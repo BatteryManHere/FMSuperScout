@@ -137,6 +137,28 @@ const I18N = {
     staffAvailSection: 'Beschikbaarheid staf', qfStaffFree: 'Transfervrij', qfStaffRelocate: 'Verhuisbereid',
     staffCoachRole: 'Coachfunctie',
     staffAvail: 'Transfervrij of aflopend', qfAMScout: 'Beschikbare AM',
+    c_bargain: 'Waardescore',
+    bargainHint: 'Moneyball-rating (1-99) die matchkwaliteit (Meta) afweegt tegen transferkosten. 85+ duidt op een topkoopje.',
+    c_staffscore: 'Beoordeling',
+    staffScoreHint: 'Geschiktheidsscore (1-20) gebaseerd op de sleutelattributen voor de specifieke functie van dit staflid.',
+    qfMoneyball: 'Moneyball',
+    qfSteals: 'Contractkoopjes',
+    qfIronman: 'IJzersterk',
+    tag_bosman: 'bosman',
+    badgeBargain: 'Koopje',
+    badgeBargainHint: 'Uitzonderlijke kwaliteit ten opzichte van de geschatte vraagprijs',
+    badgeBosman: 'Bosman-vrij',
+    badgeBosmanHint: 'Contract loopt binnen 6 maanden af - direct vast te leggen via voorcontract',
+    badgeDurable: 'Duurzaam',
+    badgeDurableHint: 'Zeer lage blessuregevoeligheid (<= 6/20)',
+    badgeFragile: 'Blessuregevoelig',
+    badgeFragileHint: 'Hoge blessuregevoeligheid (>= 14/20) - verhoogd risico op uitval',
+    badgeConsistent: 'Constant',
+    badgeConsistentHint: 'Hoge constantheid (>= 14/20) - presteert stabiel naar vermogen',
+    badgeModelPro: 'Topmentaliteit',
+    badgeModelProHint: 'Hoge professionaliteit (>= 15/20) - haalt maximaal potentieel',
+    badgeLowPro: 'Lage inzet',
+    badgeLowProHint: 'Lage professionaliteit (<= 8/20) - groot risico op stagnerende groei',
     posAccomplished: 'bedreven (geen natuurlijke positie)',
     quickFilters: 'Snelfilters', qfWonderkid: 'Wonderkids', qfExpiring: 'Einde contract', qfSale: 'Te koop', activeCount: 'Actief · {n}', noActiveFilters: 'Geen filters actief. Kies een snelfilter, tik posities aan op het veld of open een sectie.', resultsOf: 'van {total} {what}', railOpen: 'Filters tonen',
     clearAll: 'alles wissen', chipSearch: 'Zoek',
@@ -280,6 +302,28 @@ const I18N = {
     staffAvailSection: 'Availability', qfStaffFree: 'Free agents', qfStaffRelocate: 'Relocatable',
     staffCoachRole: 'Coaching role',
     staffAvail: 'Free or expiring', qfAMScout: 'Sign-ready AM',
+    c_bargain: 'Value Score',
+    bargainHint: 'Moneyball rating (1-99) measuring match quality (Meta) against transfer cost. 85+ indicates an elite bargain.',
+    c_staffscore: 'Rating',
+    staffScoreHint: 'Role suitability rating (1-20) based on the key attributes required for this staff member\'s specific role.',
+    qfMoneyball: 'Moneyball',
+    qfSteals: 'Contract steals',
+    qfIronman: 'Iron men',
+    tag_bosman: 'bosman',
+    badgeBargain: 'Bargain',
+    badgeBargainHint: 'Exceptional quality relative to estimated acquisition cost',
+    badgeBosman: 'Bosman eligible',
+    badgeBosmanHint: 'Contract expires within 6 months - eligible for immediate pre-contract signing',
+    badgeDurable: 'Durable',
+    badgeDurableHint: 'Very low injury proneness (<= 6/20)',
+    badgeFragile: 'Fragile',
+    badgeFragileHint: 'High injury proneness (>= 14/20) - elevated risk of downtime',
+    badgeConsistent: 'Consistent',
+    badgeConsistentHint: 'High consistency (>= 14/20) - regularly plays near full ability',
+    badgeModelPro: 'High drive',
+    badgeModelProHint: 'High professionalism (>= 15/20) - maximizes PA development',
+    badgeLowPro: 'Poor work ethic',
+    badgeLowProHint: 'Low professionalism (<= 8/20) - high risk of failing potential',
     posAccomplished: 'accomplished (not a natural position)',
     quickFilters: 'Quick filters', qfWonderkid: 'Wonderkids', qfExpiring: 'Expiring contracts', qfSale: 'For sale', activeCount: 'Active · {n}', noActiveFilters: 'No filters active. Pick a quick filter, tap positions on the pitch or open a section.', resultsOf: 'of {total} {what}', railOpen: 'Show filters',
     clearAll: 'clear all', chipSearch: 'Search',
@@ -423,6 +467,28 @@ const I18N = {
     staffAvailSection: 'Disponibilité', qfStaffFree: 'Agents libres', qfStaffRelocate: 'Mobiles',
     staffCoachRole: 'Rôle de coaching',
     staffAvail: 'Libre ou expirant', qfAMScout: 'AM disponible',
+    c_bargain: 'Indice valeur',
+    bargainHint: 'Indice Moneyball (1-99) mesurant le niveau en match (Méta) par rapport au coût du transfert. 85+ indique une excellente affaire.',
+    c_staffscore: 'Note rôle',
+    staffScoreHint: 'Note d\'adéquation (1-20) basée sur les attributs clés du rôle spécifique de ce membre du staff.',
+    qfMoneyball: 'Moneyball',
+    qfSteals: 'Affaires contrat',
+    qfIronman: 'Indestructibles',
+    tag_bosman: 'bosman',
+    badgeBargain: 'Affaire',
+    badgeBargainHint: 'Qualité exceptionnelle par rapport au coût estimé',
+    badgeBosman: 'Arrêt Bosman',
+    badgeBosmanHint: 'Contrat expirant dans les 6 mois - signature d\'un pré-contrat immédiat possible',
+    badgeDurable: 'Solide',
+    badgeDurableHint: 'Très faible propension aux blessures (<= 6/20)',
+    badgeFragile: 'Fragile',
+    badgeFragileHint: 'Forte propension aux blessures (>= 14/20) - risque élevé d\'absence',
+    badgeConsistent: 'Régulier',
+    badgeConsistentHint: 'Grande régularité (>= 14/20) - joue régulièrement à son meilleur niveau',
+    badgeModelPro: 'Grand pro',
+    badgeModelProHint: 'Grand professionnalisme (>= 15/20) - optimise la progression vers le PA',
+    badgeLowPro: 'Manque de rigueur',
+    badgeLowProHint: 'Faible professionnalisme (<= 8/20) - risque élevé de ne pas progresser',
     posAccomplished: 'compétent (pas un poste naturel)',
     quickFilters: 'Filtres rapides', qfWonderkid: 'Pépites', qfExpiring: 'Fin de contrat', qfSale: 'À vendre', activeCount: 'Actifs · {n}', noActiveFilters: 'Aucun filtre actif. Choisissez un filtre rapide, touchez des postes sur le terrain ou ouvrez une section.', resultsOf: 'sur {total} {what}', railOpen: 'Afficher les filtres',
     clearAll: 'tout effacer', chipSearch: 'Rechercher',
@@ -566,6 +632,28 @@ const I18N = {
     staffAvailSection: 'Verfügbarkeit', qfStaffFree: 'Vereinslose', qfStaffRelocate: 'Mobil',
     staffCoachRole: 'Coaching-Rolle',
     staffAvail: 'Vereinslos oder auslaufend', qfAMScout: 'Verfügbarer AM',
+    c_bargain: 'Wert-Score',
+    bargainHint: 'Moneyball-Bewertung (1-99), die Matchqualität (Meta) gegen Transferkosten abwägt. 85+ bedeutet ein echtes Schnäppchen.',
+    c_staffscore: 'Rollen-Note',
+    staffScoreHint: 'Eignungsnote (1-20) basierend auf den Schlüsselattributen für die Rolle dieses Mitarbeiters.',
+    qfMoneyball: 'Moneyball',
+    qfSteals: 'Vertragsschnäppchen',
+    qfIronman: 'Dauerbrenner',
+    tag_bosman: 'bosman',
+    badgeBargain: 'Schnäppchen',
+    badgeBargainHint: 'Hervorragende Qualität im Verhältnis zur geschätzten Ablöse',
+    badgeBosman: 'Bosman-Ablösefrei',
+    badgeBosmanHint: 'Vertrag läuft in unter 6 Monaten aus - sofortiger Vorvertrag möglich',
+    badgeDurable: 'Robust',
+    badgeDurableHint: 'Sehr geringe Verletzungsanfälligkeit (<= 6/20)',
+    badgeFragile: 'Verletzungsanfällig',
+    badgeFragileHint: 'Hohe Verletzungsanfälligkeit (>= 14/20) - hohes Ausfallrisiko',
+    badgeConsistent: 'Konstant',
+    badgeConsistentHint: 'Hohe Konstanz (>= 14/20) - ruft verlässlich seine Leistung ab',
+    badgeModelPro: 'Vorbildprofi',
+    badgeModelProHint: 'Hohe Professionalität (>= 15/20) - schöpft PA optimal aus',
+    badgeLowPro: 'Einstellungsmängel',
+    badgeLowProHint: 'Geringe Professionalität (<= 8/20) - stagniert häufig vor dem Potenzial',
     posAccomplished: 'erfahren (keine natürliche Position)',
     quickFilters: 'Schnellfilter', qfWonderkid: 'Wunderkinder', qfExpiring: 'Vertragsende', qfSale: 'Zu verkaufen', activeCount: 'Aktiv · {n}', noActiveFilters: 'Keine Filter aktiv. Wähle einen Schnellfilter, tippe Positionen auf dem Feld an oder öffne einen Abschnitt.', resultsOf: 'von {total} {what}', railOpen: 'Filter anzeigen',
     clearAll: 'alles leeren', chipSearch: 'Suchen',
@@ -1068,6 +1156,7 @@ const PLAYER_COLS = [
   { key: 'metapa', label: 'c_metapa', num: true, help: 'metaPaHint', get: p => metaPaScore(p), render: p => metaPaHtml(p), w: 68 },
   { key: 'value', label: 'c_value', num: true, get: p => estValue(p).v, render: p => estHtml(p), w: 95 },
   { key: 'fee', label: 'c_fee', num: true, get: p => { const f = feeEstimate(p); return f.v == null ? -1 : f.v; }, render: p => feeHtml(p), w: 105 },
+  { key: 'bargain', label: 'c_bargain', help: 'bargainHint', num: true, get: p => bargainIndex(p) ?? -1, render: bargainHtml, w: 76 },
   { key: 'wage', label: 'c_wage', num: true, get: p => p.wage, fmt: fmtWage, w: 100 },
   { key: 'expires', label: 'c_expires', get: p => p.expires, fmt: fmtDate, tdCls: p => expiresHtml(p).cls, w: 110 },
   { key: 'interest', label: 'c_interest', help: 'interestHint', get: p => { const i = interestEstimate(p); return i ? i.score : -1; }, render: p => intHtml(p), w: 110 },
@@ -1083,6 +1172,7 @@ const STAFF_COLS = [
   { key: 'name', label: 'c_name', get: p => p.name, name: true, w: 180 },
   { key: 'age', label: 'c_age', num: true, get: p => getAge(p), w: 50 },
   { key: 'job', label: 'c_role', get: p => jobLabel(p), w: 150 },
+  { key: 'staffscore', label: 'c_staffscore', help: 'staffScoreHint', num: true, get: p => staffRoleScore(p) ?? -1, render: staffRoleScoreHtml, w: 68 },
   { key: 'club', label: 'c_club', get: p => p.club || '', render: p => clubLabel(p), w: 175 },
   { key: 'nat', label: 'c_nat', get: p => natsLabel(p), w: 115 },
   { key: 'ca', label: 'CA', num: true, get: p => p.ca, render: p => qHtml(p.ca), w: 56 },
@@ -1243,6 +1333,30 @@ function feeHtml(p) {
   return (exact ? '' : '<span class="dim">~</span>') + fmtMoney(f.v);
 }
 
+// ---------- Moneyball Bargain Index (1-99) ----------
+function bargainIndex(p) {
+  if (p._bi !== undefined) return p._bi;
+  const q = metaScore(p) ?? (p.ca ? p.ca / 10 : null);
+  if (q == null || q <= 0) return p._bi = null;
+  const fee = feeEstimate(p).v ?? estValue(p).v;
+  if (fee == null) return p._bi = null;
+  if (isFree(p) || fee === 0) {
+    const s = Math.round(75 + (q / 20) * 24);
+    return p._bi = Math.min(99, Math.max(50, s));
+  }
+  const expLog = 4.2 + (q - 8) * 0.38;
+  const actualLog = Math.log10(Math.max(10000, fee));
+  const diff = expLog - actualLog;
+  const score = Math.round(60 + diff * 30);
+  return p._bi = Math.min(99, Math.max(1, score));
+}
+function bargainHtml(p) {
+  const bi = bargainIndex(p);
+  if (bi == null) return '<span class="dim">–</span>';
+  const cls = bi >= 85 ? 'g5' : bi >= 75 ? 'g4' : bi >= 60 ? 'g3' : bi >= 45 ? 'g2' : 'g1';
+  return `<span class="qcell ${cls}">${bi}</span>`;
+}
+
 // ---------- interesse-inschatting (heuristiek) ----------
 // Loonplafond van mijn club: geschat uit de hoogste salarissen in mijn eigen selectie.
 // Een doelwit dat véél meer verdient dan mijn topverdieners is lastig te verleiden.
@@ -1330,6 +1444,8 @@ function statusHtml(p) {
   if (p.loanListed) h += `<span class="tag listed">${t('tag_loan')}</span>`;
   if (p.setForRelease) h += `<span class="tag rel">${t('tag_rel')}</span>`;
   if (p.notForSale) h += `<span class="tag nfs">${t('tag_nfs')}</span>`;
+  const m = monthsUntil(p.expires);
+  if (!isFree(p) && m != null && m <= 6) h += `<span class="tag bosman" title="${escHtml(t('badgeBosmanHint'))}">${t('tag_bosman')}</span>`;
   return h || '<span class="dim">–</span>';
 }
 // Natuurlijke posities. posArr bevat sinds scanner 1.6 ook bedreven nevenposities (15+);
@@ -1569,6 +1685,42 @@ const jobLabel = p => {
   if (p && p.job === 'Staflid') return t('jobStaff');
   return (p && p.job) || '–';
 };
+// Staf-rolscore (1-20) op basis van de specifieke vereisten van de functie
+function staffRoleScore(p) {
+  if (p._staffScore !== undefined) return p._staffScore;
+  const a = p.staffAttrs;
+  if (!a) return p._staffScore = null;
+  const jid = p.jobId;
+  const v = k => a[k] || 0;
+  let score = null;
+  if (jid === 20 || jid === 21) {
+    score = (v('Oordeel_vermogen') * 2 + v('Oordeel_potentie') * 2 + v('Man-management') * 2 + v('Motiveren') * 2 + v('Tactische_kennis') + v('Vastberadenheid')) / 10;
+  } else if (jid === 14 || jid === 44 || jid === 45) {
+    score = (v('Oordeel_vermogen') * 3 + v('Oordeel_potentie') * 3 + v('Aanpassingsvermogen') * 2) / 8;
+  } else if (jid === 12 || jid === 50 || jid === 46 || jid === 38) {
+    score = v('Fysiotherapie');
+  } else if (jid === 26 || jid === 27) {
+    score = (v('Fitheid') * 3 + v('Vastberadenheid')) / 4;
+  } else if (jid === 34 || jid === 35) {
+    score = (v('KV_reflexen') * 3 + v('KV_distributie') + v('Vastberadenheid')) / 5;
+  } else if (jid === 64 || jid === 65) {
+    score = (v('Jeugd') * 3 + v('Oordeel_potentie') * 2 + v('Oordeel_vermogen') + v('Vastberadenheid')) / 7;
+  } else if (jid === 48 || jid === 40) {
+    score = v('Sportwetenschap');
+  } else if (jid === 42 || jid === 36 || jid === 58 || jid === 60 || jid === 62) {
+    score = v('Data_analyse');
+  } else {
+    const maxTraining = Math.max(v('Aanvallen'), v('Verdedigen'), v('Balbezit'), v('Technisch'), v('Tactisch'));
+    score = (maxTraining * 3 + v('Motiveren') * 2 + v('Vastberadenheid')) / 6;
+  }
+  return p._staffScore = score > 0 ? Math.round(score * 10) / 10 : null;
+}
+function staffRoleScoreHtml(p) {
+  const sc = staffRoleScore(p);
+  if (sc == null) return '<span class="dim">–</span>';
+  return `<span class="${roleClass(sc)}">${sc.toFixed(1)}</span>`;
+}
+
 const ROLE_BY_ID = Object.fromEntries(ROLES.map(r => [r.id, r]));
 // Rolscore op de 1-20 schaal; key-attributen tellen dubbel. Vereist attributen (spelers).
 function roleScore(p, role) {
@@ -2324,6 +2476,12 @@ function applyFilters() {
     if (gsel === 'm' && p.gender === 1) return false;
     if (gsel === 'v' && p.gender !== 1) return false;
     if (divVal && !(p.div || '').toLowerCase().includes(divVal)) return false;
+    if (state._qfIronMan && state.mode !== 'staff') {
+      const inj = p.attrs ? p.attrs.InjuryProneness : null;
+      const con = p.attrs ? p.attrs.Consistency : null;
+      if (inj != null && inj > 8) return false;
+      if (con != null && con < 12) return false;
+    }
     return true;
   });
   sortRows();
@@ -2389,6 +2547,22 @@ const QUICK_FILTERS = [
       $('f-staff-contract').value = v ? 'avail' : '';
       $('f-staff-relocate').checked = v;
     } },
+  { id: 'moneyball', label: 'qfMoneyball', show: () => state.mode !== 'staff',
+    on: () => $('f-meta-min').value === '13.5' && $('f-price').value === '5M',
+    set: v => {
+      $('f-meta-min').value = v ? '13.5' : '';
+      $('f-price').value = v ? '5M' : '';
+      $('f-age-max').value = v ? '27' : '';
+    } },
+  { id: 'steals', label: 'qfSteals', show: () => state.mode !== 'staff',
+    on: () => $('f-contract').value === 'exp6' && $('f-ca-min').value === '125',
+    set: v => {
+      $('f-contract').value = v ? 'exp6' : '';
+      $('f-ca-min').value = v ? '125' : '';
+    } },
+  { id: 'ironman', label: 'qfIronman', show: () => state.mode !== 'staff' && !state.hideCapa,
+    on: () => state._qfIronMan === true,
+    set: v => { state._qfIronMan = v; } },
 ];
 function renderQuickFilters() {
   const box = $('quick-filters');
@@ -3082,6 +3256,20 @@ function showDetail(p) {
   if (p.setForRelease) flags.push(`<span class="pill warn">${t('tag_rel')}</span>`);
   if (p.notForSale) flags.push(`<span class="pill">${t('tag_nfs')}</span>`);
   if (isAttainable(p)) flags.push(`<span class="pill good" data-help="attainHint">${t('attainable')}</span>`);
+  if (!state.hideCapa && isPlayer && p.attrs) {
+    const inj = p.attrs.InjuryProneness;
+    const con = p.attrs.Consistency;
+    const pro = p.professionalism;
+    const m = monthsUntil(p.expires);
+    const bi = bargainIndex(p);
+    if (bi != null && bi >= 85) flags.push(`<span class="pill good" title="${escHtml(t('badgeBargainHint'))}">⭐ ${t('badgeBargain')} (${bi})</span>`);
+    if (m != null && m <= 6 && !isFree(p)) flags.push(`<span class="pill purple" title="${escHtml(t('badgeBosmanHint'))}">🆓 ${t('badgeBosman')}</span>`);
+    if (inj != null && inj <= 6) flags.push(`<span class="pill good" title="${escHtml(t('badgeDurableHint'))}">🛡️ ${t('badgeDurable')}</span>`);
+    else if (inj != null && inj >= 14) flags.push(`<span class="pill warn" title="${escHtml(t('badgeFragileHint'))}">🩹 ${t('badgeFragile')}</span>`);
+    if (con != null && con >= 14) flags.push(`<span class="pill good" title="${escHtml(t('badgeConsistentHint'))}">🧠 ${t('badgeConsistent')}</span>`);
+    if (pro != null && pro >= 15) flags.push(`<span class="pill good" title="${escHtml(t('badgeModelProHint'))}">🔥 ${t('badgeModelPro')}</span>`);
+    else if (pro != null && pro <= 8) flags.push(`<span class="pill warn" title="${escHtml(t('badgeLowProHint'))}">⚠️ ${t('badgeLowPro')}</span>`);
+  }
   if (flags.length) html += '<div>' + flags.join('') + '</div>';
 
   if (isPlayer) {
@@ -4191,6 +4379,7 @@ $('f-role').addEventListener('change', () => {
 });
 
 $('btn-clear').onclick = () => {
+  state._qfIronMan = false;
   document.querySelectorAll('#filters input[type=text], #filters input[type=number]').forEach(i => i.value = '');
   document.querySelectorAll('#filters input[type=checkbox]').forEach(i => i.checked = false);
   $('f-staffrole').value = ''; $('f-gender').value = ''; $('f-interest').value = '0'; $('f-contract').value = ''; $('f-tstatus').value = '';

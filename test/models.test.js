@@ -158,3 +158,21 @@ test('posities: natPos valt terug op posArr (oude dumps) en gebruikt posNat als 
   assert.deepEqual(M.natPos({ posArr: ['DC', 'DM'], posNat: ['DC'] }), ['DC']);
   assert.deepEqual(M.natPos({}), []);
 });
+
+test('bargainIndex: computes score between 1 and 99', () => {
+  const p = player({ value: 2000000, attrs: { Pace: 16, Acceleration: 16 } });
+  const bi = M.bargainIndex(p);
+  assert.ok(bi >= 1 && bi <= 99, `Expected score between 1-99, got ${bi}`);
+});
+
+test('staffRoleScore: evaluates staff attributes', () => {
+  const s = {
+    jobId: 20,
+    staffAttrs: {
+      Oordeel_vermogen: 16, Oordeel_potentie: 16, 'Man-management': 15,
+      Motiveren: 15, Tactische_kennis: 14, Vastberadenheid: 14,
+    },
+  };
+  const sc = M.staffRoleScore(s);
+  assert.ok(sc >= 14 && sc <= 20, `Expected AM score >= 14, got ${sc}`);
+});
