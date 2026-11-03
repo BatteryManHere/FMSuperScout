@@ -1,4 +1,4 @@
-﻿// FMSuperScout frontend — vanilla JS, gevirtualiseerde tabel voor 50k+ rijen.
+// FMSuperScout frontend — vanilla JS, gevirtualiseerde tabel voor 50k+ rijen.
 'use strict';
 const $ = id => document.getElementById(id);
 
@@ -133,6 +133,10 @@ const I18N = {
     sg_coaching: 'Training', sg_mental: 'Mentaal', sg_knowledge: 'Kennis', sg_medical: 'Medisch & data',
     g_technical: 'Technisch', g_setpieces: 'Standaardsituaties', g_mental: 'Mentaal', g_physical: 'Fysiek', g_goalkeeping: 'Keepen',
     staffAttrs: 'Staf-attributen',
+    staffRelocate: 'Bereid te verhuizen', staffRelocateHint: 'Hoge aanpassingsvermogen (≥ 13/20) duidt op bereidheid om te verhuizen. Schatting gebaseerd op het staf-attribuut, geen FM-waarde.',
+    staffAvailSection: 'Beschikbaarheid staf', qfStaffFree: 'Transfervrij', qfStaffRelocate: 'Verhuisbereid',
+    staffCoachRole: 'Coachfunctie',
+    staffAvail: 'Transfervrij of aflopend', qfAMScout: 'Beschikbare AM',
     posAccomplished: 'bedreven (geen natuurlijke positie)',
     quickFilters: 'Snelfilters', qfWonderkid: 'Wonderkids', qfExpiring: 'Einde contract', qfSale: 'Te koop', activeCount: 'Actief · {n}', noActiveFilters: 'Geen filters actief. Kies een snelfilter, tik posities aan op het veld of open een sectie.', resultsOf: 'van {total} {what}', railOpen: 'Filters tonen',
     clearAll: 'alles wissen', chipSearch: 'Zoek',
@@ -272,6 +276,10 @@ const I18N = {
     sg_coaching: 'Coaching', sg_mental: 'Mental', sg_knowledge: 'Knowledge', sg_medical: 'Medical & Data',
     g_technical: 'Technical', g_setpieces: 'Set Pieces', g_mental: 'Mental', g_physical: 'Physical', g_goalkeeping: 'Goalkeeping',
     staffAttrs: 'Staff Attributes',
+    staffRelocate: 'Willing to relocate', staffRelocateHint: 'High adaptability (≥ 13/20) indicates willingness to relocate. An estimate based on the staff attribute, not a direct FM value.',
+    staffAvailSection: 'Availability', qfStaffFree: 'Free agents', qfStaffRelocate: 'Relocatable',
+    staffCoachRole: 'Coaching role',
+    staffAvail: 'Free or expiring', qfAMScout: 'Sign-ready AM',
     posAccomplished: 'accomplished (not a natural position)',
     quickFilters: 'Quick filters', qfWonderkid: 'Wonderkids', qfExpiring: 'Expiring contracts', qfSale: 'For sale', activeCount: 'Active · {n}', noActiveFilters: 'No filters active. Pick a quick filter, tap positions on the pitch or open a section.', resultsOf: 'of {total} {what}', railOpen: 'Show filters',
     clearAll: 'clear all', chipSearch: 'Search',
@@ -411,6 +419,10 @@ const I18N = {
     sg_coaching: 'Entraînement', sg_mental: 'Mental', sg_knowledge: 'Connaissances', sg_medical: 'Médical & données',
     g_technical: 'Technique', g_setpieces: 'Coups de pied arrêtés', g_mental: 'Mental', g_physical: 'Physique', g_goalkeeping: 'Gardien',
     staffAttrs: 'Attributs du staff',
+    staffRelocate: 'Prêt à déménager', staffRelocateHint: 'Une grande adaptabilité (≥ 13/20) indique la volonté de déménager. Estimation basée sur l\'attribut du staff, pas une valeur FM directe.',
+    staffAvailSection: 'Disponibilité', qfStaffFree: 'Agents libres', qfStaffRelocate: 'Mobiles',
+    staffCoachRole: 'Rôle de coaching',
+    staffAvail: 'Libre ou expirant', qfAMScout: 'AM disponible',
     posAccomplished: 'compétent (pas un poste naturel)',
     quickFilters: 'Filtres rapides', qfWonderkid: 'Pépites', qfExpiring: 'Fin de contrat', qfSale: 'À vendre', activeCount: 'Actifs · {n}', noActiveFilters: 'Aucun filtre actif. Choisissez un filtre rapide, touchez des postes sur le terrain ou ouvrez une section.', resultsOf: 'sur {total} {what}', railOpen: 'Afficher les filtres',
     clearAll: 'tout effacer', chipSearch: 'Rechercher',
@@ -550,6 +562,10 @@ const I18N = {
     sg_coaching: 'Training', sg_mental: 'Mental', sg_knowledge: 'Wissen', sg_medical: 'Medizin & Daten',
     g_technical: 'Technik', g_setpieces: 'Standards', g_mental: 'Mental', g_physical: 'Physis', g_goalkeeping: 'Torwart',
     staffAttrs: 'Mitarbeiter-Attribute',
+    staffRelocate: 'Umzugsbereit', staffRelocateHint: 'Hohe Anpassungsfähigkeit (≥ 13/20) deutet auf Umzugsbereitschaft hin. Schätzung auf Basis des Mitarbeiter-Attributs, kein direkter FM-Wert.',
+    staffAvailSection: 'Verfügbarkeit', qfStaffFree: 'Vereinslose', qfStaffRelocate: 'Mobil',
+    staffCoachRole: 'Coaching-Rolle',
+    staffAvail: 'Vereinslos oder auslaufend', qfAMScout: 'Verfügbarer AM',
     posAccomplished: 'erfahren (keine natürliche Position)',
     quickFilters: 'Schnellfilter', qfWonderkid: 'Wunderkinder', qfExpiring: 'Vertragsende', qfSale: 'Zu verkaufen', activeCount: 'Aktiv · {n}', noActiveFilters: 'Keine Filter aktiv. Wähle einen Schnellfilter, tippe Positionen auf dem Feld an oder öffne einen Abschnitt.', resultsOf: 'von {total} {what}', railOpen: 'Filter anzeigen',
     clearAll: 'alles leeren', chipSearch: 'Suchen',
@@ -2228,6 +2244,8 @@ function applyFilters() {
   const onlySl = $('f-shortlist').checked || state.mode === 'shortlist';
   const advRules = activeAdvRules();   // spelers: veld-/verborgen attributen; staf: stafattributen
   const staffRole = $('f-staffrole').value;
+  const staffContractF = state.mode === 'staff' ? $('f-staff-contract').value : '';
+  const staffRelocate = state.mode === 'staff' && $('f-staff-relocate').checked;
   const gsel = $('f-gender').value;   // '' = beide, 'm' = mannen, 'v' = vrouwen
   const divVal = $('f-div').value.trim().toLowerCase();   // zoekbalk: substring, hoofdletterongevoelig
   const myClub = (state.meta.myClub || '').toLowerCase();
@@ -2294,6 +2312,15 @@ function applyFilters() {
     }
     if (activePos.size && !(p.posArr || []).some(x => activePos.has(x))) return false;
     if (state.mode === 'staff' && staffRole && p.job !== staffRole) return false;
+    if (staffContractF === 'free' && !isFree(p)) return false;
+    if (staffContractF === 'exp6' || staffContractF === 'exp12') {
+      const m = monthsUntil(p.expires);
+      if (m == null || m > (staffContractF === 'exp6' ? 6 : 12)) return false;
+    }
+    if (staffContractF === 'avail') {
+      if (!isFree(p)) { const m = monthsUntil(p.expires); if (m == null || m > 12) return false; }
+    }
+    if (staffRelocate && !(p.staffAttrs && (p.staffAttrs['Aanpassingsvermogen'] || 0) >= 13)) return false;
     if (gsel === 'm' && p.gender === 1) return false;
     if (gsel === 'v' && p.gender !== 1) return false;
     if (divVal && !(p.div || '').toLowerCase().includes(divVal)) return false;
@@ -2327,6 +2354,7 @@ function updateSecDots() {
     financial: n(val('f-price'), val('f-fee'), val('f-wage')),
     origin: n(val('f-nat'), $('f-eu').checked, val('f-div')),
     availability: n(+$('f-interest').value > 0, $('f-tstatus').value, $('f-contract').value, $('f-myclub').checked, $('f-shortlist').checked),
+    staffavail: n($('f-staff-contract').value, $('f-staff-relocate').checked),
   };
   document.querySelectorAll('.fsection[data-sec]').forEach(sec => {
     const k = sec.dataset.sec, head = sec.querySelector('.fsec-head');
@@ -2350,6 +2378,17 @@ const QUICK_FILTERS = [
     on: () => $('f-tstatus').value === 'sale', set: v => { $('f-tstatus').value = v ? 'sale' : ''; } },
   { id: 'myclub', label: 'myclub', show: () => !!state.meta.myClub,
     on: () => $('f-myclub').checked, set: v => { $('f-myclub').checked = v; renderMyTeamChips(); } },
+  { id: 'stafffree', label: 'qfStaffFree', show: () => state.mode === 'staff',
+    on: () => $('f-staff-contract').value === 'free', set: v => { $('f-staff-contract').value = v ? 'free' : ''; } },
+  { id: 'staffrelocate', label: 'qfStaffRelocate', show: () => state.mode === 'staff',
+    on: () => $('f-staff-relocate').checked, set: v => { $('f-staff-relocate').checked = v; } },
+  { id: 'amscout', label: 'qfAMScout', show: () => state.mode === 'staff',
+    on: () => $('f-staffrole').value === 'Assistent-manager' && $('f-staff-contract').value === 'avail' && $('f-staff-relocate').checked,
+    set: v => {
+      $('f-staffrole').value = v ? 'Assistent-manager' : '';
+      $('f-staff-contract').value = v ? 'avail' : '';
+      $('f-staff-relocate').checked = v;
+    } },
 ];
 function renderQuickFilters() {
   const box = $('quick-filters');
@@ -2383,6 +2422,8 @@ function buildChips() {
   if (activePos.size) add(`${t('position')}: ${[...activePos].join(', ')}`,
     () => { activePos.clear(); document.querySelectorAll('.pos-node').forEach(n => n.classList.remove('on')); });
   if (state.mode === 'staff' && $('f-staffrole').value) add($('f-staffrole').value, () => { $('f-staffrole').value = ''; });
+  if (state.mode === 'staff' && $('f-staff-contract').value) add(`${t('contractF')}: ${$('f-staff-contract').selectedOptions[0].textContent}`, () => { $('f-staff-contract').value = ''; });
+  if (state.mode === 'staff' && $('f-staff-relocate').checked) add(t('staffRelocate'), () => { $('f-staff-relocate').checked = false; });
   if ($('f-gender').value) add(t($('f-gender').value === 'm' ? 'dbMen' : 'dbWomen'), () => { $('f-gender').value = ''; });
   if ($('f-div').value.trim()) add(`${t('divLabel')}: ${$('f-div').value.trim()}`, () => { $('f-div').value = ''; });
   range('f-age-min', 'f-age-max', t('age'));
@@ -2434,7 +2475,7 @@ const PRESET_TEXT_IDS = ['f-name', 'f-age-min', 'f-age-max', 'f-ca-min', 'f-ca-m
 const PRESET_CHECK_IDS = ['f-eu', 'f-myclub', 'f-shortlist', 'f-wonderkid', 'f-new'];
 // De peilperiode hoort bewust bij de preset: "doorbraken dit seizoen" betekent niets als
 // het venster erbij wegvalt. Zie applyPreset voor het opnieuw ophalen van de groeidata.
-const PRESET_SELECT_IDS = ['f-interest', 'f-staffrole', 'f-role', 'f-contract', 'f-tstatus', 'f-foot', 'f-hist-period', 'f-gender'];
+const PRESET_SELECT_IDS = ['f-interest', 'f-staffrole', 'f-role', 'f-contract', 'f-tstatus', 'f-foot', 'f-hist-period', 'f-gender', 'f-staff-contract'];
 function loadPresets() { try { return JSON.parse(localStorage.getItem('fmss_presets') || '[]'); } catch { return []; } }
 function storePresets(list) { localStorage.setItem('fmss_presets', JSON.stringify(list)); }
 function snapshotFilters() {
@@ -4114,6 +4155,8 @@ $('f-hist-period').addEventListener('change', async () => {
 });
 $('btn-adv').onclick = advDialog;
 $('f-staffrole').addEventListener('change', applyFilters);
+$('f-staff-contract').addEventListener('change', applyFilters);
+$('f-staff-relocate').addEventListener('change', applyFilters);
 $('f-gender').addEventListener('change', applyFilters);
 // Divisie-zoekbalk: filter terwijl je typt + eigen suggestie-dropdown (app-stijl, i.p.v.
 // de native datalist die als lichte "wolk" uit de donkere UI viel).
@@ -4151,6 +4194,7 @@ $('btn-clear').onclick = () => {
   document.querySelectorAll('#filters input[type=text], #filters input[type=number]').forEach(i => i.value = '');
   document.querySelectorAll('#filters input[type=checkbox]').forEach(i => i.checked = false);
   $('f-staffrole').value = ''; $('f-gender').value = ''; $('f-interest').value = '0'; $('f-contract').value = ''; $('f-tstatus').value = '';
+  $('f-staff-contract').value = ''; $('f-staff-relocate').checked = false;
   $('f-foot').value = '';
   state.advF = []; saveAdv();
   activePos.clear();
@@ -4459,6 +4503,7 @@ function setMode(mode) {
   // Staf heeft geen lengte, voet of PA-groei in de dump; die filters horen daar niet.
   $('fg-physical').style.display = mode === 'staff' ? 'none' : '';
   $('f-wonderkid-row').style.display = mode === 'staff' ? 'none' : '';
+  $('fg-staffavail').style.display = mode === 'staff' ? '' : 'none';
   renderDevSection();   // historie wordt alleen voor spelers bijgehouden
   renderIntakeBar();
   // Kolom bestaat niet in deze modus: anders sorteert de tabel stilzwijgend op een
