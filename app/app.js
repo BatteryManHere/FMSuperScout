@@ -176,6 +176,10 @@ const I18N = {
     roleFit: 'Tactische rol', roleColHdr: 'Rol', roleAny: 'Geen rol gekozen', bestRoles: 'Beste rollen',
     compare: 'Vergelijk', comparing: 'Vergelijken', addCompare: 'Vergelijk', compareFull: 'Max. 3 spelers',
     cmpTitle: 'Spelervergelijking', cmpValue: 'Waarde', cmpTopRole: 'Beste rol',
+    cmpSquadBtn: 'Vergelijk met team',
+    cmpSquadTip: 'Vergelijk deze speler met teamgenoten op dezelfde positie',
+    cmpSquadTitle: 'Positie-vergelijking met eigen team',
+    cmpNoSquadPeers: 'Geen spelers in je team spelen momenteel op deze positie ({pos})',
     cmpWinsBadge: '{n}× beste attribuut', avgLabel: 'Gemiddeld',
     mt_all: 'Alles', mt_first: '1e elftal', mt_res: '2e elftal', mt_youth: 'Jeugd',
     cmpDeltaHint: 'Verschil: speler 1 min speler 2 (groen = speler 1 beter af)',
@@ -341,6 +345,10 @@ const I18N = {
     roleFit: 'Tactical Role', roleColHdr: 'Role', roleAny: 'Any Role', bestRoles: 'Best Roles',
     compare: 'Compare', comparing: 'Comparing', addCompare: 'Compare', compareFull: 'Max. 3 players',
     cmpTitle: 'Player Comparison', cmpValue: 'Value', cmpTopRole: 'Best Role',
+    cmpSquadBtn: 'Compare with Squad',
+    cmpSquadTip: 'Compare this player with your squad in the same position',
+    cmpSquadTitle: 'Squad Positional Comparison',
+    cmpNoSquadPeers: 'No players in your squad currently play this position ({pos})',
     cmpWinsBadge: '{n}× best attribute', avgLabel: 'Average',
     mt_all: 'All', mt_first: 'First Team', mt_res: 'Reserves', mt_youth: 'Youth',
     cmpDeltaHint: 'Difference: player 1 minus player 2 (green = player 1 better off)',
@@ -506,6 +514,10 @@ const I18N = {
     roleFit: 'Rôle tactique', roleColHdr: 'Rôle', roleAny: 'Aucun rôle choisi', bestRoles: 'Meilleurs rôles',
     compare: 'Comparer', comparing: 'Comparaison', addCompare: 'Comparer', compareFull: '3 joueurs max.',
     cmpTitle: 'Comparaison de joueurs', cmpValue: 'Valeur', cmpTopRole: 'Meilleur rôle',
+    cmpSquadBtn: 'Comparer avec l\'équipe',
+    cmpSquadTip: 'Comparer ce joueur avec votre effectif au même poste',
+    cmpSquadTitle: 'Comparaison au poste avec l\'équipe',
+    cmpNoSquadPeers: 'Aucun joueur de votre effectif ne joue actuellement à ce poste ({pos})',
     cmpWinsBadge: '{n}× meilleur attribut', avgLabel: 'Moyenne',
     mt_all: 'Tout', mt_first: 'Équipe première', mt_res: 'Réserve', mt_youth: 'Jeunes',
     cmpDeltaHint: 'Écart : joueur 1 moins joueur 2 (vert = avantage joueur 1)',
@@ -671,6 +683,10 @@ const I18N = {
     roleFit: 'Taktische Rolle', roleColHdr: 'Rolle', roleAny: 'Keine Rolle gewählt', bestRoles: 'Beste Rollen',
     compare: 'Vergleichen', comparing: 'Vergleich', addCompare: 'Vergleichen', compareFull: 'Max. 3 Spieler',
     cmpTitle: 'Spielervergleich', cmpValue: 'Wert', cmpTopRole: 'Beste Rolle',
+    cmpSquadBtn: 'Mit Team vergleichen',
+    cmpSquadTip: 'Diesen Spieler mit Spielern auf derselben Position vergleichen',
+    cmpSquadTitle: 'Positionsvergleich mit dem Team',
+    cmpNoSquadPeers: 'Kein Spieler in deinem Team spielt derzeit auf dieser Position ({pos})',
     cmpWinsBadge: '{n}× bestes Attribut', avgLabel: 'Durchschnitt',
     mt_all: 'Alle', mt_first: '1. Mannschaft', mt_res: 'Reserve', mt_youth: 'Jugend',
     cmpDeltaHint: 'Differenz: Spieler 1 minus Spieler 2 (grün = Vorteil Spieler 1)',
@@ -1641,32 +1657,123 @@ const ROLES = [
   // Centrale verdedigers
   { id: 'cd', short: 'CV', pos: ['DC'], key: ['Marking', 'Tackling', 'Positioning', 'Heading', 'JumpingReach', 'Strength', 'Concentration', 'Decisions'], pref: ['Anticipation', 'Bravery', 'Composure', 'Aggression', 'Pace', 'Acceleration'] },
   { id: 'bpd', short: 'Opbouwer', pos: ['DC'], key: ['Marking', 'Tackling', 'Positioning', 'Passing', 'Composure', 'Vision', 'Decisions', 'JumpingReach'], pref: ['Heading', 'Strength', 'FirstTouch', 'Technique', 'Anticipation', 'Concentration', 'Pace'] },
-  // Backs
+  { id: 'ncb', short: 'No-Nonsense CV', pos: ['DC'], key: ['Heading', 'Marking', 'Tackling', 'JumpingReach', 'Strength', 'Positioning', 'Bravery', 'Determination'], pref: ['Aggression', 'Concentration', 'Pace'] },
+  { id: 'wcb', short: 'Brede CV', pos: ['DC'], key: ['Tackling', 'Marking', 'Positioning', 'Pace', 'Stamina', 'WorkRate', 'Decisions', 'Heading', 'JumpingReach'], pref: ['Crossing', 'Dribbling', 'Passing', 'Composure', 'Anticipation', 'Strength'] },
+  { id: 'lib', short: 'Libero', pos: ['DC'], key: ['Passing', 'Technique', 'Vision', 'Composure', 'Decisions', 'FirstTouch', 'Positioning', 'Tackling', 'Marking'], pref: ['Anticipation', 'JumpingReach', 'Concentration', 'Pace', 'Balance'] },
+  // Backs & Wingbacks
   { id: 'fb', short: 'Vleugelverd.', pos: ['DL', 'DR'], key: ['Marking', 'Tackling', 'Positioning', 'Anticipation', 'Concentration', 'Stamina', 'Pace', 'WorkRate'], pref: ['Crossing', 'Dribbling', 'Passing', 'Decisions', 'Teamwork', 'Acceleration', 'Agility'] },
+  { id: 'nfb', short: 'No-Nonsense Back', pos: ['DL', 'DR'], key: ['Marking', 'Tackling', 'Positioning', 'Strength', 'WorkRate', 'Stamina', 'Teamwork'], pref: ['Heading', 'Concentration', 'Anticipation', 'Pace'] },
   { id: 'wb', short: 'Wingback', pos: ['DL', 'DR', 'WBL', 'WBR'], key: ['Crossing', 'Dribbling', 'Tackling', 'OffTheBall', 'Stamina', 'Pace', 'Acceleration', 'WorkRate', 'Teamwork'], pref: ['Marking', 'FirstTouch', 'Passing', 'Technique', 'Anticipation', 'Positioning', 'Agility', 'Balance'] },
+  { id: 'cwb', short: 'Complete WB', pos: ['DL', 'DR', 'WBL', 'WBR'], key: ['Crossing', 'Dribbling', 'Technique', 'WorkRate', 'Stamina', 'Pace', 'Acceleration', 'OffTheBall', 'Teamwork'], pref: ['Passing', 'FirstTouch', 'Tackling', 'Anticipation', 'Decisions', 'Flair'] },
+  { id: 'iwb', short: 'Inverted WB', pos: ['DL', 'DR', 'WBL', 'WBR'], key: ['Passing', 'Tackling', 'WorkRate', 'Decisions', 'Teamwork', 'Composure', 'Stamina', 'Positioning'], pref: ['FirstTouch', 'Vision', 'Anticipation', 'OffTheBall', 'Pace', 'Acceleration'] },
+  { id: 'ifb', short: 'Inverted FB', pos: ['DL', 'DR'], key: ['Marking', 'Tackling', 'Positioning', 'Heading', 'JumpingReach', 'Strength', 'Decisions', 'Concentration'], pref: ['Anticipation', 'Composure', 'Pace', 'Passing'] },
+  { id: 'pwb', short: 'Playm. WB', pos: ['DL', 'DR', 'WBL', 'WBR'], key: ['Passing', 'Vision', 'FirstTouch', 'Technique', 'Decisions', 'Composure', 'OffTheBall', 'WorkRate', 'Stamina'], pref: ['Crossing', 'Dribbling', 'Tackling', 'Anticipation', 'Positioning', 'Teamwork', 'Pace', 'Acceleration'] },
   // Verdedigende middenvelders
   { id: 'dm', short: 'Verd. MV', pos: ['DM'], key: ['Tackling', 'Marking', 'Positioning', 'Anticipation', 'Concentration', 'Teamwork', 'WorkRate', 'Decisions', 'Stamina'], pref: ['Aggression', 'Passing', 'Composure', 'Strength', 'Bravery', 'FirstTouch'] },
   { id: 'dlp', short: 'Regisseur', pos: ['DM', 'MC'], key: ['Passing', 'Vision', 'FirstTouch', 'Technique', 'Composure', 'Decisions', 'Teamwork', 'OffTheBall'], pref: ['Anticipation', 'Positioning', 'Tackling', 'Balance', 'WorkRate', 'Flair'] },
   { id: 'bwm', short: 'Baljager', pos: ['DM', 'MC'], key: ['Tackling', 'Aggression', 'WorkRate', 'Stamina', 'Teamwork', 'Anticipation', 'Marking', 'Bravery'], pref: ['Positioning', 'Determination', 'Concentration', 'Strength', 'Acceleration', 'Pace'] },
+  { id: 'anchor', short: 'Anker', pos: ['DM'], key: ['Tackling', 'Marking', 'Positioning', 'Anticipation', 'Decisions', 'Concentration', 'Strength'], pref: ['Passing', 'Teamwork', 'Composure', 'WorkRate'] },
+  { id: 'hb', short: 'Halve Verd.', pos: ['DM'], key: ['Tackling', 'Marking', 'Positioning', 'Anticipation', 'Decisions', 'Composure', 'Passing', 'Teamwork'], pref: ['Concentration', 'WorkRate', 'Strength', 'JumpingReach', 'FirstTouch'] },
+  { id: 'regista', short: 'Regista', pos: ['DM'], key: ['Passing', 'Vision', 'FirstTouch', 'Technique', 'Composure', 'Decisions', 'Flair', 'OffTheBall'], pref: ['Anticipation', 'Balance', 'Teamwork', 'Agility'] },
+  { id: 'rpm', short: 'Dynamische SM', pos: ['DM', 'MC'], key: ['Passing', 'Vision', 'FirstTouch', 'Technique', 'Composure', 'Decisions', 'WorkRate', 'Stamina', 'OffTheBall', 'Teamwork'], pref: ['Anticipation', 'Pace', 'Acceleration', 'Dribbling', 'Tackling', 'Balance', 'Agility'] },
+  { id: 'vol', short: 'Seg. Volante', pos: ['DM'], key: ['Tackling', 'WorkRate', 'Stamina', 'Pace', 'OffTheBall', 'Passing', 'Decisions', 'Positioning'], pref: ['Finishing', 'LongShots', 'Anticipation', 'Composure', 'FirstTouch', 'Technique', 'Strength'] },
   // Centrale middenvelders
   { id: 'cm', short: 'Centrale MV', pos: ['MC'], key: ['Passing', 'Tackling', 'Decisions', 'Teamwork', 'WorkRate', 'Stamina', 'FirstTouch', 'Composure'], pref: ['Technique', 'Vision', 'OffTheBall', 'Anticipation', 'Positioning'] },
   { id: 'b2b', short: 'Box-to-box', pos: ['MC'], key: ['Stamina', 'WorkRate', 'Tackling', 'Passing', 'OffTheBall', 'Teamwork', 'Decisions', 'FirstTouch'], pref: ['Finishing', 'LongShots', 'Technique', 'Composure', 'Anticipation', 'Strength', 'Acceleration', 'Determination'] },
   { id: 'ap', short: 'Aanv. spelmaker', pos: ['MC', 'AMC'], key: ['Passing', 'Vision', 'Technique', 'FirstTouch', 'Composure', 'Decisions', 'OffTheBall', 'Flair'], pref: ['Dribbling', 'Anticipation', 'Agility', 'Teamwork', 'Acceleration'] },
+  { id: 'mez', short: 'Mezzala', pos: ['MC'], key: ['Passing', 'Dribbling', 'OffTheBall', 'Decisions', 'Technique', 'FirstTouch', 'WorkRate', 'Stamina', 'Acceleration'], pref: ['Vision', 'Flair', 'Finishing', 'LongShots', 'Anticipation', 'Composure', 'Agility'] },
+  { id: 'car', short: 'Carrilero', pos: ['MC'], key: ['Tackling', 'Positioning', 'Passing', 'WorkRate', 'Stamina', 'Teamwork', 'Decisions', 'FirstTouch'], pref: ['Anticipation', 'Concentration', 'Composure', 'Technique'] },
   // Aanvallende / brede middenvelders
   { id: 'wing', short: 'Buitenspeler', pos: ['ML', 'MR', 'AML', 'AMR'], key: ['Crossing', 'Dribbling', 'Technique', 'Pace', 'Acceleration', 'Agility', 'OffTheBall'], pref: ['FirstTouch', 'Passing', 'Flair', 'Balance', 'Stamina', 'Anticipation'] },
+  { id: 'iw', short: 'Inside Wing', pos: ['ML', 'MR', 'AML', 'AMR'], key: ['Crossing', 'Dribbling', 'Passing', 'Technique', 'FirstTouch', 'OffTheBall', 'Pace', 'Acceleration', 'Agility', 'Decisions'], pref: ['Vision', 'Composure', 'Flair', 'Stamina', 'WorkRate', 'Anticipation'] },
   { id: 'if', short: 'Schaduwspits', pos: ['AML', 'AMR'], key: ['Dribbling', 'Finishing', 'FirstTouch', 'Technique', 'OffTheBall', 'Pace', 'Acceleration', 'Agility', 'Composure'], pref: ['LongShots', 'Passing', 'Flair', 'Anticipation', 'Balance', 'Vision'] },
+  { id: 'wp', short: 'Playm. Wing', pos: ['ML', 'MR', 'AML', 'AMR'], key: ['Passing', 'Vision', 'FirstTouch', 'Technique', 'Composure', 'Decisions', 'Teamwork', 'OffTheBall'], pref: ['Crossing', 'Anticipation', 'Agility', 'Flair', 'Balance'] },
+  { id: 'wtf', short: 'Wide Fwd', pos: ['ML', 'MR', 'AML', 'AMR'], key: ['OffTheBall', 'Acceleration', 'Pace', 'Finishing', 'Heading', 'JumpingReach', 'Strength', 'FirstTouch'], pref: ['Dribbling', 'Technique', 'Anticipation', 'WorkRate', 'Composure', 'Decisions', 'Crossing'] },
+  { id: 'rd', short: 'Raumdeuter', pos: ['AML', 'AMR'], key: ['OffTheBall', 'Anticipation', 'Decisions', 'Finishing', 'Composure', 'Concentration'], pref: ['FirstTouch', 'WorkRate', 'Acceleration', 'Balance'] },
   { id: 'am', short: 'Hangende spits', pos: ['AMC'], key: ['OffTheBall', 'FirstTouch', 'Technique', 'Finishing', 'Composure', 'Decisions', 'Dribbling', 'Passing'], pref: ['LongShots', 'Vision', 'Flair', 'Anticipation', 'Acceleration', 'Agility'] },
+  { id: 'ss', short: 'Schaduwaanvaller', pos: ['AMC'], key: ['Finishing', 'OffTheBall', 'Anticipation', 'Composure', 'FirstTouch', 'Acceleration', 'Pace', 'Decisions'], pref: ['Dribbling', 'Technique', 'Passing', 'WorkRate', 'Stamina'] },
+  { id: 'eng', short: 'Enganche', pos: ['AMC'], key: ['Passing', 'Vision', 'FirstTouch', 'Technique', 'Composure', 'Decisions'], pref: ['Flair', 'Anticipation', 'Teamwork'] },
+  { id: 'tre', short: 'Trequartista', pos: ['AMC', 'ST'], key: ['Dribbling', 'FirstTouch', 'Passing', 'Technique', 'Vision', 'Flair', 'OffTheBall', 'Decisions', 'Composure'], pref: ['Anticipation', 'Agility', 'Balance', 'Acceleration'] },
   // Spitsen
   { id: 'af', short: 'Diepe spits', pos: ['ST'], key: ['Finishing', 'OffTheBall', 'Composure', 'FirstTouch', 'Dribbling', 'Technique', 'Acceleration', 'Pace'], pref: ['Anticipation', 'Decisions', 'Agility', 'Balance', 'Flair'] },
+  { id: 'pf', short: 'Drukz. spits', pos: ['ST'], key: ['WorkRate', 'Stamina', 'Aggression', 'Teamwork', 'Bravery', 'Acceleration', 'Pace', 'Tackling', 'Anticipation'], pref: ['Finishing', 'Strength', 'FirstTouch', 'Decisions', 'Determination'] },
+  { id: 'dlf', short: 'Meesp. spits', pos: ['ST'], key: ['Passing', 'FirstTouch', 'Technique', 'OffTheBall', 'Vision', 'Composure', 'Decisions', 'Teamwork'], pref: ['Finishing', 'Strength', 'Balance', 'Anticipation', 'Dribbling'] },
   { id: 'poacher', short: 'Afmaker', pos: ['ST'], key: ['Finishing', 'OffTheBall', 'Anticipation', 'Composure', 'FirstTouch'], pref: ['Dribbling', 'Heading', 'Technique', 'Decisions', 'Acceleration', 'Pace'] },
   { id: 'tm', short: 'Targetman', pos: ['ST'], key: ['Heading', 'JumpingReach', 'Strength', 'Bravery', 'FirstTouch', 'OffTheBall', 'Finishing', 'Balance'], pref: ['Aggression', 'Anticipation', 'Composure', 'Teamwork', 'Determination'] },
   { id: 'cf', short: 'Complete spits', pos: ['ST'], key: ['Finishing', 'FirstTouch', 'Technique', 'OffTheBall', 'Composure', 'Dribbling', 'Heading', 'Strength', 'Acceleration', 'Pace'], pref: ['Passing', 'Vision', 'LongShots', 'Anticipation', 'Decisions', 'Agility', 'Balance', 'JumpingReach'] },
+  { id: 'f9', short: 'Valse negen', pos: ['ST'], key: ['Passing', 'Vision', 'FirstTouch', 'Technique', 'Dribbling', 'OffTheBall', 'Decisions', 'Composure', 'Agility'], pref: ['Acceleration', 'Pace', 'Flair', 'Anticipation', 'Finishing'] },
+  // FM27 tactische rollen
+  { id: 'hfb', short: 'Holding FB', pos: ["DL","DR"], key: ["Marking","Tackling","Positioning","Decisions","Concentration","Strength","Stamina","WorkRate"], pref: ["Anticipation","Heading","Composure","Pace","Teamwork"] },
+  { id: 'pfb', short: 'Pressing FB', pos: ["DL","DR"], key: ["WorkRate","Stamina","Aggression","Tackling","Pace","Acceleration","Anticipation","Bravery"], pref: ["Marking","Positioning","Decisions","Teamwork","Strength"] },
+  { id: 'hwb', short: 'Holding WB', pos: ["DL","DR","WBL","WBR"], key: ["Positioning","Tackling","Marking","Decisions","Stamina","WorkRate","Teamwork","Passing"], pref: ["Concentration","Anticipation","Pace","Composure","Crossing"] },
+  { id: 'prwb', short: 'Pressing WB', pos: ["DL","DR","WBL","WBR"], key: ["WorkRate","Stamina","Aggression","Tackling","Pace","Acceleration","OffTheBall","Anticipation"], pref: ["Crossing","Decisions","Teamwork","Bravery","Dribbling"] },
+  { id: 'awb', short: 'Adv. WB', pos: ["DL","DR","WBL","WBR"], key: ["Crossing","Dribbling","Pace","Acceleration","OffTheBall","Stamina","WorkRate","Technique"], pref: ["Passing","FirstTouch","Tackling","Agility","Anticipation"] },
+  { id: 'scb', short: 'Stopping CB', pos: ["DC"], key: ["Heading","Tackling","Aggression","Bravery","JumpingReach","Strength","Positioning","Anticipation"], pref: ["Marking","Decisions","Determination","Pace"] },
+  { id: 'acb', short: 'Adv. CB', pos: ["DC"], key: ["Passing","Technique","Composure","Decisions","Vision","Tackling","Positioning","Pace"], pref: ["Dribbling","FirstTouch","Anticipation","JumpingReach","Strength"] },
+  { id: 'ddm', short: 'Dropping DM', pos: ["DM"], key: ["Positioning","Tackling","Marking","Anticipation","Decisions","Passing","Composure","Teamwork"], pref: ["Concentration","Heading","Strength","JumpingReach","WorkRate"] },
+  { id: 'b2bp', short: 'B2B Playm.', pos: ["MC"], key: ["Passing","Vision","FirstTouch","Technique","Stamina","WorkRate","OffTheBall","Decisions","Composure"], pref: ["Tackling","Anticipation","LongShots","Acceleration","Teamwork"] },
+  { id: 'wcm', short: 'Wide CM', pos: ["MC"], key: ["WorkRate","Stamina","Passing","Tackling","Positioning","Decisions","OffTheBall","Teamwork"], pref: ["Crossing","Dribbling","Anticipation","Technique","Pace"] },
+  { id: 'tam', short: 'Track. AM', pos: ["AMC"], key: ["WorkRate","Stamina","Tackling","Teamwork","Anticipation","Decisions","OffTheBall","Passing"], pref: ["FirstTouch","Technique","Composure","Pace","Acceleration"] },
+  { id: 'tcf', short: 'Track. CF', pos: ["ST"], key: ["WorkRate","Stamina","Aggression","Teamwork","Bravery","Tackling","Acceleration","Pace"], pref: ["Anticipation","Finishing","FirstTouch","Decisions","Strength"] },
+  { id: 'cocf', short: 'Outlet CF', pos: ["ST"], key: ["Heading","Strength","JumpingReach","OffTheBall","FirstTouch","Finishing","Bravery","Balance"], pref: ["Passing","Composure","Teamwork","Decisions","Anticipation"] },
 ];
 const ROLE_LABEL = {
-  nl: { gk: 'Keeper', sk: 'Meevoetballende keeper', cd: 'Centrale verdediger', bpd: 'Opbouwende verdediger', fb: 'Vleugelverdediger', wb: 'Wingback', dm: 'Verdedigende middenvelder', dlp: 'Verdiepte spelmaker', bwm: 'Baljagende middenvelder', cm: 'Centrale middenvelder', b2b: 'Box-to-box middenvelder', ap: 'Aanvallende spelmaker', wing: 'Buitenspeler', if: 'Schaduwspits', am: 'Hangende spits', af: 'Diepliggende spits', poacher: 'Afmaker', tm: 'Targetman', cf: 'Complete spits' },
-  en: { gk: 'Goalkeeper', sk: 'Sweeper Keeper', cd: 'Central Defender', bpd: 'Ball Playing Defender', fb: 'Full Back', wb: 'Wing Back', dm: 'Defensive Midfielder', dlp: 'Deep Lying Playmaker', bwm: 'Ball Winning Midfielder', cm: 'Central Midfielder', b2b: 'Box to Box Midfielder', ap: 'Advanced Playmaker', wing: 'Winger', if: 'Inside Forward', am: 'Attacking Midfielder', af: 'Advanced Forward', poacher: 'Poacher', tm: 'Target Man', cf: 'Complete Forward' },
-  fr: { gk: 'Gardien', sk: 'Gardien libéro', cd: 'Défenseur central', bpd: 'Défenseur relanceur', fb: 'Arrière latéral', wb: 'Piston', dm: 'Milieu défensif', dlp: 'Meneur reculé', bwm: 'Récupérateur', cm: 'Milieu central', b2b: 'Milieu box-to-box', ap: 'Meneur avancé', wing: 'Ailier', if: 'Attaquant intérieur', am: 'Milieu offensif', af: 'Attaquant avancé', poacher: 'Renard des surfaces', tm: 'Pivot', cf: 'Attaquant complet' },
-  de: { gk: 'Torwart', sk: 'Mitspielender Torwart', cd: 'Innenverteidiger', bpd: 'Ballspielender Innenverteidiger', fb: 'Außenverteidiger', wb: 'Flügelverteidiger', dm: 'Defensiver Mittelfeldspieler', dlp: 'Tiefer Spielmacher', bwm: 'Balleroberer', cm: 'Zentraler Mittelfeldspieler', b2b: 'Box-to-Box-Spieler', ap: 'Offensiver Spielmacher', wing: 'Flügelspieler', if: 'Inverser Flügelstürmer', am: 'Offensiver Mittelfeldspieler', af: 'Vorgezogene Spitze', poacher: 'Knipser', tm: 'Zielspieler', cf: 'Komplette Spitze' },
+  nl: {
+    gk: 'Keeper', sk: 'Meevoetballende keeper', cd: 'Centrale verdediger', bpd: 'Opbouwende verdediger',
+    ncb: 'No-nonsense centrale verdediger', wcb: 'Brede centrale verdediger', lib: 'Libero',
+    fb: 'Vleugelverdediger', nfb: 'No-nonsense vleugelverdediger', wb: 'Wingback', cwb: 'Complete wingback',
+    iwb: 'Omgekeerde wingback', ifb: 'Ingevouwen vleugelverdediger', pwb: 'Spelmakende wingback',
+    dm: 'Verdedigende middenvelder', dlp: 'Verdiepte spelmaker', bwm: 'Baljagende middenvelder',
+    anchor: 'Verdedigend anker', hb: 'Halve verdediger', regista: 'Regista', rpm: 'Dynamische spelmaker', vol: 'Segundo Volante',
+    cm: 'Centrale middenvelder', b2b: 'Box-to-box middenvelder', ap: 'Aanvallende spelmaker', mez: 'Mezzala', car: 'Carrilero',
+    wing: 'Buitenspeler', iw: 'Inside Winger', if: 'Schaduwspits', wp: 'Playmaking Winger',
+    wtf: 'Wide Forward', rd: 'Raumdeuter', am: 'Hangende spits', ss: 'Schaduwaanvaller',
+    eng: 'Enganche', tre: 'Trequartista',
+    af: 'Diepliggende spits', pf: 'Drukzettende spits', dlf: 'Meespelende spits', poacher: 'Afmaker',
+    tm: 'Targetman', cf: 'Complete spits', f9: 'Valse negen', hfb: 'Controlerende vleugelverdediger', pfb: 'Drukzettende vleugelverdediger', hwb: 'Controlerende wingback', prwb: 'Drukzettende wingback', awb: 'Aanvallende wingback', scb: 'Stoppende centrale verdediger', acb: 'Inschuivende centrale verdediger', ddm: 'Inzakkende verdedigende middenvelder', b2bp: 'Box-to-box spelmaker', wcm: 'Brede centrale middenvelder', tam: 'Meeverdedigende aanvallende middenvelder', tcf: 'Meeverdedigende centrumspits', cocf: 'Aanspeelpunt centrumspits'
+  },
+  en: {
+    gk: 'Goalkeeper', sk: 'Sweeper Keeper', cd: 'Central Defender', bpd: 'Ball-Playing Centre-Back',
+    ncb: 'No-Nonsense Centre Back', wcb: 'Wide Centre Back', lib: 'Libero',
+    fb: 'Full Back', nfb: 'No-Nonsense Full Back', wb: 'Wing Back', cwb: 'Complete Wing Back',
+    iwb: 'Inside Wing-Back', ifb: 'Inside Full-Back', pwb: 'Playmaking Wing Back',
+    dm: 'Defensive Midfielder', dlp: 'Deep Lying Playmaker', bwm: 'Ball Winning Midfielder',
+    anchor: 'Anchor', hb: 'Half Back', regista: 'Regista', rpm: 'Roaming Playmaker', vol: 'Segundo Volante',
+    cm: 'Central Midfielder', b2b: 'Box to Box Midfielder', ap: 'Advanced Playmaker', mez: 'Mezzala', car: 'Carrilero',
+    wing: 'Winger', iw: 'Inside Winger', if: 'Inside Forward', wp: 'Playmaking Winger',
+    wtf: 'Wide Forward', rd: 'Raumdeuter', am: 'Attacking Midfielder', ss: 'Shadow Striker',
+    eng: 'Enganche', tre: 'Trequartista',
+    af: 'Advanced Forward', pf: 'Pressing Forward', dlf: 'Deep Lying Forward', poacher: 'Poacher',
+    tm: 'Target Man', cf: 'Complete Forward', f9: 'False Nine', hfb: 'Holding Full-Back', pfb: 'Pressing Full-Back', hwb: 'Holding Wing-Back', prwb: 'Pressing Wing-Back', awb: 'Advanced Wing-Back', scb: 'Stopping Centre-Back', acb: 'Advanced Centre-Back', ddm: 'Dropping Defensive Midfielder', b2bp: 'Box-To-Box Playmaker', wcm: 'Wide Central Midfielder', tam: 'Tracking Attacking Midfielder', tcf: 'Tracking Centre Forward', cocf: 'Central Outlet Centre Forward'
+  },
+  fr: {
+    gk: 'Gardien', sk: 'Gardien libéro', cd: 'Défenseur central', bpd: 'Défenseur relanceur',
+    ncb: 'Défenseur strict', wcb: 'Défenseur central excentré', lib: 'Libéro',
+    fb: 'Arrière latéral', nfb: 'Latéral strict', wb: 'Piston', cwb: 'Piston offensif',
+    iwb: 'Piston intérieur', ifb: 'Arrière latéral intérieur', pwb: 'Piston meneur de jeu',
+    dm: 'Milieu défensif', dlp: 'Meneur reculé', bwm: 'Récupérateur',
+    anchor: 'Sentinelle', hb: 'Demi-centre', regista: 'Regista', rpm: 'Meneur de jeu libre', vol: 'Segundo Volante',
+    cm: 'Milieu central', b2b: 'Milieu box-to-box', ap: 'Meneur avancé', mez: 'Mezzala', car: 'Carrilero',
+    wing: 'Ailier', iw: 'Inside Winger', if: 'Attaquant intérieur', wp: 'Playmaking Winger',
+    wtf: 'Wide Forward', rd: 'Raumdeuter', am: 'Milieu offensif', ss: 'Attaquant de soutien',
+    eng: 'Enganche', tre: 'Trequartista',
+    af: 'Attaquant avancé', pf: 'Attaquant pressing', dlf: 'Attaquant en retrait', poacher: 'Renard des surfaces',
+    tm: 'Pivot', cf: 'Attaquant complet', f9: 'Faux neuf', hfb: 'Arrière latéral défensif', pfb: 'Latéral de pressing', hwb: 'Piston défensif', prwb: 'Piston de pressing', awb: 'Piston avancé', scb: 'Défenseur central stoppeur', acb: 'Défenseur central avancé', ddm: 'Milieu défensif décrocheur', b2bp: 'Meneur box-to-box', wcm: 'Milieu central excentré', tam: 'Milieu offensif de repli', tcf: 'Avant-centre de repli', cocf: 'Avant-centre point d\'appui'
+  },
+  de: {
+    gk: 'Torwart', sk: 'Mitspielender Torwart', cd: 'Innenverteidiger', bpd: 'Ballspielender Innenverteidiger',
+    ncb: 'Schnörkelloser Innenverteidiger', wcb: 'Äußerer Innenverteidiger', lib: 'Libero',
+    fb: 'Außenverteidiger', nfb: 'Schnörkelloser Außenverteidiger', wb: 'Flügelverteidiger', cwb: 'Kompletter Flügelverteidiger',
+    iwb: 'Inverser Flügelverteidiger', ifb: 'Inverser Außenverteidiger', pwb: 'Spielmachender Flügelverteidiger',
+    dm: 'Defensiver Mittelfeldspieler', dlp: 'Tiefer Spielmacher', bwm: 'Balleroberer',
+    anchor: 'Ankerspieler', hb: 'Halbspieler', regista: 'Regista', rpm: 'Dynamischer Spielmacher', vol: 'Segundo Volante',
+    cm: 'Zentraler Mittelfeldspieler', b2b: 'Box-to-Box-Spieler', ap: 'Offensiver Spielmacher', mez: 'Mezzala', car: 'Carrilero',
+    wing: 'Flügelspieler', iw: 'Inside Winger', if: 'Inverser Flügelstürmer', wp: 'Playmaking Winger',
+    wtf: 'Wide Forward', rd: 'Raumdeuter', am: 'Offensiver Mittelfeldspieler', ss: 'Schattenspieler',
+    eng: 'Enganche', tre: 'Trequartista',
+    af: 'Vorgezogene Spitze', pf: 'Pressender Stürmer', dlf: 'Hängender Stürmer', poacher: 'Knipser',
+    tm: 'Zielspieler', cf: 'Komplette Spitze', f9: 'Falsche Neun', hfb: 'Haltender Außenverteidiger', pfb: 'Pressender Außenverteidiger', hwb: 'Haltender Flügelverteidiger', prwb: 'Pressender Flügelverteidiger', awb: 'Vorgezogener Flügelverteidiger', scb: 'Stoppender Innenverteidiger', acb: 'Aufrückender Innenverteidiger', ddm: 'Abkippender Sechser', b2bp: 'Box-to-Box-Spielmacher', wcm: 'Breiter zentraler Mittelfeldspieler', tam: 'Mitgehender offensiver Mittelfeldspieler', tcf: 'Mitgehender Mittelstürmer', cocf: 'Zielstürmer-Mittelstürmer'
+  },
 };
 const roleName = id => (ROLE_LABEL[state.lang]?.[id] ?? ROLE_LABEL.en[id] ?? id);
 
@@ -2321,9 +2428,11 @@ function renderDivSuggest() {
 }
 // Rol-keuze: gegroepeerd op linie zodat de lijst overzichtelijk blijft.
 function buildRoleSelect() {
-  const groups = [
-    ['GK', ['gk', 'sk']], ['DEF', ['cd', 'bpd', 'fb', 'wb']],
-    ['MID', ['dm', 'dlp', 'bwm', 'cm', 'b2b', 'ap']], ['AANV', ['wing', 'if', 'am', 'af', 'poacher', 'tm', 'cf']],
+    const groups = [
+    ['GK', ['gk', 'sk']],
+    ['DEF', ['cd', 'bpd', 'ncb', 'wcb', 'lib', 'scb', 'acb', 'fb', 'hfb', 'pfb', 'nfb', 'wb', 'hwb', 'prwb', 'awb', 'cwb', 'iwb', 'ifb', 'pwb']],
+    ['MID', ['dm', 'ddm', 'dlp', 'bwm', 'anchor', 'hb', 'regista', 'rpm', 'vol', 'cm', 'b2b', 'b2bp', 'wcm', 'ap', 'mez', 'car']],
+    ['AANV', ['wing', 'iw', 'if', 'wp', 'wtf', 'rd', 'am', 'tam', 'ss', 'eng', 'tre', 'af', 'pf', 'dlf', 'tcf', 'cocf', 'poacher', 'tm', 'cf', 'f9']],
   ];
   const headsBy = {
     nl: { GK: 'Keeper', DEF: 'Verdediging', MID: 'Middenveld', AANV: 'Aanval' },
@@ -3225,6 +3334,8 @@ function showDetail(p) {
   const on = state.shortlist.has(p.id);
   const ev = estValue(p);
   const valTxt = ev.v == null || ev.v === 0 ? '–' : ev.est ? `${fmtMoney(ev.lo)} – ${fmtMoney(ev.hi)}` : fmtMoney(ev.v);
+  const peers = isPlayer ? squadPlayersForPos(p) : [];
+  const hasMyClub = !!(state.meta.myClub);
 
   const gauge = (!state.hideCapa && (p.ca != null || p.pa != null)) ? `<div class="capa">
     <div class="capa-nums"><span><b>CA</b> <span class="ca-bar">${p.ca ?? '–'}</span></span><span><b>PA</b> <span class="pa-bar">${p.pa ?? '–'}</span></span></div>
@@ -3235,6 +3346,12 @@ function showDetail(p) {
     <button class="copybtn" title="${t('copyBtnTip')}">${icon('clipboard', 13)}</button>
     <button class="cmpbtn ${inCmp ? 'on' : ''}" title="${t('addCompare')}">${icon('compare', 13)}</button>${isPlayer && p.attrs ? `<button class="cardbtn" title="${t('cardBtnTip')}">${icon('card', 13)}</button>` : ''}</h2>
   <div class="sub">${getAge(p)} · ${escHtml(natsLabel(p))}${isEu(p) ? ' · <span class="eu-yes">EU</span>' : ''} · ${clubLabel(p)}${p.div ? ` · <span class="dim">${escHtml(p.div)}</span>` : ''}</div>
+  ${isPlayer && hasMyClub ? `<div class="detail-actions">
+    <button id="btn-cmp-squad" class="btn-cmp-squad" title="${escHtml(t('cmpSquadTip'))}">
+      ${icon('compare', 13)} <span>${t('cmpSquadBtn')}</span>
+      ${peers.length ? `<span class="badge-count">${peers.length}</span>` : ''}
+    </button>
+  </div>` : ''}
   ${gauge}
   <div class="kv">
     ${isPlayer ? `<div><b>${t('c_pos')}</b> ${posHtml(p)}</div><div><b>${t('foot')}</b> ${escHtml(footLabel(p))}</div>` : `<div><b>${t('c_role')}</b> ${escHtml(jobLabel(p))}</div>`}
@@ -3347,6 +3464,8 @@ function showDetail(p) {
     html += `<div class="attr-cols staff-cols">${cols}</div>`;
   }
   $('detail-body').innerHTML = html;
+  const bcs = $('btn-cmp-squad');
+  if (bcs) bcs.onclick = () => openSquadCompare(p);
   document.querySelector('.detail-star').onclick = () => toggleShortlist(p.id);
   document.querySelector('.copybtn').onclick = () => copyName(p.name);
   const cmp = document.querySelector('.cmpbtn');
@@ -4037,8 +4156,43 @@ function bestRoleScore(p) {
   const b = bestRoles(p, 1)[0];
   return b ? { name: roleName(b.id), score: b.score } : null;
 }
-function openCompare() {
-  const players = state.compare.map(findPlayer).filter(Boolean);
+function squadPlayersForPos(p) {
+  const myClub = (state.meta.myClub || '').toLowerCase();
+  if (!myClub) return [];
+  const pPos = new Set(natPos(p));
+  return state.players
+    .filter(x => (x.club || '').toLowerCase() === myClub && x.id !== p.id && natPos(x).some(pos => pPos.has(pos)))
+    .sort((a, b) => (b.ca || 0) - (a.ca || 0));
+}
+function openSquadCompare(p, peerIndex = 0) {
+  const peers = squadPlayersForPos(p);
+  if (!peers.length) {
+    const posStr = (natPos(p) || []).join(', ') || p.pos || '-';
+    showToast(tf('cmpNoSquadPeers', { pos: posStr }), 'warning');
+    return;
+  }
+  const idx = Math.max(0, Math.min(peers.length - 1, peerIndex));
+  const peer = peers[idx];
+  const title = `${t('cmpSquadTitle')} · ${p.name} vs ${peer.name}`;
+  
+  let tabsHtml = '';
+  if (peers.length > 1) {
+    tabsHtml = `<div class="cmp-tabs">` + peers.map((m, i) =>
+      `<button type="button" class="cmp-tab${i === idx ? ' active' : ''}" data-idx="${i}">
+        ${escHtml(m.name)} <span class="dim">(CA ${m.ca ?? '-'})</span>
+      </button>`
+    ).join('') + `</div>`;
+  }
+  
+  openCompare([p, peer], title, tabsHtml);
+  
+  document.querySelectorAll('.cmp-tab').forEach(b => {
+    b.onclick = () => openSquadCompare(p, +b.dataset.idx);
+  });
+}
+function openCompare(customPlayers, customTitle, headerExtraHtml) {
+  if (!Array.isArray(customPlayers)) { customPlayers = null; customTitle = null; headerExtraHtml = null; }
+  const players = (customPlayers || state.compare.map(findPlayer)).filter(Boolean);
   if (players.length < 2) return;
   const n = players.length;
   const two = n === 2;   // bij precies 2 spelers is er een Δ-kolom; bij 3 markeert de rij de winnaar
@@ -4199,8 +4353,10 @@ function openCompare() {
   }
 
   const cols = two ? '130px 1fr 1fr 72px' : `130px repeat(${n}, 1fr)`;
+  const title = customTitle || t('cmpTitle');
+  const extra = headerExtraHtml ? headerExtraHtml : '';
   $('compare-inner').innerHTML =
-    `<div class="cmp-top"><h2>${t('cmpTitle')}</h2><button id="cmp-close">${icon('x', 15)}</button></div>` +
+    `<div class="cmp-top"><h2>${escHtml(title)}</h2>${extra}<button id="cmp-close">${icon('x', 15)}</button></div>` +
     `<div class="cmp-scroll">` +
     `<div class="cmp-grid cmp-headgrid" style="grid-template-columns:${cols}">${headRow}</div>` +
     `<div class="cmp-grid" style="grid-template-columns:${cols}">${body}</div>${panels}</div>`;

@@ -176,3 +176,45 @@ test('staffRoleScore: evaluates staff attributes', () => {
   const sc = M.staffRoleScore(s);
   assert.ok(sc >= 14 && sc <= 20, `Expected AM score >= 14, got ${sc}`);
 });
+
+test('squadPlayersForPos: finds squad members sharing positions', () => {
+  M.state.meta.myClub = 'Fenerbahçe A.Ş.';
+  M.state.players = [
+    { id: 10, name: 'Squad Striker', club: 'Fenerbahçe A.Ş.', posArr: ['ST'], ca: 140 },
+    { id: 20, name: 'Squad Defender', club: 'Fenerbahçe A.Ş.', posArr: ['DC'], ca: 135 },
+  ];
+  const target = { id: 99, name: 'Target ST', club: 'Other Club', posArr: ['ST'] };
+  const matches = M.squadPlayersForPos(target);
+  assert.equal(matches.length, 1);
+  assert.equal(matches[0].name, 'Squad Striker');
+});
+
+test('modern tactical roles: all roles have valid attributes, labels and score properly', () => {
+  const roles = M.ROLES;
+  assert.ok(roles.length >= 40, `Expected 40+ tactical roles, got ${roles.length}`);
+  const validAttrs = new Set(Object.keys(M.ATTR_LABEL.en));
+
+  const expectedModernIds = ['iwb', 'ifb', 'pwb', 'cwb', 'nfb', 'ncb', 'wcb', 'lib', 'anchor', 'hb', 'regista', 'rpm', 'vol', 'mez', 'car', 'iw', 'wp', 'wtf', 'rd', 'ss', 'eng', 'tre', 'pf', 'dlf', 'f9'];
+  for (const role of roles) {
+    assert.ok(M.ROLE_LABEL.en[role.id], `Missing en label for ${role.id}`);
+    assert.ok(M.ROLE_LABEL.nl[role.id], `Missing nl label for ${role.id}`);
+    assert.ok(M.ROLE_LABEL.fr[role.id], `Missing fr label for ${role.id}`);
+    assert.ok(M.ROLE_LABEL.de[role.id], `Missing de label for ${role.id}`);
+    for (const k of role.key) assert.ok(validAttrs.has(k), `Invalid key attribute "${k}" in role ${role.id}`);
+    for (const p of role.pref) assert.ok(validAttrs.has(p), `Invalid pref attribute "${p}" in role ${role.id}`);
+  }
+
+  for (const id of expectedModernIds) {
+    const r = roles.find(x => x.id === id);
+    assert.ok(r, `Modern role ${id} must be defined in ROLES`);
+  }
+
+  // Test role scoring for an Inverted Wing Back (IWB)
+  const iwbRole = roles.find(x => x.id === 'iwb');
+  const wbPlayer = player({
+    posArr: ['DR', 'WBR'],
+    attrs: { Passing: 15, Tackling: 14, WorkRate: 16, Decisions: 15, Teamwork: 15, Composure: 14, Stamina: 16, Positioning: 13, FirstTouch: 14, Vision: 14, Anticipation: 14, OffTheBall: 13, Pace: 15, Acceleration: 15 },
+  });
+  const iwbScore = M.roleScore(wbPlayer, iwbRole);
+  assert.ok(iwbScore >= 13 && iwbScore <= 16, `Expected IWB score ~14-15, got ${iwbScore}`);
+});
