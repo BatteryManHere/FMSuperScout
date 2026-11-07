@@ -47,6 +47,7 @@ const REPO_URL = 'https://github.com/mavarobli/FMSuperScout';
 // ================= i18n =================
 const I18N = {
   nl: {
+    int_not_competitive: 'Club niet competitief genoeg',
     staffUnassignedOpt: 'Clubloze staf (op geschiktheid)',
     staffBestFitTip: 'Geschatte beste rol op basis van attributen: {r} ({s}/20)',
     tag_unassigned: 'clubloos',
@@ -221,6 +222,7 @@ const I18N = {
     verWarnOldDump: 'Deze data komt van een oudere FMSuperScout-plugin. Alles werkt, maar haal verse data op (F9 in FM met je save geladen) voor het beste resultaat.',
   },
   en: {
+    int_not_competitive: 'Club not competitive enough',
     staffUnassignedOpt: 'Unassigned / Free Staff (by suitability)',
     staffBestFitTip: 'Estimated best role based on attributes: {r} ({s}/20)',
     tag_unassigned: 'unassigned',
@@ -395,6 +397,7 @@ const I18N = {
     verWarnOldDump: 'This data was made by an older FMSuperScout plugin. Everything works, but fetch fresh data (F9 in FM with your save loaded) for the best results.',
   },
   fr: {
+    int_not_competitive: 'Club pas assez compétitif',
     staffUnassignedOpt: 'Staff sans club (selon aptitude)',
     staffBestFitTip: 'Meilleur rôle estimé selon les attributs : {r} ({s}/20)',
     tag_unassigned: 'sans club',
@@ -569,6 +572,7 @@ const I18N = {
     verWarnOldDump: 'Ces données viennent d\'un plugin FMSuperScout plus ancien. Tout fonctionne, mais rechargez des données fraîches (F9 dans FM, sauvegarde chargée) pour un meilleur résultat.',
   },
   de: {
+    int_not_competitive: 'Verein nicht konkurrenzfähig genug',
     staffUnassignedOpt: 'Vereinslose Mitarbeiter (nach Eignung)',
     staffBestFitTip: 'Geschätzte beste Rolle basierend auf Attributen: {r} ({s}/20)',
     tag_unassigned: 'vereinslos',
@@ -1450,50 +1454,79 @@ function interestEstimate(p) {
 function interestEstimateCalc(p) {
   const myRep = state.meta.myClubRep || 0;
   if (!myRep) return null;
-  if (p.club && (p.club || '').toLowerCase() === (state.meta.myClub || '').toLowerCase()) return null; // eigen speler
+  if (p.club && (p.club || '').toLowerCase() === (state.meta.myClub || '').toLowerCase()) return null; // eigen speler / staf
 
-  // Reputatie: mijn club vs (a) huidige club en (b) de persoonlijke status van de speler.
-  // Bij jonge spelers weegt de clubkloof zwaarder: hun lage wereldreputatie is vooral leeftijd,
-  // geen "klein spelertje", dus statuskloof zou de interesse anders kunstmatig opblazen.
+  const isStaff = !!(p.staffAttrs || p.job);
   const age = getAge(p);
-  const known = age != null && age > 0;   // geboortejaar kan ontbreken → leeftijd onbekend, niet "0 jaar"
+  const known = age != null && age > 0;
   const eu = isEu(p);
+
+  // Bepaal de effectieve persoonlijke reputatie:
+  // Als worldRep ontbreekt (oude dumps of staf), schatten we die via CA (ca * 50 op de 1..10000 schaal)
+  // in plaats van terug te vallen op 0 (wat de interesse kunstmatig op 100/100 blies).
+  const personalRep = p.worldRep != null ? p.worldRep : (p.ca ? Math.min(10000, p.ca * 50) : (isStaff ? 5000 : 3500));
   const clubGap = myRep - (p.clubRep || 0);
-  const statGap = myRep - (p.worldRep || 0);
-  const blend = known && age <= 19 ? (0.9 * clubGap + 0.15 * statGap) : (0.55 * clubGap + 0.45 * statGap);
-  let score = 100 / (1 + Math.exp(-blend / 1400));   // 0 kloof → 50; +1400 → ~73; -1400 → ~27
+  const statGap = myRep - personalRep;
+
+  // Staf-specifieke competitiviteit / status-eis:
+  // In FM weigert een staflid direct als de reputatie van jouw club te ver onder zijn persoonlijke
+  // status ligt (FM-melding: "[Club] is not competitive enough to match ambitions").
+  if (isStaff && statGap < -350) {
+    return { score: 10, label: t('int_no'), cls: 'int-n', note: 'not_competitive' };
+  }
+
+  // Idem voor topspelers: als een club 1400+ punten onder hun status ligt, weigeren ze.
+  if (!isStaff && statGap < -1400) {
+    return { score: 12, label: t('int_no'), cls: 'int-n', note: 'not_competitive' };
+  }
+
+  const blend = isStaff
+    ? (isFree(p) ? statGap : 0.45 * clubGap + 0.55 * statGap)
+    : (known && age <= 19 ? (0.9 * clubGap + 0.15 * statGap) : (0.55 * clubGap + 0.45 * statGap));
+
+  let score = 100 / (1 + Math.exp(-blend / 1400));
 
   // Beschikbaarheidssignalen
-  if (isFree(p)) score = Math.max(score, 72);                     // clubloos: alleen loon nodig
-  if (p.listed || p.setForRelease) score += 15;                  // club wil verkopen
-  if (p.notForSale) score *= 0.4;                                // niet te koop: fors omlaag
+  if (isFree(p)) {
+    // Clubloos: loon en reputatie tellen. Geeft een duw (+20), maar forceert niet langer blind 72 (High)
+    // als de club veel te klein is voor de kandidaat.
+    score = Math.min(100, score + 20);
+  }
+  if (p.listed || p.setForRelease) score += 15;
+  if (p.notForSale) score *= 0.4;
   const m = monthsUntil(p.expires);
-  if (m != null && m <= 6) score += 14;                          // (bijna) transfervrij
+  if (m != null && m <= 6) score += 14;
   else if (m != null && m <= 12) score += 7;
 
-  // Loon-haalbaarheid: past de speler in mijn loonstructuur?
+  // Loon-haalbaarheid
   const ceil = myWageCeiling();
   if (ceil && p.wage > 0 && !isFree(p)) {
     const ratio = p.wage / ceil;
-    if (ratio > 1) score -= Math.min(38, (ratio - 1) * 46);      // boven budget: moeilijk
-    else score += Math.min(6, (1 - ratio) * 8);                  // ruim betaalbaar: klein duwtje
+    if (ratio > 1) score -= Math.min(38, (ratio - 1) * 46);
+    else score += Math.min(6, (1 - ratio) * 8);
   }
 
-  // Persoonlijkheid (nu uit de dump): ambitie stuwt naar een stap omhoog en remt een stap
-  // omlaag/lateraal; loyaliteit houdt spelers bij hun club.
+  // Persoonlijkheid & Verhuizen / Adaptability
+  const adapt = isStaff ? (p.staffAttrs?.Aanpassingsvermogen || 10) : (p.adaptability || 10);
+  if (isStaff) {
+    if (adapt < 10) score -= 25;
+    else if (adapt >= 14) score += 10;
+  }
   if (p.ambition) score += (blend >= 0 ? 1.2 : -2.2) * (p.ambition - 10);
   if (p.loyalty && !isFree(p)) score *= (1 - 0.45 * (p.loyalty / 20));
 
-  // Leeftijd: jonge spelers verhuizen minder makkelijk (settelen, ontwikkelen bij eigen club).
-  if (known && age <= 16) score *= 0.7;
-  else if (known && age <= 17) score *= 0.85;
+  // Leeftijd (spelers)
+  if (!isStaff) {
+    if (known && age <= 16) score *= 0.7;
+    else if (known && age <= 17) score *= 0.85;
+  }
 
-  // FIFA Art. 19: non-EU-speler onder de 18 kan internationaal pas komen vanaf z'n 18e.
-  // Bij onbekende leeftijd géén minderjarigen-cap: dan zou een speler zonder geboortejaar
-  // onterecht als "te jong" worden weggezet.
+  // FIFA Art. 19 minderjarigen (spelers)
   let note = null;
-  if (known && age <= 15) { score = Math.min(score, 6); note = 'minor'; }
-  else if (known && age <= 17 && !eu) { score = Math.min(score, 8); note = 'minorIntl'; }
+  if (!isStaff) {
+    if (known && age <= 15) { score = Math.min(score, 6); note = 'minor'; }
+    else if (known && age <= 17 && !eu) { score = Math.min(score, 8); note = 'minorIntl'; }
+  }
 
   score = Math.max(0, Math.min(100, Math.round(score)));
   const label = score >= 70 ? t('int_big') : score >= 45 ? t('int_ok') : score >= 25 ? t('int_small') : t('int_no');

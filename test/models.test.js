@@ -281,3 +281,25 @@ test('bestStaffFit: identifies best role for jobless staff without set job', () 
   assert.ok(bestM.g === 0 || bestM.g === 1); // Group 0 (Manager) or 1 (AM)
   assert.ok(bestM.score >= 16);
 });
+
+
+test('interestEstimate: staff exceeding club reputation considers club not competitive', () => {
+  const eliteStaff = {
+    name: 'Elite Manager',
+    ca: 190, // Rep ~9500 vs myClubRep 6000 -> statGap = -3500
+    job: 'Manager',
+    staffAttrs: { Aanpassingsvermogen: 18, Tactische_kennis: 18 },
+  };
+  const intElite = M.interestEstimate(eliteStaff);
+  assert.equal(intElite.note, 'not_competitive');
+  assert.ok(intElite.score <= 15);
+
+  const realisticStaff = {
+    name: 'Realistic Coach',
+    ca: 110, // Rep ~5500 vs myClubRep 6000 -> statGap = +500
+    job: 'Coach',
+    staffAttrs: { Aanpassingsvermogen: 15, Aanvallen: 14 },
+  };
+  const intReal = M.interestEstimate(realisticStaff);
+  assert.ok(intReal.score >= 50);
+});
