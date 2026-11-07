@@ -41,7 +41,7 @@ try { ['fmss_donate', 'fmss_donate_at', 'fmss_days'].forEach(k => localStorage.r
 // $: xe.com-koers uit diezelfde periode; verifieer tegen FM's eigen USD-weergave.
 const CUR_RATE = { '£': 1, '€': 1.16, '$': 1.35 };
 // App-versie: bij een release gelijk trekken met MyAppVersion in installer/FMSuperScout.iss.
-const APP_VERSION = '1.7.0';
+const APP_VERSION = '1.7.3';
 const REPO_URL = 'https://github.com/mavarobli/FMSuperScout';
 
 // ================= i18n =================
@@ -71,6 +71,7 @@ const I18N = {
     c_growth: 'Groei', grNew: 'nieuw', development: 'Ontwikkeling', histPeriod: 'Periode',
     hp_last: 'Sinds vorige dump', hp_m6: 'Afgelopen 6 maanden', hp_y1: 'Afgelopen jaar',
     hp_season: 'Dit seizoen', hp_all: 'Sinds we meten', growthRange: 'Groei', onlyNew: 'Alleen nieuwe spelers',
+    fitHint: 'Hoe goed past iemand bij de rol (1-20)? Gewogen gemiddelde van de staf-attributen die voor die rol tellen, bv. Conditie en Sportwetenschap bij een conditietrainer. Een eigen benadering, niet de FM-sterren. Geldt voor de gefilterde rol, anders de huidige functie of de voorkeursbaan.',
     growthHint: 'CA-verandering sinds de gekozen peildatum, gemeten uit je eigen dumps. Groen = groei, rood = verlies, "nieuw" = bestond toen nog niet.\n\nElke F9 voegt een meetpunt toe: hoe langer je de tool gebruikt, hoe verder je terugkijkt.',
     onlyNewHint: 'Spelers die er op de peildatum nog niet waren. Meestal jeugdspelers uit een intake, soms iemand die vanuit een niet-geladen competitie jouw database in komt.',
     intakeTitle: 'Jeugdintake: {n} nieuwe spelers wereldwijd', intakeBest: 'Beste vooruitzicht: {p}',
@@ -95,7 +96,7 @@ const I18N = {
     nodata: 'Nog geen data geladen', exportcsv: 'Shortlist exporteren (CSV)',
     results: 'resultaten', c_name: 'Naam', c_age: 'Lft', c_pos: 'Positie', c_club: 'Club', c_nat: 'Nat',
     c_value: 'Waarde', c_fee: 'Vraagprijs', c_wage: 'Salaris', c_expires: 'Contract tot', c_interest: 'Interesse',
-    c_status: 'Status', c_role: 'Rol', foot: 'Voet', footR: 'Rechts', footL: 'Links', footB: 'Beide', height: 'Lengte', repLabel: 'Reputatie',
+    c_status: 'Status', c_role: 'Rol', c_prefjob: 'Voorkeursbaan', c_fit: 'Geschiktheid', foot: 'Voet', footR: 'Rechts', footL: 'Links', footB: 'Beide', height: 'Lengte', repLabel: 'Reputatie',
     c_clubrep: 'Clubrep.', c_worldrep: 'Wereldrep.', c_div: 'Divisie',
     estval: 'Gesch. waarde', wageLabel: 'Salaris', contractLabel: 'Contract tot', free_l: 'transfervrij',
     int_big: 'Groot', int_ok: 'Redelijk', int_small: 'Klein', int_no: 'Nee', interestTitle: 'Interesse-inschatting',
@@ -129,6 +130,7 @@ const I18N = {
     scanStalled: 'De scan lijkt gestopt (is FM afgesloten of gecrasht?). Herstart FM en probeer opnieuw.',
     serverGone: 'Geen verbinding met de lokale server. Sluit dit venster en start FMSuperScout opnieuw.',
     tag_free: 'clubloos', tag_listed: 'transferlijst', tag_loan: 'te huur', tag_rel: 'vrijgegeven', tag_nfs: 'niet te koop',
+    dealTip: 'Transferakkoord met {c}, gaat over op {d}', dealLabel: 'Transferakkoord', hideDeals: 'Zonder transferakkoorden', hideDealsHint: 'Verbergt spelers die al rond zijn met een andere club (bv. per 1 juli). Spelers van of naar jouw club blijven altijd zichtbaar.',
     colHint: 'Sleep om te verplaatsen · rechtsklik voor kolommen', colsTitle: 'Kolommen tonen', colsReset: 'Standaard herstellen',
     sg_coaching: 'Training', sg_mental: 'Mentaal', sg_knowledge: 'Kennis', sg_medical: 'Medisch & data',
     g_technical: 'Technisch', g_setpieces: 'Standaardsituaties', g_mental: 'Mentaal', g_physical: 'Fysiek', g_goalkeeping: 'Keepen',
@@ -240,6 +242,7 @@ const I18N = {
     c_growth: 'Growth', grNew: 'new', development: 'Development', histPeriod: 'Period',
     hp_last: 'Since last dump', hp_m6: 'Last 6 months', hp_y1: 'Last year',
     hp_season: 'This season', hp_all: 'Since tracking began', growthRange: 'Growth', onlyNew: 'New players only',
+    fitHint: 'How well does someone fit the role (1-20)? Weighted average of the staff attributes that matter for it, e.g. Fitness and Sports Science for a fitness coach. Our own estimate, not the FM stars. Uses the filtered role, else the current job or the preferred job.',
     growthHint: 'CA change since the chosen reference date, measured from your own dumps. Green = growth, red = decline, "new" = did not exist yet.\n\nEvery F9 adds a data point: the longer you use the tool, the further back you can look.',
     onlyNewHint: 'Players who did not exist at the reference date. Usually youth intake players, sometimes someone arriving in your database from a league you had not loaded.',
     intakeTitle: 'Youth Intake: {n} new players worldwide', intakeBest: 'Top Prospect: {p}',
@@ -264,7 +267,7 @@ const I18N = {
     nodata: 'No data loaded yet', exportcsv: 'Export shortlist (CSV)',
     results: 'results', c_name: 'Name', c_age: 'Age', c_pos: 'Position', c_club: 'Club', c_nat: 'Nat',
     c_value: 'Value', c_fee: 'Asking Price', c_wage: 'Wage', c_expires: 'Contract Expires', c_interest: 'Interest',
-    c_status: 'Status', c_role: 'Role', foot: 'Foot', footR: 'Right', footL: 'Left', footB: 'Both', height: 'Height', repLabel: 'Reputation',
+    c_status: 'Status', c_role: 'Role', c_prefjob: 'Preferred Job', c_fit: 'Suitability', foot: 'Foot', footR: 'Right', footL: 'Left', footB: 'Both', height: 'Height', repLabel: 'Reputation',
     c_clubrep: 'Club Rep', c_worldrep: 'World Rep', c_div: 'Division',
     estval: 'Market Value', wageLabel: 'Wage', contractLabel: 'Contract Expires', free_l: 'free agent',
     int_big: 'High', int_ok: 'Fair', int_small: 'Low', int_no: 'None', interestTitle: 'Interest',
@@ -298,6 +301,7 @@ const I18N = {
     scanStalled: 'The scan appears to have stopped (was FM closed, or did it crash?). Restart FM and try again.',
     serverGone: 'Lost connection to the local server. Close this window and start FMSuperScout again.',
     tag_free: 'free agent', tag_listed: 'transfer listed', tag_loan: 'for loan', tag_rel: 'released', tag_nfs: 'not for sale',
+    dealTip: 'Transfer agreed with {c}, moves on {d}', dealLabel: 'Transfer agreed', hideDeals: 'Without agreed transfers', hideDealsHint: 'Hides players who already agreed a move to another club (e.g. on July 1st). Players from or to your club always remain visible.',
     colHint: 'Drag to reorder · right-click for columns', colsTitle: 'Show columns', colsReset: 'Reset to default',
     sg_coaching: 'Coaching', sg_mental: 'Mental', sg_knowledge: 'Knowledge', sg_medical: 'Medical & Data',
     g_technical: 'Technical', g_setpieces: 'Set Pieces', g_mental: 'Mental', g_physical: 'Physical', g_goalkeeping: 'Goalkeeping',
@@ -409,6 +413,7 @@ const I18N = {
     c_growth: 'Progrès', grNew: 'nouveau', development: 'Progression', histPeriod: 'Période',
     hp_last: 'Depuis le dernier dump', hp_m6: '6 derniers mois', hp_y1: 'Dernière année',
     hp_season: 'Cette saison', hp_all: 'Depuis le début', growthRange: 'Progrès', onlyNew: 'Nouveaux joueurs uniquement',
+    fitHint: 'Adéquation au poste (1-20) : moyenne pondérée des attributs du staff utiles pour ce poste, p. ex. Condition physique et Sciences du sport pour un préparateur physique. Notre estimation, pas les étoiles de FM. Porte sur le rôle filtré, sinon le poste actuel ou le poste préféré.',
     growthHint: 'Évolution de la CA depuis la date de référence, mesurée dans vos propres dumps. Vert = progrès, rouge = recul, "nouveau" = n\'existait pas encore.\n\nChaque F9 ajoute un point de mesure : plus vous utilisez l\'outil, plus vous remontez loin.',
     onlyNewHint: 'Joueurs absents à la date de référence. En général des jeunes issus d\'une intake, parfois un joueur arrivé d\'un championnat non chargé.',
     intakeTitle: 'Intake : {n} nouveaux joueurs dans le monde', intakeBest: 'Meilleur espoir : {p}',
@@ -433,7 +438,7 @@ const I18N = {
     nodata: 'Aucune donnée chargée', exportcsv: 'Exporter la shortlist (CSV)',
     results: 'résultats', c_name: 'Nom', c_age: 'Âge', c_pos: 'Poste', c_club: 'Club', c_nat: 'Nat',
     c_value: 'Valeur', c_fee: 'Prix demandé', c_wage: 'Salaire', c_expires: 'Contrat jusqu\'au', c_interest: 'Intérêt',
-    c_status: 'Statut', c_role: 'Rôle', foot: 'Pied', footR: 'Droit', footL: 'Gauche', footB: 'Les deux', height: 'Taille', repLabel: 'Réputation',
+    c_status: 'Statut', c_role: 'Rôle', c_prefjob: 'Poste préféré', c_fit: 'Adéquation', foot: 'Pied', footR: 'Droit', footL: 'Gauche', footB: 'Les deux', height: 'Taille', repLabel: 'Réputation',
     c_clubrep: 'Rép. club', c_worldrep: 'Rép. mondiale', c_div: 'Division',
     estval: 'Valeur est.', wageLabel: 'Salaire', contractLabel: 'Contrat jusqu\'au', free_l: 'libre',
     int_big: 'Fort', int_ok: 'Correct', int_small: 'Faible', int_no: 'Non', interestTitle: 'Estimation d\'intérêt',
@@ -467,6 +472,7 @@ const I18N = {
     scanStalled: 'Le scan semble arrêté (FM fermé ou planté ?). Relancez FM et réessayez.',
     serverGone: 'Pas de connexion au serveur local. Fermez cette fenêtre et relancez FMSuperScout.',
     tag_free: 'libre', tag_listed: 'transférable', tag_loan: 'à prêter', tag_rel: 'libéré', tag_nfs: 'pas à vendre',
+    dealTip: 'Transfert conclu avec {c}, effectif le {d}', dealLabel: 'Transfert conclu', hideDeals: 'Sans transferts conclus', hideDealsHint: 'Masque les joueurs qui ont déjà conclu un transfert vers un autre club (par ex. au 1er juillet). Les joueurs de ou vers votre club restent toujours visibles.',
     colHint: 'Glissez pour déplacer · clic droit pour les colonnes', colsTitle: 'Colonnes affichées', colsReset: 'Rétablir par défaut',
     sg_coaching: 'Entraînement', sg_mental: 'Mental', sg_knowledge: 'Connaissances', sg_medical: 'Médical & données',
     g_technical: 'Technique', g_setpieces: 'Coups de pied arrêtés', g_mental: 'Mental', g_physical: 'Physique', g_goalkeeping: 'Gardien',
@@ -578,6 +584,7 @@ const I18N = {
     c_growth: 'Wachstum', grNew: 'neu', development: 'Entwicklung', histPeriod: 'Zeitraum',
     hp_last: 'Seit letztem Dump', hp_m6: 'Letzte 6 Monate', hp_y1: 'Letztes Jahr',
     hp_season: 'Diese Saison', hp_all: 'Seit Beginn', growthRange: 'Wachstum', onlyNew: 'Nur neue Spieler',
+    fitHint: 'Wie gut passt jemand zur Rolle (1-20)? Gewichteter Schnitt der dafür wichtigen Mitarbeiter-Attribute, z. B. Fitness und Sportwissenschaft beim Fitnesstrainer. Eigene Schätzung, nicht die FM-Sterne. Gilt für die gefilterte Rolle, sonst die aktuelle oder bevorzugte Tätigkeit.',
     growthHint: 'CA-Veränderung seit dem gewählten Stichtag, gemessen aus deinen eigenen Dumps. Grün = Wachstum, Rot = Verlust, "neu" = existierte damals noch nicht.\n\nJedes F9 fügt einen Messpunkt hinzu: Je länger du das Tool nutzt, desto weiter blickst du zurück.',
     onlyNewHint: 'Spieler, die es am Stichtag noch nicht gab. Meist Jugendspieler aus einer Intake, manchmal jemand aus einer nicht geladenen Liga.',
     intakeTitle: 'Jugend-Intake: {n} neue Spieler weltweit', intakeBest: 'Bestes Talent: {p}',
@@ -602,7 +609,7 @@ const I18N = {
     nodata: 'Noch keine Daten geladen', exportcsv: 'Shortlist exportieren (CSV)',
     results: 'Treffer', c_name: 'Name', c_age: 'Alter', c_pos: 'Position', c_club: 'Verein', c_nat: 'Nat',
     c_value: 'Wert', c_fee: 'Forderung', c_wage: 'Gehalt', c_expires: 'Vertrag bis', c_interest: 'Interesse',
-    c_status: 'Status', c_role: 'Rolle', foot: 'Fuß', footR: 'Rechts', footL: 'Links', footB: 'Beide', height: 'Größe', repLabel: 'Reputation',
+    c_status: 'Status', c_role: 'Rolle', c_prefjob: 'Bevorzugte Tätigkeit', c_fit: 'Eignung', foot: 'Fuß', footR: 'Rechts', footL: 'Links', footB: 'Beide', height: 'Größe', repLabel: 'Reputation',
     c_clubrep: 'Vereinsrep.', c_worldrep: 'Weltrep.', c_div: 'Liga',
     estval: 'Gesch. Wert', wageLabel: 'Gehalt', contractLabel: 'Vertrag bis', free_l: 'ablösefrei',
     int_big: 'Hoch', int_ok: 'Ordentlich', int_small: 'Gering', int_no: 'Nein', interestTitle: 'Interesse-Einschätzung',
@@ -636,6 +643,7 @@ const I18N = {
     scanStalled: 'Der Scan scheint gestoppt (FM beendet oder abgestürzt?). Starte FM neu und versuche es erneut.',
     serverGone: 'Keine Verbindung zum lokalen Server. Schließe dieses Fenster und starte FMSuperScout neu.',
     tag_free: 'vereinslos', tag_listed: 'Transferliste', tag_loan: 'zu verleihen', tag_rel: 'freigestellt', tag_nfs: 'unverkäuflich',
+    dealTip: 'Wechsel zu {c} vereinbart, ab {d}', dealLabel: 'Wechsel vereinbart', hideDeals: 'Ohne vereinbarte Wechsel', hideDealsHint: 'Blendet Spieler aus, deren Wechsel zu einem anderen Verein schon feststeht (z. B. zum 1. Juli). Spieler von oder zu deinem Verein bleiben immer sichtbar.',
     colHint: 'Ziehen zum Verschieben · Rechtsklick für Spalten', colsTitle: 'Spalten anzeigen', colsReset: 'Standard wiederherstellen',
     sg_coaching: 'Training', sg_mental: 'Mental', sg_knowledge: 'Wissen', sg_medical: 'Medizin & Daten',
     g_technical: 'Technik', g_setpieces: 'Standards', g_mental: 'Mental', g_physical: 'Physis', g_goalkeeping: 'Torwart',
@@ -1159,7 +1167,7 @@ const PLAYER_COLS = [
   { key: 'name', label: 'c_name', get: p => p.name, name: true, w: 180 },
   { key: 'age', label: 'c_age', num: true, get: p => getAge(p), w: 50 },
   { key: 'pos', label: 'c_pos', get: p => posRank(p), render: p => posHtml(p), w: 130 },
-  { key: 'club', label: 'c_club', get: p => p.club || '', render: p => clubLabel(p), w: 175 },
+  { key: 'club', label: 'c_club', get: p => p.club || '', render: p => clubLabel(p) + dealSuffix(p), w: 175 },
   { key: 'div', label: 'c_div', get: p => p.div || '', render: p => p.div ? escHtml(p.div) : '<span class="dim">–</span>', defHidden: true, w: 170 },
   { key: 'nat', label: 'c_nat', get: p => natsLabel(p), w: 115 },
   { key: 'eu', label: 'EU', get: p => isEu(p) ? 1 : 0, render: p => isEu(p) ? `<span class="eu-yes">${icon('check', 12)}</span>` : '<span class="dim">–</span>', w: 42 },
@@ -1187,16 +1195,18 @@ const STAFF_COLS = [
   { key: 'sl', label: '★', star: true, w: 34 },
   { key: 'name', label: 'c_name', get: p => p.name, name: true, w: 180 },
   { key: 'age', label: 'c_age', num: true, get: p => getAge(p), w: 50 },
-  { key: 'job', label: 'c_role', get: p => jobLabel(p), w: 150 },
+  { key: 'job', label: 'c_role', get: p => staffJobless(p) ? '' : jobLabel(p), render: p => staffJobless(p) ? '<span class="dim">–</span>' : escHtml(jobLabel(p)), w: 150 },
+  { key: 'prefJob', label: 'c_prefjob', get: p => prefJobLabel(p), render: p => prefJobLabel(p) ? escHtml(prefJobLabel(p)) : '<span class="dim">–</span>', w: 140 },
+  { key: 'fit', label: 'c_fit', num: true, help: 'fitHint', get: p => fitOf(p) ?? -1, render: p => { const v = fitOf(p); return v == null ? '<span class="dim">–</span>' : `<span class="${roleClass(v)}">${v.toFixed(1)}</span>`; }, w: 60 },
   { key: 'staffscore', label: 'c_staffscore', help: 'staffScoreHint', num: true, get: p => staffRoleScore(p) ?? -1, render: staffRoleScoreHtml, w: 68 },
-  { key: 'club', label: 'c_club', get: p => p.club || '', render: p => clubLabel(p), w: 175 },
+  { key: 'club', label: 'c_club', get: p => p.club || '', render: p => clubLabel(p), w: 140 },
   { key: 'nat', label: 'c_nat', get: p => natsLabel(p), w: 115 },
   { key: 'ca', label: 'CA', num: true, get: p => p.ca, render: p => qHtml(p.ca), w: 56 },
   { key: 'pa', label: 'PA', num: true, get: p => p.pa, render: p => qHtml(p.pa), w: 56 },
   { key: 'wage', label: 'c_wage', num: true, get: p => p.wage, fmt: fmtWage, w: 100 },
   { key: 'expires', label: 'c_expires', get: p => p.expires, fmt: fmtDate, tdCls: p => expiresHtml(p).cls, w: 110 },
   { key: 'clubRep', label: 'c_clubrep', num: true, get: p => p.clubRep || 0, defHidden: true, w: 85 },
-  { key: 'worldRep', label: 'c_worldrep', num: true, get: p => p.worldRep || 0, defHidden: true, w: 85 },
+  { key: 'worldRep', label: 'c_worldrep', num: true, get: p => p.worldRep || 0, w: 85 },
 ];
 
 // ---------- geschatte marktwaarde (GBP) ----------
@@ -1206,8 +1216,8 @@ const STAFF_COLS = [
 // bovendien zo gecorreleerd dat CA meenemen het model onstabiel maakt. Daarom: reputatie (met
 // verzadiging aan de top) + leeftijd + resterende contractduur, plus een lichte jeugd-correctie.
 // Gevolg/beperking: een sterke speler met lage faam (kleine club) wordt eerder onderschat.
-// De écht accurate route is de waarde rechtstreeks uit het geheugen lezen (zoals GenieScout);
-// zie docs/backlog.md.
+// Voor de meeste spelers leest de scanner de echte waarde uit het geheugen; dit model vult alleen
+// de rest. Zie docs/value-model.md.
 const VAL_B = { c0: 10.96, wRep: 0.997, age: -0.069, yhead: -0.041, lnC: 0.507 };
 function wSat(w) { return Math.min(w, 7500) + 0.30 * Math.max(0, w - 7500); }   // faam vlakt af aan de top
 // Écht clubloos = geen club én geen clubreputatie. (Club met wél rep maar zonder naam is een
@@ -1215,6 +1225,9 @@ function wSat(w) { return Math.min(w, 7500) + 0.30 * Math.max(0, w - 7500); }   
 const isFree = p => !p.club && !(p.clubRep > 0);
 // Clublabel: naam, of "onbekende club" als de plugin wél een clubreputatie vond maar de naam
 // niet kon uitlezen (bekende beperking), of "clubloos" bij een echte transfervrije speler.
+// Clubkolom: akkoord met een andere club direct achter de huidige club ("Mallorca → Barcelona").
+const dealSuffix = p => p.transferTo && p.transferTo !== p.club
+  ? ` <span class="deal-txt" data-tip="${escHtml(dealTip(p))}">→ ${escHtml(p.transferTo)}</span>` : '';
 function clubLabel(p) {
   if (p.club) return escHtml(p.club);
   if (p.clubRep > 0) return `<span class="dim" data-tip="${escHtml(tf('clubNotRead', { r: p.clubRep }))}">${t('clubUnknown')}</span>`;
@@ -1228,7 +1241,8 @@ function estValue(p) {
 }
 function estValueCalc(p) {
   if (p.value != null && p.value > 0) return { v: p.value, est: false, lo: Math.round(p.value * 0.85), hi: Math.round(p.value * 1.15) };
-  if (!p.ca || p.ca < 1) return { v: null, est: false };
+  // Het model is op spelers gekalibreerd; staf heeft geen transferwaarde.
+  if (!p.ca || p.ca < 1 || (p.staffAttrs && !p.attrs)) return { v: null, est: false };
   if (isFree(p)) return { v: 0, est: true };
   const a = getAge(p) || 25;
   const m = monthsUntil(p.expires);
@@ -1453,6 +1467,12 @@ function intHtml(p) {
   return `<span class="int ${i.cls}" data-tip="${i.score}/100">${i.label}</span>`;
 }
 
+// Transferakkoord (scanner 1.7.3+): al rond met een andere club, nog niet overgestapt.
+const dealTip = p => tf('dealTip', { c: p.transferTo, d: p.transferDate ? fmtDate(p.transferDate) : '?' });
+// Bij mijn club betrokken (van, naar of eigendom van): altijd tonen, ook met een akkoord.
+function dealInvolvesMe(p, myClub) {
+  return !!myClub && [p.club, p.ownerClub, p.transferTo].some(c => (c || '').toLowerCase() === myClub);
+}
 function statusHtml(p) {
   let h = '';
   if (isFree(p)) h += `<span class="tag free">${t('tag_free')}</span>`;
@@ -1460,8 +1480,9 @@ function statusHtml(p) {
   if (p.loanListed) h += `<span class="tag listed">${t('tag_loan')}</span>`;
   if (p.setForRelease) h += `<span class="tag rel">${t('tag_rel')}</span>`;
   if (p.notForSale) h += `<span class="tag nfs">${t('tag_nfs')}</span>`;
+  if (p.transferTo) h = `<span class="tag deal" data-tip="${escHtml(dealTip(p))}">→ ${escHtml(p.transferTo)}</span>` + h;
   const m = monthsUntil(p.expires);
-  if (!isFree(p) && m != null && m <= 6) h += `<span class="tag bosman" title="${escHtml(t('badgeBosmanHint'))}">${t('tag_bosman')}</span>`;
+  if (!isFree(p) && m != null && m <= 6) h += `<span class="tag bosman" title="${escHtml(t('badgeBosmanHint'))}"><span class="tag-icon">🆓</span>${t('badgeBosman')}</span>`;
   return h || '<span class="dim">–</span>';
 }
 // Natuurlijke posities. posArr bevat sinds scanner 1.6 ook bedreven nevenposities (15+);
@@ -1526,7 +1547,9 @@ const advValue = (p, k) => isStaffAttr(k) ? (p.staffAttrs ? p.staffAttrs[k] : nu
   : ADV_PERS_KEYS.includes(k) ? (p[k] || null) : (p.attrs ? p.attrs[k] : null);
 // Alleen regels van de soort die bij de modus hoort: een preset uit de spelersmodus mag de
 // staflijst niet leegfilteren, en andersom.
-const activeAdvRules = () => state.advF.filter(r => r.k && (r.min || r.max) && isStaffAttr(r.k) === (state.mode === 'staff')
+// Persoonlijkheid bestaat bij beide (staf sinds scanner 1.7.1), dus die geldt in elke modus.
+const activeAdvRules = () => state.advF.filter(r => r.k && (r.min || r.max)
+  && (ADV_PERS_KEYS.includes(r.k) || isStaffAttr(r.k) === (state.mode === 'staff'))
   && !(state.hideCapa && advIsHidden(r.k)));
 const advChipTxt = r => `${advLabel(r.k)} ${r.min && r.max ? r.min + '–' + r.max : r.min ? '≥ ' + r.min : '≤ ' + r.max}`;
 // Spelers en staf hebben elk hun eigen regelset; state.advF is die van de huidige modus.
@@ -1554,10 +1577,13 @@ function advDialog() {
       for (const k of [...keys].sort((a, b) => staffAttrName(a).localeCompare(staffAttrName(b), state.lang))) catalog.push({ k, label: staffAttrName(k), group: t(g) });
   } else for (const [g, keys] of [...ATTR_GROUPS_OUTFIELD, ['g_goalkeeping', gkOnly]])
     for (const k of sortByLabel(keys)) catalog.push({ k, label: attrName(k), group: t(g) });
-  if (!state.hideCapa && state.mode !== 'staff') {
+  if (!state.hideCapa) {
     const byT = (a, b) => a.localeCompare(b, state.lang);
-    for (const k of [...ADV_HIDDEN_KEYS].sort((a, b) => byT(t('a_' + a), t('a_' + b)))) catalog.push({ k, label: t('a_' + k), group: t('hiddenTitle') });
-    for (const k of [...ADV_PERS_KEYS].sort((a, b) => byT(t(a), t(b)))) catalog.push({ k, label: t(k), group: t('personaTitle') });
+    if (state.mode !== 'staff')
+      for (const k of [...ADV_HIDDEN_KEYS].sort((a, b) => byT(t('a_' + a), t('a_' + b)))) catalog.push({ k, label: t('a_' + k), group: t('hiddenTitle') });
+    // Staf: aanpassingsvermogen staat al als staf-attribuut onder Mentaal.
+    for (const k of [...ADV_PERS_KEYS].filter(k => state.mode !== 'staff' || k !== 'adaptability').sort((a, b) => byT(t(a), t(b))))
+      catalog.push({ k, label: t(k), group: t('personaTitle') });
   }
   // Escape sluit eerst een open attributen-dropdown, daarna pas de popup zelf.
   const esc = e => {
@@ -1792,6 +1818,78 @@ const jobLabel = p => {
   if (p && p.job === 'Staflid') return t('jobStaff');
   return (p && p.job) || '–';
 };
+// Voorkeursbaan (FM's "Voorkeursbaan"): de scanner levert prefJob = groepsindex(en) 0..14
+// uit FM's voorkeurstabel. Elke groep hoort bij één functie-id (label via JOB_LABEL);
+// bestuur (8) en analist (12) zijn verzamelgroepen: FM slaat bij analisten geen subtype op.
+const PREF_JOB = [16, 20, 2, 12, 14, 34, 26, 22, null, 10, 64, 86, null, 48, 88];
+const PREF_GROUP_LABEL = {
+  nl: { 8: 'Bestuur', 12: 'Analist' }, en: { 8: 'Board', 12: 'Analyst' },
+  fr: { 8: 'Direction', 12: 'Analyste' }, de: { 8: 'Vorstand', 12: 'Analyst' },
+};
+// Functie-id → voorkeursgroep, voor de rolfilter (transfervrije staf matcht op voorkeur).
+const JOB_PREF_GROUP = { 16: 0, 52: 0, 144: 0, 20: 1, 2: 2, 54: 2, 12: 3, 50: 3, 14: 4, 44: 4, 34: 5, 26: 6, 22: 7,
+  4: 8, 6: 8, 8: 8, 24: 8, 66: 8, 70: 8, 10: 9, 64: 10, 86: 11, 58: 12, 60: 12, 62: 12, 40: 13, 48: 13, 88: 14 };
+const prefGroupLabel = g => {
+  const id = PREF_JOB[g];
+  if (id) return (JOB_LABEL[state.lang] || JOB_LABEL.en)[id] || JOB_LABEL.en[id];
+  return (PREF_GROUP_LABEL[state.lang] || PREF_GROUP_LABEL.en)[g] || '';
+};
+const prefJobLabel = p => (p && p.prefJob && p.prefJob.length) ? p.prefJob.map(prefGroupLabel).filter(Boolean).join(' / ') : '';
+// Geen baan bij een club: transfervrij, of een functie-byte die we niet kennen zonder club.
+const staffJobless = p => !p.club && (!p.jobId || p.job === 'Staflid');
+// Rolfilter: naast de huidige functie telt ook de voorkeur. jobPrefs = FM's 15 voorkeurs-
+// scores (1-20); 15+ is een serieuze voorkeur, ook als het niet de hoogste is (een trainer
+// met conditietrainer 15/20 komt dus mee bij "Conditietrainer"). Oudere dumps hebben alleen
+// prefJob (de hoogste groep).
+const PREF_MIN = 15;
+const roleGroup = job => JOB_PREF_GROUP[state.jobIdByJob?.get(job)];
+const staffPrefMatch = (p, job) => {
+  const g = roleGroup(job);
+  if (g == null) return false;
+  if (p.jobPrefs) return p.jobPrefs[g] >= PREF_MIN;
+  return !!p.prefJob && p.prefJob.includes(g);
+};
+
+// Geschiktheid (1-20): gewogen gemiddelde van de staf-attributen die voor een functiegroep
+// tellen. Eigen benadering, niet FM's sterren: getoetst op 27k FM27-stafleden, waar mensen
+// in een functie op hún groep gemiddeld 3-5 punten hoger scoren dan op de andere groepen.
+// Groepen 7 en 8 (functie 22, bestuur) hebben geen zinnige attribuutmaat.
+const STAFF_FIT_W = {
+  0: { Tactische_kennis: 2, 'Man-management': 2, Motiveren: 1, Vastberadenheid: 1, KV_distributie: 1, Oordeel_vermogen: 1, Oordeel_potentie: 1 },
+  1: { Tactische_kennis: 2, 'Man-management': 1, Motiveren: 1, Oordeel_vermogen: 1, Oordeel_potentie: 1, Tactisch: 1 },
+  2: { Aanvallen: 1, Verdedigen: 1, Balbezit: 1, Technisch: 1, Tactisch: 1, Motiveren: 1, Vastberadenheid: 1, KV_distributie: 1 },
+  3: { Fysiotherapie: 4, Sportwetenschap: 1 },
+  4: { Oordeel_vermogen: 2, Oordeel_potentie: 2, Aanpassingsvermogen: 1 },
+  5: { KV_reflexen: 3, Motiveren: 1, Vastberadenheid: 1 },
+  6: { Fitheid: 3, Sportwetenschap: 1, Motiveren: 1, Vastberadenheid: 1 },
+  9: { Onderhandelen: 2, Oordeel_staf: 2, Oordeel_vermogen: 1, Oordeel_potentie: 1 },
+  10: { Jeugd: 2, Oordeel_potentie: 2, Oordeel_staf: 1, Motiveren: 1 },
+  11: { 'Man-management': 2, Onderhandelen: 1, Oordeel_potentie: 1, Oordeel_vermogen: 1 },
+  12: { Data_analyse: 3, Tactische_kennis: 1, Oordeel_vermogen: 1 },
+  13: { Sportwetenschap: 4, Fysiotherapie: 1 },
+  14: { Oordeel_staf: 2, Onderhandelen: 1, Tactische_kennis: 1, Oordeel_potentie: 1 },
+};
+function staffFit(p, g) {
+  const w = STAFF_FIT_W[g];
+  if (!w || !p.staffAttrs) return null;
+  let s = 0, n = 0;
+  for (const k in w) {
+    const v = p.staffAttrs[k];
+    if (!(v > 0) || !staffAttrUsable(k)) continue;
+    s += v * w[k]; n += w[k];
+  }
+  return n ? s / n : null;
+}
+// Voor welke groep tonen we de geschiktheid? De gefilterde rol; anders de huidige functie;
+// anders (transfervrij) de voorkeursbaan.
+function fitGroup(p) {
+  const role = state.mode === 'staff' ? $('f-staffrole').value : '';
+  if (role && roleGroup(role) != null) return roleGroup(role);
+  if (!staffJobless(p) && JOB_PREF_GROUP[p.jobId] != null) return JOB_PREF_GROUP[p.jobId];
+  return p.prefJob && p.prefJob.length ? p.prefJob[0] : null;
+}
+const fitOf = p => { const g = fitGroup(p); return g == null ? null : staffFit(p, g); };
+
 // Staf-rolscore (1-20) op basis van de specifieke vereisten van de functie
 function staffRoleScore(p) {
   if (p._staffScore !== undefined) return p._staffScore;
@@ -2303,6 +2401,7 @@ function buildStaffRoles() {
   const cur = $('f-staffrole').value;
   const byJob = new Map();
   for (const s of state.staff) if (s.job && !byJob.has(s.job)) byJob.set(s.job, s);
+  state.jobIdByJob = new Map([...byJob].map(([j, s]) => [j, s.jobId || 0]));
   const items = [...byJob.values()].map(s => ({ v: s.job, l: jobLabel(s) }))
     .sort((a, b) => a.l.localeCompare(b.l, uiLocale()));
   $('f-staffrole').innerHTML = `<option value="">${t('all')}</option>` +
@@ -2500,6 +2599,7 @@ function applyFilters() {
   // Wonderkids: staf heeft geen PA-groei, en zonder zichtbare PA is het filter verstopt.
   const onlyWk = state.mode !== 'staff' && !state.hideCapa && $('f-wonderkid').checked;
   const onlyEu = $('f-eu').checked, onlyMyClub = $('f-myclub').checked;
+  const hideDeals = state.mode === 'players' && $('f-deals').checked;   // standaard uit: akkoorden staan gewoon in de lijst
   const minInterest = +$('f-interest').value || 0;
   const tstatus = $('f-tstatus').value, contractF = $('f-contract').value;
   const onlySl = $('f-shortlist').checked || state.mode === 'shortlist';
@@ -2542,6 +2642,7 @@ function applyFilters() {
     if (hMin > 0 || hMax < 999) { const h = p.height || 0; if (h < hMin || h > hMax) return false; }
     if (footF && p.foot !== footF) return false;
     if (onlyEu && !isEu(p)) return false;
+    if (hideDeals && p.transferTo && !dealInvolvesMe(p, myClub)) return false;
     // "Mijn club": toon eigen spelers + verhuurde (moederclub = mijn club, spelen elders)
     // + gehuurde (spelen bij mij, moederclub elders). Zie loanStatus() voor de kleuring.
     if (onlyMyClub) {
@@ -2549,12 +2650,7 @@ function applyFilters() {
       if (cl !== myClub && ow !== myClub) return false;
     }
     // Teamchips (1e/2e/jeugd) — alleen actief samen met "Mijn club" en teamType-data (plugin v0.1.10+).
-    if (onlyMyClub && state.myTeam !== 'all' && state.mode !== 'staff') {
-      const tt = p.teamType;
-      if (state.myTeam === 'first' && tt !== 0) return false;
-      if (state.myTeam === 'res' && !(tt >= 1 && tt <= 9)) return false;
-      if (state.myTeam === 'youth' && !(tt >= 10)) return false;
-    }
+    if (onlyMyClub && state.myTeam !== 'all' && state.mode !== 'staff' && !inMyTeam(p, state.myTeam, myClub)) return false;
     if (contractF === 'free' && !isFree(p)) return false;
     if (contractF === 'exp6' || contractF === 'exp12') {
       const m = monthsUntil(p.expires);
@@ -2572,16 +2668,13 @@ function applyFilters() {
       if (r.max && av > r.max) return false;
     }
     if (activePos.size && !(p.posArr || []).some(x => activePos.has(x))) return false;
-    if (state.mode === 'staff' && staffRole && p.job !== staffRole) return false;
+    if (state.mode === 'staff' && staffRole && p.job !== staffRole && !staffPrefMatch(p, staffRole)) return false;
     if (staffContractF === 'free' && !isFree(p)) return false;
     if (staffContractF === 'exp6' || staffContractF === 'exp12') {
       const m = monthsUntil(p.expires);
       if (m == null || m > (staffContractF === 'exp6' ? 6 : 12)) return false;
     }
-    if (staffContractF === 'avail') {
-      if (!isFree(p)) { const m = monthsUntil(p.expires); if (m == null || m > 12) return false; }
-    }
-    if (staffRelocate && !(p.staffAttrs && (p.staffAttrs['Aanpassingsvermogen'] || 0) >= 13)) return false;
+    if (staffRelocate && (!p.staffAttrs || (p.staffAttrs.Aanpassingsvermogen || 0) < 13)) return false;
     if (gsel === 'm' && p.gender === 1) return false;
     if (gsel === 'v' && p.gender !== 1) return false;
     if (divVal && !(p.div || '').toLowerCase().includes(divVal)) return false;
@@ -2620,8 +2713,8 @@ function updateSecDots() {
     physical: n(pair('f-height-min', 'f-height-max'), $('f-foot').value),
     financial: n(val('f-price'), val('f-fee'), val('f-wage')),
     origin: n(val('f-nat'), $('f-eu').checked, val('f-div')),
-    availability: n(+$('f-interest').value > 0, $('f-tstatus').value, $('f-contract').value, $('f-myclub').checked, $('f-shortlist').checked),
-    staffavail: n($('f-staff-contract').value, $('f-staff-relocate').checked),
+    availability: n(+$('f-interest').value > 0, $('f-tstatus').value, $('f-contract').value, $('f-myclub').checked, $('f-shortlist').checked, $('f-deals')?.checked),
+    staffavail: n($('f-staff-contract')?.value, $('f-staff-relocate')?.checked),
   };
   document.querySelectorAll('.fsection[data-sec]').forEach(sec => {
     const k = sec.dataset.sec, head = sec.querySelector('.fsec-head');
@@ -2730,8 +2823,15 @@ function buildChips() {
   if ($('f-tstatus').value) add(`${t('tstatus')}: ${$('f-tstatus').selectedOptions[0].textContent}`, () => { $('f-tstatus').value = ''; });
   if ($('f-contract').value) add(`${t('contractF')}: ${$('f-contract').selectedOptions[0].textContent}`, () => { $('f-contract').value = ''; });
   for (const r of activeAdvRules()) add(advChipTxt(r), () => { state.advF = state.advF.filter(x => x !== r); saveAdv(); });
-  if ($('f-myclub').checked) add(t('myclub'), uncheck('f-myclub'));
+  // Met een teamchip actief (bv. standaard "1e elftal" via de clubbadge) hoort dat in het
+  // label: de chips zelf staan in een sectie die meestal ingeklapt is.
+  if ($('f-myclub').checked) {
+    const sub = state.myTeam !== 'all' && state.mode !== 'staff' && hasMyTeamData();
+    add(sub ? `${t('myclub')} · ${t('mt_' + state.myTeam)}` : t('myclub'),
+      () => { $('f-myclub').checked = false; state.myTeam = 'all'; renderMyTeamChips(); });
+  }
   if ($('f-shortlist').checked && state.mode !== 'shortlist') add(t('onlyshortlist'), uncheck('f-shortlist'));
+  if ($('f-deals').checked && state.mode === 'players') add(t('hideDeals'), uncheck('f-deals'));
   return chips;
 }
 function renderChips(chips) {
@@ -2755,7 +2855,7 @@ function renderChips(chips) {
 // Een preset is een momentopname van alle filtervelden (tekst, vinkjes, selects, posities
 // op het veld en de gekozen tactische rol). Bewaard in localStorage; zelfde naam = overschrijven.
 const PRESET_TEXT_IDS = ['f-name', 'f-age-min', 'f-age-max', 'f-ca-min', 'f-ca-max', 'f-pa-min', 'f-pa-max', 'f-meta-min', 'f-meta-max', 'f-metapa-min', 'f-metapa-max', 'f-growth-min', 'f-growth-max', 'f-height-min', 'f-height-max', 'f-price', 'f-fee', 'f-wage', 'f-nat', 'f-div'];
-const PRESET_CHECK_IDS = ['f-eu', 'f-myclub', 'f-shortlist', 'f-wonderkid', 'f-new'];
+const PRESET_CHECK_IDS = ['f-eu', 'f-myclub', 'f-shortlist', 'f-wonderkid', 'f-new', 'f-deals'];
 // De peilperiode hoort bewust bij de preset: "doorbraken dit seizoen" betekent niets als
 // het venster erbij wegvalt. Zie applyPreset voor het opnieuw ophalen van de groeidata.
 const PRESET_SELECT_IDS = ['f-interest', 'f-staffrole', 'f-role', 'f-contract', 'f-tstatus', 'f-foot', 'f-hist-period', 'f-gender', 'f-staff-contract'];
@@ -2938,6 +3038,9 @@ function colCfg() {
     if (defHidden.has(kk) && !saved.hidden.includes(kk)) saved.hidden.push(kk);   // standaard verborgen
   }
   saved.order = saved.order.filter(kk => keys.includes(kk));                    // verdwenen eruit
+  // Staf-reputatie zat tot 1.7.1 niet in de dump (kolom stond standaard verborgen en leeg);
+  // nu wel, dus eenmalig zichtbaar maken. Wie hem daarna weer verbergt, houdt dat.
+  if (k === 'staff' && !saved.repV1) { saved.hidden = saved.hidden.filter(kk => kk !== 'worldRep'); saved.repV1 = true; }
   return saved;
 }
 function saveColCfg() { localStorage.setItem('fmss_cols', JSON.stringify(state.colCfg)); }
@@ -3323,6 +3426,14 @@ function closeDetail() {
   $('detail-backdrop').classList.add('hidden');
   state.selected = null; renderVisible();
 }
+// Persoonlijkheid (verborgen kenmerken, ruw 1-20) als eigenschappengroep; skip = weg te laten sleutels.
+function personaHtml(p, skip = []) {
+  const pd = [['ambition', p.ambition], ['professionalism', p.professionalism], ['loyalty', p.loyalty],
+    ['pressure', p.pressure], ['temperament', p.temperament], ['sportsmanship', p.sportsmanship],
+    ['adaptability', p.adaptability], ['controversy', p.controversy]].filter(x => x[1] > 0 && !skip.includes(x[0]));
+  return pd.length ? `<div class="attr-col"><h3>${t('personaTitle')}</h3>` + pd.map(([k, v], idx) =>
+    `<div class="attr-row ${idx % 2 ? 'odd' : ''}"><span>${t(k)}</span><span class="v ${attrClass(v)}">${v}</span></div>`).join('') + '</div>' : '';
+}
 function showDetail(p) {
   state.selected = p;
   renderVisible();
@@ -3354,13 +3465,14 @@ function showDetail(p) {
   </div>` : ''}
   ${gauge}
   <div class="kv">
-    ${isPlayer ? `<div><b>${t('c_pos')}</b> ${posHtml(p)}</div><div><b>${t('foot')}</b> ${escHtml(footLabel(p))}</div>` : `<div><b>${t('c_role')}</b> ${escHtml(jobLabel(p))}</div>`}
-    <div><b>${t('estval')}</b> ${valTxt}</div>
-    ${!state.hideCapa && feeEstimate(p).v > 0 ? `<div><b>${t('c_fee')}</b> ${fmtMoney(feeEstimate(p).v * 0.85)} – ${fmtMoney(feeEstimate(p).v * 1.15)}</div>` : ''}
+    ${isPlayer ? `<div><b>${t('c_pos')}</b> ${posHtml(p)}</div><div><b>${t('foot')}</b> ${escHtml(footLabel(p))}</div>` : `<div><b>${t('c_role')}</b> ${staffJobless(p) ? '–' : escHtml(jobLabel(p))}</div>${prefJobLabel(p) ? `<div><b>${t('c_prefjob')}</b> ${escHtml(prefJobLabel(p))}</div>` : ''}${fitOf(p) != null ? `<div data-help="fitHint"><b>${t('c_fit')}</b> <span class="${roleClass(fitOf(p))}">${fitOf(p).toFixed(1)}</span> <span class="dim">(${escHtml(prefGroupLabel(fitGroup(p)))})</span> <span class="col-help">?</span></div>` : ''}`}
+    ${isPlayer ? `<div><b>${t('estval')}</b> ${valTxt}</div>` : ''}
+    ${isPlayer && !state.hideCapa && feeEstimate(p).v > 0 ? `<div><b>${t('c_fee')}</b> ${fmtMoney(feeEstimate(p).v * 0.85)} – ${fmtMoney(feeEstimate(p).v * 1.15)}</div>` : ''}
     <div><b>${t('wageLabel')}</b> ${fmtWage(p.wage)}${p.wage > 0 ? ` <span class="dim">${wageSuf()}</span>` : ''}</div>
     ${p.worldRep ? `<div><b>${t('repLabel')}</b> ${p.worldRep}</div>` : ''}
     <div><b>${t('contractLabel')}</b> ${fmtDate(p.expires)}</div>
     ${p.ownerClub && p.ownerClub !== p.club ? `<div><b>${t('ownerLabel')}</b> ${escHtml(p.ownerClub)}</div>` : ''}
+    ${p.transferTo ? `<div><b>${t('dealLabel')}</b> <span class="deal-txt">${escHtml(p.transferTo)}</span>${p.transferDate ? ` <span class="dim">· ${fmtDate(p.transferDate)}</span>` : ''}</div>` : ''}
     ${p.height ? `<div><b>${t('height')}</b> ${p.height} cm</div>` : ''}
     ${isPlayer && !state.hideMeta && metaScore(p) != null ? `<div data-help="metaHint"><b>${t('metaLabel')}</b> <span class="${roleClass(metaScore(p))}">${metaScore(p).toFixed(1)}</span> <span class="col-help">?</span></div>` : ''}
     ${isPlayer && !state.hideMeta && !state.hideCapa && metaPaScore(p) != null ? `<div data-help="metaPaHint"><b>${t('c_metapa')}</b> <span class="${roleClass(metaPaScore(p))}">${metaPaScore(p).toFixed(1)}</span> <span class="col-help">?</span></div>` : ''}
@@ -3428,12 +3540,7 @@ function showDetail(p) {
         return `<div class="attr-row ${idx % 2 ? 'odd' : ''}"><span>${attrName(k)}</span><span class="v ${attrClass(shown)}${grew ? ' grew' : ''}">${shown}</span></div>`;
       }).join('') + '</div>';
     }
-    // Persoonlijkheid (verborgen kenmerken) — net als een normale eigenschappengroep.
-    const pd = [['ambition', p.ambition], ['professionalism', p.professionalism], ['loyalty', p.loyalty],
-      ['pressure', p.pressure], ['temperament', p.temperament], ['sportsmanship', p.sportsmanship],
-      ['adaptability', p.adaptability], ['controversy', p.controversy]].filter(x => x[1] > 0);
-    const persHtml = pd.length ? `<div class="attr-col"><h3>${t('personaTitle')}</h3>` + pd.map(([k, v], idx) =>
-      `<div class="attr-row ${idx % 2 ? 'odd' : ''}"><span>${t(k)}</span><span class="v ${attrClass(v)}">${v}</span></div>`).join('') + '</div>' : '';
+    const persHtml = personaHtml(p);
     // Overige verborgen kenmerken. Bij InjuryProneness/Dirtiness is HOOG slecht → kleur omkeren.
     const hd = [['Consistency', true], ['ImportantMatches', true], ['Versatility', true],
       ['InjuryProneness', false], ['Dirtiness', false]]
@@ -3461,7 +3568,8 @@ function showDetail(p) {
         return `<div class="attr-row ${idx % 2 ? 'odd' : ''}"><span>${escHtml(staffAttrName(k))}</span><span class="v ${attrClass(v)}">${v}</span></div>`;
       }).join('') + '</div>' : '';
     }).join('');
-    html += `<div class="attr-cols staff-cols">${cols}</div>`;
+    // Persoonlijkheid (sinds scanner 1.7.1 ook bij staf); aanpassingsvermogen staat al onder Mentaal.
+    html += `<div class="attr-cols staff-cols">${cols}${state.hideCapa ? '' : personaHtml(p, ['adaptability'])}</div>`;
   }
   $('detail-body').innerHTML = html;
   const bcs = $('btn-cmp-squad');
@@ -4491,14 +4599,19 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(
 ['f-name', 'f-age-min', 'f-age-max', 'f-ca-min', 'f-ca-max', 'f-pa-min', 'f-pa-max', 'f-meta-min', 'f-meta-max', 'f-metapa-min', 'f-metapa-max', 'f-growth-min', 'f-growth-max', 'f-height-min', 'f-height-max', 'f-price', 'f-fee', 'f-wage', 'f-nat'].forEach(id => {
   let tm; $(id).addEventListener('input', () => { clearTimeout(tm); tm = setTimeout(applyFilters, 150); });
 });
-['f-eu', 'f-myclub', 'f-tstatus', 'f-contract', 'f-shortlist', 'f-wonderkid', 'f-foot', 'f-new'].forEach(id => $(id).addEventListener('change', applyFilters));
+['f-eu', 'f-myclub', 'f-tstatus', 'f-contract', 'f-shortlist', 'f-wonderkid', 'f-foot', 'f-new', 'f-deals'].forEach(id => $(id).addEventListener('change', applyFilters));
 $('f-hist-period').addEventListener('change', async () => {
   await setHistPeriod($('f-hist-period').value);
   renderTable();     // groeikolom leest andere peildata
   applyFilters();
 });
 $('btn-adv').onclick = advDialog;
-$('f-staffrole').addEventListener('change', applyFilters);
+$('f-staffrole').addEventListener('change', () => {
+  // Rol gekozen: meteen op geschiktheid sorteren (zoals de spelersrolfilter op rolscore).
+  if ($('f-staffrole').value) { state.sortKey = 'fit'; state.sortDir = -1; }
+  else if (state.sortKey === 'fit') { state.sortKey = 'wage'; state.sortDir = -1; }
+  applyFilters();
+});
 $('f-staff-contract').addEventListener('change', applyFilters);
 $('f-staff-relocate').addEventListener('change', applyFilters);
 $('f-gender').addEventListener('change', applyFilters);
@@ -4662,11 +4775,14 @@ $('mgr-pick').addEventListener('change', () => {
   loadHistDeltas().then(() => applyFilters());
 });
 
-// club-badge klik → filters wissen + mijn club aan
+// club-badge klik → filters wissen + mijn club aan, standaard alleen het eerste elftal
+// (inclusief spelers die vanuit de A-selectie verhuurd zijn). Reserves/jeugd via de chips.
+// Zonder teamtype-data (oude dump) blijft het "Alles": anders zou de lijst leeg zijn.
 $('club-badge').onclick = () => {
   if (!state.meta.myClub) return;
   $('btn-clear').onclick();
   $('f-myclub').checked = true;
+  if (hasMyTeamData()) state.myTeam = 'first';
   renderMyTeamChips();   // programmatisch aanvinken vuurt geen change-event → chips zelf tonen
   applyFilters();
 };
@@ -4849,6 +4965,7 @@ function setMode(mode) {
   $('fg-physical').style.display = mode === 'staff' ? 'none' : '';
   $('f-wonderkid-row').style.display = mode === 'staff' ? 'none' : '';
   $('fg-staffavail').style.display = mode === 'staff' ? '' : 'none';
+  $('f-deals-row').style.display = mode === 'players' ? '' : 'none';   // akkoorden verbergen geldt alleen voor de spelerslijst
   renderDevSection();   // historie wordt alleen voor spelers bijgehouden
   renderIntakeBar();
   // Kolom bestaat niet in deze modus: anders sorteert de tabel stilzwijgend op een
@@ -4883,13 +5000,33 @@ $('tab-analysis').onclick = () => setMode('analysis');
 $('btn-reload').onclick = () => loadDump();
 
 // ---------- teamchips: 1e/2e/jeugd binnen "Mijn club" ----------
+// In welk elftal van mijn club hoort deze speler? Eigen en gehuurde spelers: het elftal
+// waarin ze bij mij spelen (teamType). Verhuurde spelers spelen elders; hun teamType is dat
+// van de huurclub (bijna altijd 0), dus daar telt het elftal bij de moederclub
+// (ownerTeamType, scanner 1.7.2+). Onbekend → valt onder geen enkele chip, alleen "Alles".
+function myTeamType(p, myClub) {
+  const cl = (p.club || '').toLowerCase(), ow = (p.ownerClub || '').toLowerCase();
+  if (ow && ow === myClub && cl !== myClub) return p.ownerTeamType;
+  return p.teamType;
+}
+function inMyTeam(p, sel, myClub) {
+  const tt = myTeamType(p, myClub);
+  if (tt == null) return sel === 'all';
+  if (sel === 'first') return tt === 0;
+  if (sel === 'res') return tt >= 1 && tt <= 9;
+  if (sel === 'youth') return tt >= 10;
+  return true;
+}
+// Heeft deze dump teamtypes voor mijn club? Oudere dumps niet: dan geen chips en geen subfilter.
+function hasMyTeamData() {
+  const myClub = (state.meta.myClub || '').toLowerCase();
+  return !!myClub && state.players.some(p => p.teamType != null && (p.club || '').toLowerCase() === myClub);
+}
 // Zichtbaar zodra het "Mijn club"-vinkje aanstaat én de dump teamType-data heeft
 // (plugin v0.1.10+); oudere dumps → chips blijven verborgen, filter doet niets.
 function renderMyTeamChips() {
   const box = $('myteam-chips');
-  const myClub = (state.meta.myClub || '').toLowerCase();
-  const hasData = myClub && state.players.some(p => p.teamType != null && (p.club || '').toLowerCase() === myClub);
-  const show = hasData && $('f-myclub').checked && state.mode !== 'staff';
+  const show = hasMyTeamData() && $('f-myclub').checked && state.mode !== 'staff';
   box.style.display = show ? '' : 'none';
   if (!show) return;
   const opts = [['all', t('mt_all')], ['first', t('mt_first')], ['res', t('mt_res')], ['youth', t('mt_youth')]];

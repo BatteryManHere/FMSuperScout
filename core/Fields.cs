@@ -56,6 +56,9 @@ internal sealed class Fields
     public uint PERO_NATION { get; private set; } = 0x68;      // ptr → nation
     public uint PERO_DOB { get; private set; } = 0x88;         // u32 FM-datum
     public uint PERO_FULL_CONTRACT { get; private set; } = 0xA8; // ptr → contract-object
+    // ptr → 15 bytes (1..20): voorkeur per functiegroep, hoogste = FM's "Voorkeursbaan".
+    // Gepind 04-11-2026 op FM27 (zie Dumper.ReadJobPrefs); op FM26 niet geverifieerd.
+    public uint PERO_JOB_PREFS { get; private set; } = 0xD0;
 
     // Verborgen persoonlijkheid (pero.Pada), bytes 1..20:
     public uint PERO_ADAPTABILITY { get; private set; } = 0x70;
@@ -113,6 +116,20 @@ internal sealed class Fields
     public uint TEAM_REP { get; private set; } = 0xA8;         // u16 reputatie (~0..10000)
     public uint CON_TEAM { get; private set; } = 0x10;         // ptr → team (pero.Pcti)
     public uint CON_JOB { get; private set; } = 0x26;          // byte: functie (personJobTypes, pero.Pcjo)
+
+    // Transferdeals (FM27, gemeten 05-11-2026). Records van 0xC8 bytes in een tabel zonder
+    // vtable; herkend op vorm: [+0x00] person, [+0x08] team koper, [+0x18] team verkoper,
+    // [+0x2C] = FFFFFFFF en [+0x34] = 0x076C0001 (lege datum). Status-byte: 0x14 afgerond,
+    // 0x13 akkoord maar nog niet uitgevoerd, 0x0F afgewezen; overige = lopend/vervallen.
+    // Census over ~3.800 deals: alle 180 toekomstige deals hebben 0x13. Het bedrag (+0x20)
+    // is niet betrouwbaar (vaak exact de marktwaarde) en wordt niet gebruikt.
+    public uint DEAL_TO_TEAM { get; private set; } = 0x08;
+    public uint DEAL_FROM_TEAM { get; private set; } = 0x18;
+    public uint DEAL_SENT1 { get; private set; } = 0x2C;       // u32 = 0xFFFFFFFF
+    public uint DEAL_SENT2 { get; private set; } = 0x34;       // u32 = 0x076C0001
+    public uint DEAL_DATE { get; private set; } = 0x44;        // u32 FM-datum: ingangsdatum transfer
+    public uint DEAL_STATUS { get; private set; } = 0x55;      // byte, zie boven
+    public byte DEAL_STATUS_AGREED { get; private set; } = 0x13;
 
     /// <summary>FM26, gepind op 26.3.x.</summary>
     public static readonly Fields FM26 = new();
@@ -201,4 +218,12 @@ internal sealed class Fields
         ("KV_distributie", 0x2A), ("KV_vangen", 0x29), ("KV_reflexen", 0x1B),
     };
     public static readonly HashSet<string> StaffAttrsRaw = new() { "Jeugd" };
+
+    // Functiegroepen van de voorkeurstabel (PERO_JOB_PREFS), afgeleid uit 26k FM27-stafleden
+    // (hoogste groep tegen de functie-byte van het contract): 0 manager, 1 assistent-manager,
+    // 2 trainer, 3 fysio, 4 scout, 5 keeperstrainer, 6 conditietrainer, 7 functie 22,
+    // 8 bestuur (voorzitter/directeur/eigenaar), 9 directeur voetbalzaken, 10 hoofd
+    // jeugdopleiding, 11 (ver)huurmanager, 12 analist (rekrutering én prestatie: FM slaat
+    // geen subtype op), 13 sportwetenschap, 14 technisch directeur. De app vertaalt.
+    public const int JobPrefGroups = 15;
 }

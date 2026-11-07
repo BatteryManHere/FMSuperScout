@@ -5,6 +5,69 @@ new release is built, so the Unreleased section below is what the next release s
 
 ## [Unreleased]
 
+## [1.7.3] - 2026-11-05
+
+Agreed transfers: players who already have a deal with another club are labelled, and you can
+hide them with one tick.
+
+### Added
+- **Agreed transfers** read from FM's deal table: the club a player has agreed to join and the
+  date the move happens. FM keeps these deals in a table of its own, not on the player; the
+  scanner finds the records by their shape and keeps those with status "agreed, not yet done"
+  (0x13). Checked on FM27 against 3/3 known deals (including one where FM also had a rejected
+  bid from another club) and a census of ~3,400 deals: every deal with a future date had this
+  status. The fee in the record is not reliable (often exactly the market value), so it is
+  not shown.
+- Shown as "Club → New club" in the club column, a tag in the status column and a line on the
+  player card.
+- **"Without agreed transfers"** box hides them from the player list (off by default). Players
+  from, to or owned by your club always stay visible. Shortlist and staff are not affected.
+
+## [1.7.2] - 2026-11-05
+
+My club: loaned-out players sit under the right squad, and the club button opens the first team.
+
+### Fixed
+- **Loaned-out players under the right squad.** Their team type was the one at the loan club
+  (almost always the first team there), so a reserve or U18 player out on loan showed up under
+  "First team". The scanner now also records the squad at the parent club (`ownerTeamType`,
+  from the parent club's own squad list; the contract's team turned out to be the main team
+  even for youth players). Checked on FM27: 4/4 loans of the test club in the right squad.
+
+### Changed
+- **Club button opens the first team.** Clicking your club at the top now shows only the first
+  team (including players loaned out from it); reserves and youth are one click away. Older
+  dumps without squad data keep showing everything.
+- The active-filter label says which squad is on ("My club · First team"); clearing it also
+  resets the squad.
+
+## [1.7.1] - 2026-11-04
+
+Staff search fixed: free agents get their preferred job, plus reputation, personality and a
+suitability score.
+
+### Added
+- **Preferred job** for staff, read from FM's job-preference table (a 1-20 score per job
+  group, `person+0xD0`). Free agents have no contract and used to show as "Staff member";
+  they now show "–" as role and their real preferred job, like FM's staff search. Verified
+  on FM27: 23/23 staff from FM's staff search, and over 27k staff the top group matches the
+  current job. FM stores no recruitment/performance subtype for analysts, so those show as
+  "Analyst".
+- **Role filter on preference**: picking a role also finds staff with a preference of 15+
+  for it (current role or not), so a free fitness coach or a coach who would also like the
+  fitness job shows up.
+- **Suitability** (1-20) column and profile line: a weighted average of the staff attributes
+  that matter for the role (e.g. Fitness and Sports Science for a fitness coach). Our own
+  estimate, not FM's stars; checked on 27k staff (people in a job score 3-5 points higher on
+  their own role). Choosing a role sorts on it.
+- **Staff reputation** (world, current, club) in the dump; the World rep column is now
+  visible by default for staff and the profile shows it.
+- **Staff personality** (ambition, professionalism, loyalty, pressure, temperament,
+  sportsmanship, controversy) in the profile and the attribute filter.
+
+### Fixed
+- Staff no longer get a player-model "estimated value" and asking price in the profile.
+
 ## [1.7.0] - 2026-11-02
 
 FMSuperScout for Mac. Windows: same results, internals reorganised.

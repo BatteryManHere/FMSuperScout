@@ -586,6 +586,9 @@ internal static class Dumper
             { p.Club = sc.club; if (sc.rep > 0) p.ClubRep = sc.rep; if (sc.div != null) p.Div = sc.div; p.TeamType = sc.tt; }
 
         Dumper.LinkedViaSquad = squadClub.Count;
+
+        ScanAgreedTransfers(mem, players, personToUid, clubObjs.Concat(clubAddrs), mem.ScanRegions.Where(r => r.size >= 0x60).ToList(), maxDop);
+        Phase("transferakkoorden");
         Dumper.ClubCount = clubObjs.Count;
 
         // Mijn team via de manager-keten (person→contract→team) — hieruit leest FindGameDate
@@ -810,9 +813,47 @@ internal static class Dumper
         }
         if (string.IsNullOrEmpty(e.Job)) e.Job = "Staflid";
         e.Gender = (m.U8(db + (ulong)F.PERO_GENDER) & F.GENDER_FEMALE_BIT) != 0 ? 1 : 0;
-        var (sclub, _, sdiv) = ResolveClub(m, person);
-        e.Club = sclub; e.Div = sdiv;
+        var (sclub, srep, sdiv) = ResolveClub(m, person);
+        e.Club = sclub; e.Div = sdiv; e.ClubRep = srep;
+        e.CurRep = Rep(m.U16(st + F.NPLO_CUR_REP));
+        e.WorldRep = Rep(m.U16(st + F.NPLO_WORLD_REP));
+        (e.PrefJobs, e.JobPrefs) = ReadJobPrefs(m, person);
+        // Persoonlijkheid (pero, ruw 1-20) staat bij staf op dezelfde plek als bij spelers.
+        e.Ambition = ClampAttr(m.U8(person + F.PERO_AMBITION));
+        e.Loyalty = ClampAttr(m.U8(person + F.PERO_LOYALTY));
+        e.Professionalism = ClampAttr(m.U8(person + F.PERO_PROFESSIONALISM));
+        e.Adaptability = ClampAttr(m.U8(person + F.PERO_ADAPTABILITY));
+        e.Pressure = ClampAttr(m.U8(person + F.PERO_PRESSURE));
+        e.Sportsmanship = ClampAttr(m.U8(person + F.PERO_SPORTSMANSHIP));
+        e.Temperament = ClampAttr(m.U8(person + F.PERO_TEMPERAMENT));
+        e.Controversy = ClampAttr(m.U8(person + F.PERO_CONTROVERSY));
         return e;
+    }
+
+    private static int Rep(int v) => v is >= 1 and <= 10000 ? v : 0;
+
+    // Voorkeursbaan: [person+PERO_JOB_PREFS] wijst naar 15 bytes (1..20), één score per
+    // functiegroep (Fields.JobPrefGroups). De hoogste score is wat FM als "Voorkeursbaan"
+    // toont — ook bij transfervrije staf, die geen contract en dus geen functie-byte heeft.
+    // Geverifieerd 04-11-2026 (FM27): 23/23 stafleden uit FM's stafzoekscherm, en over 26k
+    // stafleden valt de hoogste groep samen met de huidige functie. Bij een gelijke stand
+    // komen alle hoogste groepen mee; geen duidelijke voorkeur (max < 10) = leeg.
+    // Tweede waarde: alle 15 scores (de app filtert op "voorkeur >= 15" per groep); null als
+    // de tabel ontbreekt of onleesbaar is.
+    private static (List<int> top, byte[] all) ReadJobPrefs(MemScan m, ulong person)
+    {
+        var res = new List<int>();
+        ulong arr = m.Ptr(person + F.PERO_JOB_PREFS);
+        if (arr == 0) return (res, null);
+        var b = new byte[Fields.JobPrefGroups];
+        if (!m.ReadBlock(arr, b, b.Length)) return (res, null);
+        int max = 0;
+        foreach (byte v in b) { if (v > 20) return (res, null); if (v > max) max = v; }
+        if (max == 0) return (res, null);
+        if (max < 10) return (res, b);
+        for (int i = 0; i < b.Length; i++) if (b[i] == max) res.Add(i);
+        if (res.Count > 3) res.Clear();
+        return (res, b);
     }
 
     private static int Attr(MemScan m, ulong addr)
@@ -878,6 +919,16 @@ internal static class Dumper
                                   Dictionary<uint, Person> players,
                                   uint uid, string cname, int tt, int trep, string div)
     {
+        // Verhuurde spelers staan ook nog in een selectie van de moederclub. Dat elftal
+        // onthouden we apart: TeamType wordt het elftal bij de húúrclub (meestal 0), maar
+        // "Mijn club → 1e elftal" moet juist weten of hij vanuit de A-selectie, de O21 of de
+        // O18 is verhuurd. (Het contract-team helpt niet: dat is vrijwel altijd het
+        // hoofdteam, ook bij jeugdspelers — gemeten 05-11.)
+        players.TryGetValue(uid, out var pe);
+        string parent = pe?.OwnerClub;
+        if (pe != null && parent != null && cname == parent && (pe.OwnerTeamType < 0 || tt < pe.OwnerTeamType))
+            pe.OwnerTeamType = tt;
+
         if (!squad.TryGetValue(uid, out var cur)) { squad[uid] = (cname, tt, trep, div); return; }
 
         bool take;
@@ -887,7 +938,6 @@ internal static class Dumper
         }
         else
         {
-            string parent = players.TryGetValue(uid, out var pe) ? pe.OwnerClub : null;
             bool curIsParent = parent != null && cur.club == parent;
             bool newIsParent = parent != null && cname == parent;
             if (curIsParent == newIsParent) take = tt < cur.tt;   // geen van beide (of allebei) de moederclub
@@ -985,6 +1035,83 @@ internal static class Dumper
     private static string JobName(int v) => Jobs.TryGetValue(v, out var s) ? s : null;
 
     // FM-datum: u32, jaar = raw>>16, dag-van-jaar = raw & 0x1ff
+    // Transferakkoorden: spelers die al rond zijn met een andere club maar nog niet zijn
+    // overgestapt (bv. per 1 juli). Die staan niet aan de persoon gekoppeld; FM houdt ze bij
+    // in een dealtabel. We herkennen de records op vorm (zie Fields.DEAL_*) en bewaren per
+    // speler het akkoord met de vroegste ingangsdatum. Een "deal" naar dezelfde club
+    // (contractverlenging, doorschuiven uit de jeugd) telt niet.
+    internal static int DiagDeals, DiagDealsAgreed;
+    private static void ScanAgreedTransfers(MemScan mem, Dictionary<uint, Person> players, Dictionary<ulong, uint> personToUid,
+                                            IEnumerable<ulong> clubAddrs, List<(ulong start, ulong size)> regions, int maxDop)
+    {
+        DiagDeals = 0; DiagDealsAgreed = 0;
+        var teamClub = new Dictionary<ulong, string>();
+        foreach (ulong c in clubAddrs.Distinct())
+        {
+            string n = ClubNameOf(mem, c);
+            if (n == null) continue;
+            ulong tb = mem.Ptr(c + F.CLUB_TEAMS_BEGIN), te = mem.Ptr(c + F.CLUB_TEAMS_END);
+            if (tb == 0 || te <= tb || (te - tb) % 8 != 0 || (te - tb) / 8 > 64) continue;
+            for (ulong i = 0; i < (te - tb) / 8; i++) { ulong t = mem.Ptr(tb + i * 8); if (t != 0) teamClub[t] = n; }
+        }
+        if (teamClub.Count == 0) return;
+
+        int need = (int)F.DEAL_STATUS + 1, dateOff = (int)F.DEAL_DATE;
+        var found = new List<(uint uid, string to, string from, uint date)>[maxDop];
+        var counts = new int[maxDop];
+        var tasks = new System.Threading.Tasks.Task[maxDop];
+        for (int t = 0; t < maxDop; t++)
+        {
+            int worker = t;
+            found[worker] = new();
+            tasks[worker] = System.Threading.Tasks.Task.Run(() =>
+            {
+                var buf = BufPool[worker];
+                var hits = found[worker];
+                int seen = 0;
+                for (int ri = worker; ri < regions.Count; ri += maxDop)
+                {
+                    var (start, size) = regions[ri];
+                    // Overlap van één record tussen blokken, zodat er geen record op een grens wegvalt.
+                    for (ulong o = 0; o < size; o += (ulong)(buf.Length - need))
+                    {
+                        int len = (int)System.Math.Min((ulong)buf.Length, size - o);
+                        if (len < need || !mem.ReadBlock(start + o, buf, len)) continue;
+                        for (int i = 0; i + need <= len; i += 8)
+                        {
+                            // Goedkope vaste velden eerst; dictionary-lookups pas daarna.
+                            if (BitConverter.ToUInt32(buf, i + (int)F.DEAL_SENT2) != 0x076C0001u
+                                || BitConverter.ToUInt32(buf, i + (int)F.DEAL_SENT1) != 0xFFFFFFFFu) continue;
+                            if (!personToUid.TryGetValue(BitConverter.ToUInt64(buf, i), out uint uid)
+                                || !teamClub.TryGetValue(BitConverter.ToUInt64(buf, i + (int)F.DEAL_TO_TEAM), out var to)
+                                || !teamClub.TryGetValue(BitConverter.ToUInt64(buf, i + (int)F.DEAL_FROM_TEAM), out var from)) continue;
+                            seen++;
+                            if (buf[i + (int)F.DEAL_STATUS] != F.DEAL_STATUS_AGREED || to == from) continue;
+                            hits.Add((uid, to, from, BitConverter.ToUInt32(buf, i + dateOff)));
+                        }
+                        if (o + (ulong)len >= size) break;
+                    }
+                }
+                counts[worker] = seen;
+            });
+        }
+        System.Threading.Tasks.Task.WaitAll(tasks);
+        DiagDeals = counts.Sum();
+
+        foreach (var (uid, to, from, date) in found.SelectMany(x => x))
+        {
+            if (!players.TryGetValue(uid, out var p)) continue;
+            // Al uitgevoerd (speler staat bij de koper en is er niet te huur): geen akkoord meer.
+            // Huur met koopverplichting (speelt al bij de koper, eigendom elders) blijft staan.
+            if (p.Club == to && (p.OwnerClub == null || p.OwnerClub == to)) continue;
+            string iso = FmDateIso(date);
+            if (p.TransferTo != null && string.CompareOrdinal(iso ?? "9999", p.TransferDate ?? "9999") >= 0) continue;
+            p.TransferTo = to; p.TransferFrom = from; p.TransferDate = iso;
+        }
+        DiagDealsAgreed = players.Values.Count(p => p.TransferTo != null);
+        Host.Info($"Transferakkoorden: {DiagDealsAgreed:N0} spelers (van {DiagDeals:N0} deal-records).");
+    }
+
     private static (int year, int doy) DecodeFmDate(uint raw)
     {
         int year = (int)(raw >> 16);
@@ -1164,7 +1291,11 @@ internal static class Dumper
         if (p.NatId != 0) j.Prop("natId", p.NatId);
         j.Prop("club", p.Club);
         // Moederclub alleen emitten als die afwijkt van de huidige club (= huurrelatie); scheelt ruis.
-        if (isPlayer && p.OwnerClub != null && p.OwnerClub != p.Club) j.Prop("ownerClub", p.OwnerClub);
+        if (isPlayer && p.OwnerClub != null && p.OwnerClub != p.Club)
+        {
+            j.Prop("ownerClub", p.OwnerClub);
+            if (p.OwnerTeamType >= 0) j.Prop("ownerTeamType", p.OwnerTeamType);   // elftal bij de moederclub
+        }
         j.Prop("div", p.Div);
         // Gender alleen emitten als vrouw (bij "vrouwenvoetbal meenemen"); mannen blijven veld-loos.
         if (p.Gender == 1) j.Prop("gender", 1);
@@ -1191,6 +1322,7 @@ internal static class Dumper
             j.Null4("wageDemand");
             j.Prop("listed", p.Listed);
             j.Prop("loanListed", p.LoanListed);
+            if (p.TransferTo != null) { j.Prop("transferTo", p.TransferTo); if (p.TransferDate != null) j.Prop("transferDate", p.TransferDate); }
             j.Prop("notForSale", p.NotForSale);
             j.Prop("setForRelease", p.SetForRelease);
             j.Prop("clubRep", p.ClubRep);
@@ -1211,6 +1343,20 @@ internal static class Dumper
         {
             j.Prop("job", p.Job);
             if (p.JobId > 0) j.Prop("jobId", p.JobId);   // taalonafhankelijk; app vertaalt
+            if (p.PrefJobs.Count > 0)                     // voorkeursbaan: groepsindex(en) 0..14
+            { j.Key("prefJob"); j.BeginArr(); foreach (var x in p.PrefJobs) j.Val((long)x); j.EndArr(); }
+            if (p.JobPrefs != null)                       // alle voorkeursscores per groep (1..20)
+            { j.Key("jobPrefs"); j.BeginArr(); foreach (var x in p.JobPrefs) j.Val((long)x); j.EndArr(); }
+            if (p.ClubRep > 0) j.Prop("clubRep", p.ClubRep);
+            if (p.CurRep > 0) j.Prop("curRep", p.CurRep);
+            if (p.WorldRep > 0) j.Prop("worldRep", p.WorldRep);
+            if (p.Ambition > 0)                            // persoonlijkheid (ruw 1-20)
+            {
+                j.Prop("ambition", p.Ambition); j.Prop("loyalty", p.Loyalty);
+                j.Prop("professionalism", p.Professionalism); j.Prop("adaptability", p.Adaptability);
+                j.Prop("pressure", p.Pressure); j.Prop("sportsmanship", p.Sportsmanship);
+                j.Prop("temperament", p.Temperament); j.Prop("controversy", p.Controversy);
+            }
             j.Key("staffAttrs"); j.BeginObj();
             foreach (var kv in p.StaffAttrs) { j.Key(kv.Key); j.Val((long)kv.Value); }
             j.EndObj();
@@ -1294,6 +1440,13 @@ internal static class Dumper
                 w.WriteLine($"  {p.Name} lft={p.Age} club={p.Club}");
             w.WriteLine();
 
+            // Transferakkoorden (status 0x13 in de dealtabel): check een paar namen in FM.
+            w.WriteLine($"=== Transferakkoorden: {DiagDealsAgreed:N0} spelers (van {DiagDeals:N0} deal-records) ===");
+            var agreed = players.Values.Where(p => p.TransferTo != null).ToList();
+            foreach (var p in agreed.Where(p => p.Club == MyClub || p.OwnerClub == MyClub || p.TransferTo == MyClub).Concat(agreed).Distinct().Take(25))
+                w.WriteLine($"  {p.Name,-24} {p.TransferFrom} -> {p.TransferTo} per {p.TransferDate ?? "?"}  (speelt nu: {p.Club})");
+            w.WriteLine();
+
             // Huur-overzicht: moederclub (volledig contract) ≠ huidige squad-club.
             var loans = players.Values.Where(x => x.OwnerClub != null && x.OwnerClub != x.Club).ToList();
             w.WriteLine($"=== Huur-overzicht: {loans.Count:N0} huurrelaties (moederclub ≠ huidige club) ===");
@@ -1307,7 +1460,7 @@ internal static class Dumper
             }
             w.WriteLine("  Eerste 40:");
             foreach (var p in loans.Take(40))
-                w.WriteLine($"    {p.Name,-24} speelt: {p.Club ?? "-"}  ·  moederclub: {p.OwnerClub}");
+                w.WriteLine($"    {p.Name,-24} speelt: {p.Club ?? "-"} (tt{p.TeamType})  ·  moederclub: {p.OwnerClub} (tt{p.OwnerTeamType})");
             w.WriteLine();
             // Dubbele selectie-hits: hier koos PickSquad de niet-moederclub. Valse positieven
             // zouden hier zichtbaar worden (bv. een B-elftal dat als aparte club telt).
@@ -1333,6 +1486,7 @@ internal sealed class Person
     public string Div;
     public int Gender;          // 0 = man, 1 = vrouw
     public int TeamType = -1;   // 0 = 1e elftal, ~3 = reserves, ≥10 = jeugd; -1 = onbekend
+    public int OwnerTeamType = -1;   // elftal bij de moederclub (squad-walk); alleen relevant bij huur
     public bool IsPlayer;
     public ushort Ca;
     public ushort Pa;
@@ -1346,6 +1500,9 @@ internal sealed class Person
     public string Expires;
     public bool Listed;
     public bool LoanListed;
+    public string TransferTo;     // akkoord met deze club, nog niet uitgevoerd
+    public string TransferFrom;
+    public string TransferDate;   // ingangsdatum (ISO) van dat akkoord
     public byte StatusFlags;
     public bool NotForSale;
     public bool SetForRelease;
@@ -1365,4 +1522,6 @@ internal sealed class Person
     public string Job;
     public Dictionary<string, int> Attrs = new();
     public Dictionary<string, int> StaffAttrs = new();
+    public List<int> PrefJobs = new();   // staf: voorkeursbaan-groep(en), zie Fields.JobPrefGroups
+    public byte[] JobPrefs;              // staf: alle 15 voorkeursscores (null = onbekend)
 }

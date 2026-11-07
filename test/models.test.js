@@ -159,6 +159,7 @@ test('posities: natPos valt terug op posArr (oude dumps) en gebruikt posNat als 
   assert.deepEqual(M.natPos({}), []);
 });
 
+
 test('bargainIndex: computes score between 1 and 99', () => {
   const p = player({ value: 2000000, attrs: { Pace: 16, Acceleration: 16 } });
   const bi = M.bargainIndex(p);
@@ -217,4 +218,42 @@ test('modern tactical roles: all roles have valid attributes, labels and score p
   });
   const iwbScore = M.roleScore(wbPlayer, iwbRole);
   assert.ok(iwbScore >= 13 && iwbScore <= 16, `Expected IWB score ~14-15, got ${iwbScore}`);
+});
+
+
+// ---------- teamchips binnen "Mijn club" ----------
+// Verhuurde spelers horen bij het elftal van de moederclub (ownerTeamType), niet bij het
+// elftal van de huurclub (teamType, bijna altijd 0). Praktijkgeval 05-11: Vanhoutte, reserves
+// bij Feyenoord en verhuurd, stond onder "1e elftal".
+test('inMyTeam: verhuurde speler telt bij zijn elftal bij de moederclub', () => {
+  const my = 'feyenoord';
+  const own0 = { club: 'Feyenoord', teamType: 0 };
+  const own11 = { club: 'Feyenoord', teamType: 11 };
+  const outRes = { club: 'Basaksehir', ownerClub: 'Feyenoord', teamType: 0, ownerTeamType: 3 };
+  const outYouth = { club: 'FC Emmen', ownerClub: 'Feyenoord', teamType: 0, ownerTeamType: 11 };
+  const outFirst = { club: 'FC Groningen', ownerClub: 'Feyenoord', teamType: 0, ownerTeamType: 0 };
+  const outUnknown = { club: 'Almere', ownerClub: 'Feyenoord', teamType: 0 };
+  const loanIn = { club: 'Feyenoord', ownerClub: 'Ajax', teamType: 0, ownerTeamType: 3 };
+  const first = [own0, own11, outRes, outYouth, outFirst, outUnknown, loanIn].filter(p => M.inMyTeam(p, 'first', my));
+  assert.deepEqual(first, [own0, outFirst, loanIn]);
+  assert.ok(M.inMyTeam(outRes, 'res', my));
+  assert.ok(M.inMyTeam(outYouth, 'youth', my));
+  assert.ok(!M.inMyTeam(outRes, 'first', my));
+  // Onbekend elftal: alleen onder "Alles", nergens anders.
+  for (const sel of ['first', 'res', 'youth']) assert.ok(!M.inMyTeam(outUnknown, sel, my));
+  assert.ok(M.inMyTeam(outUnknown, 'all', my));
+  assert.equal(M.myTeamType(loanIn, my), 0);   // gehuurd: elftal waarin hij bij mij speelt
+});
+
+// ---------- transferakkoorden ----------
+// Spelers met een akkoord gaan standaard uit de lijst, behalve als mijn club erbij betrokken is
+// (eigen speler die vertrekt, speler die naar mij komt, of mijn speler die verhuurd is).
+test('dealInvolvesMe: van, naar of eigendom van mijn club', () => {
+  const my = 'feyenoord';
+  assert.ok(M.dealInvolvesMe({ club: 'Feyenoord', transferTo: 'Parthenope' }, my));
+  assert.ok(M.dealInvolvesMe({ club: 'Mallorca', transferTo: 'Feyenoord' }, my));
+  assert.ok(M.dealInvolvesMe({ club: 'Emmen', ownerClub: 'Feyenoord', transferTo: 'Ajax' }, my));
+  assert.ok(!M.dealInvolvesMe({ club: 'Mallorca', transferTo: 'Barcelona' }, my));
+  assert.ok(!M.dealInvolvesMe({ club: 'Mallorca', transferTo: 'Barcelona' }, ''));
+
 });
