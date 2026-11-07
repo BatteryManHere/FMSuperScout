@@ -286,7 +286,7 @@ test('bestStaffFit: identifies best role for jobless staff without set job', () 
 test('interestEstimate: staff exceeding club reputation considers club not competitive', () => {
   const eliteStaff = {
     name: 'Elite Manager',
-    ca: 190, // Rep ~9500 vs myClubRep 6000 -> statGap = -3500
+    ca: 190, // Rep 10000 vs myClubRep 6000 -> statGap = -4000
     job: 'Manager',
     staffAttrs: { Aanpassingsvermogen: 18, Tactische_kennis: 18 },
   };
@@ -294,9 +294,20 @@ test('interestEstimate: staff exceeding club reputation considers club not compe
   assert.equal(intElite.note, 'not_competitive');
   assert.ok(intElite.score <= 15);
 
+  const foreignTopCoach = {
+    name: 'Top Foreign Manager',
+    ca: 155, // Rep ~9125 vs myClubRep 6000 -> statGap = -3125
+    job: 'Staflid',
+    nat: ['Argentina'],
+    staffAttrs: { Aanpassingsvermogen: 16 },
+  };
+  const intForeign = M.interestEstimate(foreignTopCoach);
+  assert.equal(intForeign.note, 'not_competitive');
+  assert.ok(intForeign.score <= 15);
+
   const realisticStaff = {
     name: 'Realistic Coach',
-    ca: 110, // Rep ~5500 vs myClubRep 6000 -> statGap = +500
+    ca: 110, // Rep ~5750 vs myClubRep 6000 -> statGap = +250
     job: 'Coach',
     staffAttrs: { Aanpassingsvermogen: 15, Aanvallen: 14 },
   };

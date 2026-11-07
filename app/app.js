@@ -1443,6 +1443,31 @@ function myWageCeiling() {
   state._wageCeil = ref ? Math.round(ref * 1.3) : null;   // ~30% rek boven de huidige top
   return state._wageCeil;
 }
+function myClubNation() {
+  if (state._myNation) return state._myNation;
+  const club = (state.meta.myClub || '').toLowerCase();
+  if (!club) return null;
+  const list = (state.staff || []).concat(state.players || []).filter(p => (p.club || '').toLowerCase() === club && p.nat && p.nat[0]);
+  if (!list.length) return null;
+  const counts = {};
+  for (const p of list) {
+    const n = p.nat[0];
+    counts[n] = (counts[n] || 0) + 1;
+  }
+  const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+  state._myNation = top ? top[0] : null;
+  return state._myNation;
+}
+
+function staffPersonalRep(p) {
+  if (p.worldRep != null && p.worldRep > 0) return p.worldRep;
+  const ca = p.ca || 100;
+  // Niet-lineaire schaling voor staf-CA:
+  // In FM is staf-CA 100 ~5000 rep; 120 ~6500; 135 ~7625; 140 ~8000; 150 ~8750; 160+ 9500+.
+  if (ca <= 100) return Math.round(ca * 50);
+  return Math.min(10000, Math.round(5000 + (ca - 100) * 75));
+}
+
 // Logistische kans (0-100) dat een speler een overstap naar mijn club ziet zitten.
 // Gememoiseerd per speler (_int); het label bevat vertaalde tekst, dus de cache is
 // gestempeld met de taal en wordt bij een taalwissel per speler opnieuw berekend.
@@ -1462,17 +1487,23 @@ function interestEstimateCalc(p) {
   const eu = isEu(p);
 
   // Bepaal de effectieve persoonlijke reputatie:
-  // Als worldRep ontbreekt (oude dumps of staf), schatten we die via CA (ca * 50 op de 1..10000 schaal)
-  // in plaats van terug te vallen op 0 (wat de interesse kunstmatig op 100/100 blies).
-  const personalRep = p.worldRep != null ? p.worldRep : (p.ca ? Math.min(10000, p.ca * 50) : (isStaff ? 5000 : 3500));
+  // Voor staf hanteren we de niet-lineaire CA-statuuscurve (CA 140+ is top-5-competitie niveau).
+  const personalRep = isStaff
+    ? staffPersonalRep(p)
+    : (p.worldRep != null ? p.worldRep : (p.ca ? Math.min(10000, p.ca * 50) : 3500));
   const clubGap = myRep - (p.clubRep || 0);
   const statGap = myRep - personalRep;
 
   // Staf-specifieke competitiviteit / status-eis:
-  // In FM weigert een staflid direct als de reputatie van jouw club te ver onder zijn persoonlijke
-  // status ligt (FM-melding: "[Club] is not competitive enough to match ambitions").
-  if (isStaff && statGap < -350) {
-    return { score: 10, label: t('int_no'), cls: 'int-n', note: 'not_competitive' };
+  // In FM weigert een buitenlands staflid direct als de clubreputatie onder zijn persoonlijke status ligt
+  // (FM: "[Club] is not competitive enough to match ambitions"). Binnenlandse kandidaten tolereren meer (-400).
+  if (isStaff) {
+    const myNat = myClubNation();
+    const isDomestic = myNat && (p.nat || []).includes(myNat);
+    const maxDeficit = isDomestic ? -400 : -150;
+    if (statGap < maxDeficit) {
+      return { score: 10, label: t('int_no'), cls: 'int-n', note: 'not_competitive' };
+    }
   }
 
   // Idem voor topspelers: als een club 1400+ punten onder hun status ligt, weigeren ze.
@@ -1484,13 +1515,18 @@ function interestEstimateCalc(p) {
     ? (isFree(p) ? statGap : 0.45 * clubGap + 0.55 * statGap)
     : (known && age <= 19 ? (0.9 * clubGap + 0.15 * statGap) : (0.55 * clubGap + 0.45 * statGap));
 
-  let score = 100 / (1 + Math.exp(-blend / 1400));
+  let score = 100 / (1 + Math.exp(-blend / (isStaff ? 1200 : 1400)));
 
   // Beschikbaarheidssignalen
   if (isFree(p)) {
-    // Clubloos: loon en reputatie tellen. Geeft een duw (+20), maar forceert niet langer blind 72 (High)
-    // als de club veel te klein is voor de kandidaat.
-    score = Math.min(100, score + 20);
+    if (isStaff) {
+      // Clubloze staf: alleen een boost als de club qua status passend is (statGap >= 0).
+      // Als de club onder hun status ligt, maakt clubloos zijn hen niet zomaar happig op een stap omlaag.
+      if (statGap >= 0) score = Math.min(100, score + 15);
+      else score -= Math.abs(statGap) * 0.05;
+    } else {
+      score = Math.min(100, score + 20);
+    }
   }
   if (p.listed || p.setForRelease) score += 15;
   if (p.notForSale) score *= 0.4;
@@ -1510,9 +1546,15 @@ function interestEstimateCalc(p) {
   const adapt = isStaff ? (p.staffAttrs?.Aanpassingsvermogen || 10) : (p.adaptability || 10);
   if (isStaff) {
     if (adapt < 10) score -= 25;
-    else if (adapt >= 14) score += 10;
+    else if (adapt >= 14 && statGap >= 0) score += 8;
   }
-  if (p.ambition) score += (blend >= 0 ? 1.2 : -2.2) * (p.ambition - 10);
+  if (p.ambition) {
+    if (isStaff && statGap < 0) {
+      score -= (p.ambition - 10) * 2.5; // Hoge ambitie weigert stap omlaag
+    } else {
+      score += (blend >= 0 ? 1.2 : -2.2) * (p.ambition - 10);
+    }
+  }
   if (p.loyalty && !isFree(p)) score *= (1 - 0.45 * (p.loyalty / 20));
 
   // Leeftijd (spelers)
