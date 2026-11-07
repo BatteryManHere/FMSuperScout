@@ -257,3 +257,27 @@ test('dealInvolvesMe: van, naar of eigendom van mijn club', () => {
   assert.ok(!M.dealInvolvesMe({ club: 'Mallorca', transferTo: 'Barcelona' }, ''));
 
 });
+
+
+test('bestStaffFit: identifies best role for jobless staff without set job', () => {
+  const joblessPhysio = {
+    job: 'Staflid',
+    staffAttrs: { Fysiotherapie: 18, Sportwetenschap: 12, Vastberadenheid: 14 },
+  };
+  const bestP = M.bestStaffFit(joblessPhysio);
+  assert.ok(bestP, 'Should return best staff fit');
+  assert.equal(bestP.g, 3); // Group 3 is Physio
+  assert.ok(bestP.score >= 16);
+
+  const joblessManager = {
+    job: 'Staflid',
+    staffAttrs: {
+      Tactische_kennis: 18, 'Man-management': 18, Motiveren: 17,
+      Vastberadenheid: 16, Oordeel_vermogen: 17, Oordeel_potentie: 17,
+    },
+  };
+  const bestM = M.bestStaffFit(joblessManager);
+  assert.ok(bestM, 'Should return best staff fit');
+  assert.ok(bestM.g === 0 || bestM.g === 1); // Group 0 (Manager) or 1 (AM)
+  assert.ok(bestM.score >= 16);
+});

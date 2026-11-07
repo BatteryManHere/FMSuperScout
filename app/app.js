@@ -47,6 +47,9 @@ const REPO_URL = 'https://github.com/mavarobli/FMSuperScout';
 // ================= i18n =================
 const I18N = {
   nl: {
+    staffUnassignedOpt: 'Clubloze staf (op geschiktheid)',
+    staffBestFitTip: 'Geschatte beste rol op basis van attributen: {r} ({s}/20)',
+    tag_unassigned: 'clubloos',
     players: 'Spelers', staff: 'Staf', shortlist: 'Shortlist', searchph: 'Zoek naam of club',
     settings: 'Instellingen', langLabel: 'Taal', curLabel: 'Valuta',
     showHidden: 'Verborgen stats tonen', showMeta: 'Meta-score tonen',
@@ -218,6 +221,9 @@ const I18N = {
     verWarnOldDump: 'Deze data komt van een oudere FMSuperScout-plugin. Alles werkt, maar haal verse data op (F9 in FM met je save geladen) voor het beste resultaat.',
   },
   en: {
+    staffUnassignedOpt: 'Unassigned / Free Staff (by suitability)',
+    staffBestFitTip: 'Estimated best role based on attributes: {r} ({s}/20)',
+    tag_unassigned: 'unassigned',
     players: 'Players', staff: 'Staff', shortlist: 'Shortlist', searchph: 'Search name or club',
     settings: 'Settings', langLabel: 'Language', curLabel: 'Currency',
     showHidden: 'Show Hidden Attributes', showMeta: 'Show Meta Score',
@@ -389,6 +395,9 @@ const I18N = {
     verWarnOldDump: 'This data was made by an older FMSuperScout plugin. Everything works, but fetch fresh data (F9 in FM with your save loaded) for the best results.',
   },
   fr: {
+    staffUnassignedOpt: 'Staff sans club (selon aptitude)',
+    staffBestFitTip: 'Meilleur rôle estimé selon les attributs : {r} ({s}/20)',
+    tag_unassigned: 'sans club',
     players: 'Joueurs', staff: 'Staff', shortlist: 'Shortlist', searchph: 'Nom ou club…',
     settings: 'Paramètres', langLabel: 'Langue', curLabel: 'Devise',
     showHidden: 'Afficher les stats cachées', showMeta: 'Afficher le score méta',
@@ -560,6 +569,9 @@ const I18N = {
     verWarnOldDump: 'Ces données viennent d\'un plugin FMSuperScout plus ancien. Tout fonctionne, mais rechargez des données fraîches (F9 dans FM, sauvegarde chargée) pour un meilleur résultat.',
   },
   de: {
+    staffUnassignedOpt: 'Vereinslose Mitarbeiter (nach Eignung)',
+    staffBestFitTip: 'Geschätzte beste Rolle basierend auf Attributen: {r} ({s}/20)',
+    tag_unassigned: 'vereinslos',
     players: 'Spieler', staff: 'Mitarbeiter', shortlist: 'Shortlist', searchph: 'Name oder Verein…',
     settings: 'Einstellungen', langLabel: 'Sprache', curLabel: 'Währung',
     showHidden: 'Versteckte Werte anzeigen', showMeta: 'Meta-Score anzeigen',
@@ -1195,8 +1207,35 @@ const STAFF_COLS = [
   { key: 'sl', label: '★', star: true, w: 34 },
   { key: 'name', label: 'c_name', get: p => p.name, name: true, w: 180 },
   { key: 'age', label: 'c_age', num: true, get: p => getAge(p), w: 50 },
-  { key: 'job', label: 'c_role', get: p => staffJobless(p) ? '' : jobLabel(p), render: p => staffJobless(p) ? '<span class="dim">–</span>' : escHtml(jobLabel(p)), w: 150 },
-  { key: 'prefJob', label: 'c_prefjob', get: p => prefJobLabel(p), render: p => prefJobLabel(p) ? escHtml(prefJobLabel(p)) : '<span class="dim">–</span>', w: 140 },
+  { key: 'job', label: 'c_role', get: p => {
+    if (!staffJobless(p)) return jobLabel(p);
+    const b = bestStaffFit(p);
+    return b ? `${b.name} (${t('tag_unassigned')})` : jobLabel(p);
+  }, render: p => {
+    if (!staffJobless(p)) return escHtml(jobLabel(p));
+    const b = bestStaffFit(p);
+    if (b && b.score >= 11) {
+      return `<span class="dim">–</span> <span class="tag free-role" title="${escHtml(t('staffBestFitTip', { r: b.name, s: b.score.toFixed(1) }))}">⭐ ${escHtml(b.name)}</span>`;
+    }
+    return '<span class="dim">–</span>';
+  }, w: 160 },
+  { key: 'prefJob', label: 'c_prefjob', get: p => {
+    if (p.prefJob && p.prefJob.length) return prefJobLabel(p);
+    if (staffJobless(p)) {
+      const b = bestStaffFit(p);
+      return b ? `${b.name} (${t('tag_unassigned')})` : '';
+    }
+    return '';
+  }, render: p => {
+    if (p.prefJob && p.prefJob.length) return escHtml(prefJobLabel(p));
+    if (staffJobless(p)) {
+      const b = bestStaffFit(p);
+      if (b && b.score >= 11) {
+        return `<span class="tag free-role" title="${escHtml(t('staffBestFitTip', { r: b.name, s: b.score.toFixed(1) }))}">⭐ ${escHtml(b.name)}</span>`;
+      }
+    }
+    return '<span class="dim">–</span>';
+  }, w: 140 },
   { key: 'fit', label: 'c_fit', num: true, help: 'fitHint', get: p => fitOf(p) ?? -1, render: p => { const v = fitOf(p); return v == null ? '<span class="dim">–</span>' : `<span class="${roleClass(v)}">${v.toFixed(1)}</span>`; }, w: 60 },
   { key: 'staffscore', label: 'c_staffscore', help: 'staffScoreHint', num: true, get: p => staffRoleScore(p) ?? -1, render: staffRoleScoreHtml, w: 68 },
   { key: 'club', label: 'c_club', get: p => p.club || '', render: p => clubLabel(p), w: 140 },
@@ -1882,6 +1921,23 @@ function staffFit(p, g) {
 }
 // Voor welke groep tonen we de geschiktheid? De gefilterde rol; anders de huidige functie;
 // anders (transfervrij) de voorkeursbaan.
+
+// Bepaalt de best passende rol voor een staflid op basis van zijn attributen.
+// Essentieel voor transfervrije stafleden die in FM als generiek "Staflid" gedumpt worden
+// zonder huidige club of voorkeursrol (bv. werkloze toptrainers of fysiotherapeuten).
+function bestStaffFit(p) {
+  if (!p || !p.staffAttrs) return null;
+  let bestG = null, maxScore = -1;
+  for (const g in STAFF_FIT_W) {
+    const sc = staffFit(p, +g);
+    if (sc != null && sc > maxScore) {
+      maxScore = sc;
+      bestG = +g;
+    }
+  }
+  return bestG != null ? { g: bestG, score: maxScore, name: prefGroupLabel(bestG) } : null;
+}
+
 function fitGroup(p) {
   const role = state.mode === 'staff' ? $('f-staffrole').value : '';
   if (role && roleGroup(role) != null) return roleGroup(role);
@@ -2668,7 +2724,19 @@ function applyFilters() {
       if (r.max && av > r.max) return false;
     }
     if (activePos.size && !(p.posArr || []).some(x => activePos.has(x))) return false;
-    if (state.mode === 'staff' && staffRole && p.job !== staffRole && !staffPrefMatch(p, staffRole)) return false;
+    if (state.mode === 'staff' && staffRole) {
+      if (staffRole === '__unassigned__') {
+        if (!staffJobless(p)) return false;
+      } else {
+        const matchesJob = p.job === staffRole;
+        const matchesPref = staffPrefMatch(p, staffRole);
+        const g = roleGroup(staffRole);
+        const matchesJoblessFit = staffJobless(p) && g != null && (
+          (staffFit(p, g) >= 12.0) || (bestStaffFit(p)?.g === g && staffFit(p, g) >= 10.0)
+        );
+        if (!matchesJob && !matchesPref && !matchesJoblessFit) return false;
+      }
+    }
     if (staffContractF === 'free' && !isFree(p)) return false;
     if (staffContractF === 'exp6' || staffContractF === 'exp12') {
       const m = monthsUntil(p.expires);
