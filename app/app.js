@@ -1505,7 +1505,12 @@ function myClubNation() {
 }
 
 function staffPersonalRep(p) {
-  if (p.worldRep != null && p.worldRep > 0) return p.worldRep;
+  // De dump heeft voor staf zowel curRep (huidige reputatie) als worldRep. curRep volgt CA veel
+  // strakker en ligt gemiddeld ~2000 hoger (CA 120-140: ~6250, CA 160+: ~8000), en dat is de
+  // status waaraan een staflid jouw club afmeet. Alleen worldRep gebruiken onderschatte de
+  // status en liet staf door het filter komen die toch weigert. We nemen het hoogste van beide.
+  const known = Math.max(p.curRep > 0 ? p.curRep : 0, p.worldRep > 0 ? p.worldRep : 0);
+  if (known > 0) return known;
   const ca = p.ca || 100;
   // Niet-lineaire schaling voor staf-CA:
   // In FM is staf-CA 100 ~5000 rep; 120 ~6500; 135 ~7625; 140 ~8000; 150 ~8750; 160+ 9500+.

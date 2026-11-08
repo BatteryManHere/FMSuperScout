@@ -315,6 +315,23 @@ test('interestEstimate: staff exceeding club reputation considers club not compe
   assert.ok(intReal.score >= 50);
 });
 
+test('interestEstimate: staff status uses the higher of curRep and worldRep', () => {
+  const coach = {
+    name: 'Rising Coach',
+    ca: 150,
+    job: 'Coach',
+    nat: ['Argentina'],
+    worldRep: 5000,   // alleen worldRep: statGap +1000, club is goed genoeg
+    staffAttrs: { Aanpassingsvermogen: 15 },
+  };
+  assert.notEqual(M.interestEstimate(coach).note, 'not_competitive');
+  M.state.meta.myClubRep = 6000;
+  const withCur = Object.assign({}, coach, { _int: undefined, curRep: 8200 });   // curRep 8200: club 2200 te laag
+  const i = M.interestEstimate(withCur);
+  assert.equal(i.note, 'not_competitive');
+  assert.equal(i.personalRep, 8200);
+});
+
 test('staff comparison: groups, intrinsic mapping and club peer filtering', () => {
   assert.ok(M.STAFF_GROUPS.length >= 10, 'All main staff groups defined');
   const asst = { id: 1, jobId: 20, job: 'Assistent-manager' };
