@@ -139,7 +139,7 @@ const I18N = {
     sg_coaching: 'Training', sg_mental: 'Mentaal', sg_knowledge: 'Kennis', sg_medical: 'Medisch & data',
     g_technical: 'Technisch', g_setpieces: 'Standaardsituaties', g_mental: 'Mentaal', g_physical: 'Fysiek', g_goalkeeping: 'Keepen',
     staffAttrs: 'Staf-attributen',
-    staffRelocate: 'Bereid te verhuizen', staffRelocateHint: 'Hoge aanpassingsvermogen (≥ 13/20) duidt op bereidheid om te verhuizen. Schatting gebaseerd op het staf-attribuut, geen FM-waarde.',
+    staffEngage: 'Wil bij mijn club', staffEngageHint: 'Verbergt staf die zou weigeren: filtert staf weg die jouw club “niet competitief genoeg” vindt (clubreputatie onder zijn status) en staf met Interesse “Nee”. Schatting, geen FM-getal.', staffRelocate: 'Bereid te verhuizen', staffRelocateHint: 'Hoge aanpassingsvermogen (≥ 13/20) duidt op bereidheid om te verhuizen. Schatting gebaseerd op het staf-attribuut, geen FM-waarde.',
     staffAvailSection: 'Beschikbaarheid staf', qfStaffFree: 'Transfervrij', qfStaffRelocate: 'Verhuisbereid',
     staffCoachRole: 'Coachfunctie',
     staffAvail: 'Transfervrij of aflopend', qfAMScout: 'Beschikbare AM',
@@ -323,7 +323,7 @@ const I18N = {
     sg_coaching: 'Coaching', sg_mental: 'Mental', sg_knowledge: 'Knowledge', sg_medical: 'Medical & Data',
     g_technical: 'Technical', g_setpieces: 'Set Pieces', g_mental: 'Mental', g_physical: 'Physical', g_goalkeeping: 'Goalkeeping',
     staffAttrs: 'Staff Attributes',
-    staffRelocate: 'Willing to relocate', staffRelocateHint: 'High adaptability (≥ 13/20) indicates willingness to relocate. An estimate based on the staff attribute, not a direct FM value.',
+    staffEngage: 'Would join my club', staffEngageHint: 'Hides staff who would refuse: those who find your club “not competitive enough” (club reputation below their status) and anyone rated Interest “None”. An estimate, not an FM number.', staffRelocate: 'Willing to relocate', staffRelocateHint: 'High adaptability (≥ 13/20) indicates willingness to relocate. An estimate based on the staff attribute, not a direct FM value.',
     staffAvailSection: 'Availability', qfStaffFree: 'Free agents', qfStaffRelocate: 'Relocatable',
     staffCoachRole: 'Coaching role',
     staffAvail: 'Free or expiring', qfAMScout: 'Sign-ready AM',
@@ -507,7 +507,7 @@ const I18N = {
     sg_coaching: 'Entraînement', sg_mental: 'Mental', sg_knowledge: 'Connaissances', sg_medical: 'Médical & données',
     g_technical: 'Technique', g_setpieces: 'Coups de pied arrêtés', g_mental: 'Mental', g_physical: 'Physique', g_goalkeeping: 'Gardien',
     staffAttrs: 'Attributs du staff',
-    staffRelocate: 'Prêt à déménager', staffRelocateHint: 'Une grande adaptabilité (≥ 13/20) indique la volonté de déménager. Estimation basée sur l\'attribut du staff, pas une valeur FM directe.',
+    staffEngage: 'Accepterait mon club', staffEngageHint: 'Masque le staff qui refuserait : ceux qui jugent votre club « pas assez compétitif » (réputation du club sous leur statut) et ceux dont l’intérêt est « Non ». Estimation, pas un chiffre FM.', staffRelocate: 'Prêt à déménager', staffRelocateHint: 'Une grande adaptabilité (≥ 13/20) indique la volonté de déménager. Estimation basée sur l\'attribut du staff, pas une valeur FM directe.',
     staffAvailSection: 'Disponibilité', qfStaffFree: 'Agents libres', qfStaffRelocate: 'Mobiles',
     staffCoachRole: 'Rôle de coaching',
     staffAvail: 'Libre ou expirant', qfAMScout: 'AM disponible',
@@ -691,7 +691,7 @@ const I18N = {
     sg_coaching: 'Training', sg_mental: 'Mental', sg_knowledge: 'Wissen', sg_medical: 'Medizin & Daten',
     g_technical: 'Technik', g_setpieces: 'Standards', g_mental: 'Mental', g_physical: 'Physis', g_goalkeeping: 'Torwart',
     staffAttrs: 'Mitarbeiter-Attribute',
-    staffRelocate: 'Umzugsbereit', staffRelocateHint: 'Hohe Anpassungsfähigkeit (≥ 13/20) deutet auf Umzugsbereitschaft hin. Schätzung auf Basis des Mitarbeiter-Attributs, kein direkter FM-Wert.',
+    staffEngage: 'Würde zu meinem Verein kommen', staffEngageHint: 'Blendet Mitarbeiter aus, die ablehnen würden: wer deinen Verein „nicht konkurrenzfähig genug“ findet (Vereinsreputation unter seinem Status) und alle mit Interesse „Nein“. Schätzung, keine FM-Zahl.', staffRelocate: 'Umzugsbereit', staffRelocateHint: 'Hohe Anpassungsfähigkeit (≥ 13/20) deutet auf Umzugsbereitschaft hin. Schätzung auf Basis des Mitarbeiter-Attributs, kein direkter FM-Wert.',
     staffAvailSection: 'Verfügbarkeit', qfStaffFree: 'Vereinslose', qfStaffRelocate: 'Mobil',
     staffCoachRole: 'Coaching-Rolle',
     staffAvail: 'Vereinslos oder auslaufend', qfAMScout: 'Verfügbarer AM',
@@ -1282,6 +1282,7 @@ const STAFF_COLS = [
   { key: 'nat', label: 'c_nat', get: p => natsLabel(p), w: 115 },
   { key: 'ca', label: 'CA', num: true, get: p => p.ca, render: p => qHtml(p.ca), w: 56 },
   { key: 'pa', label: 'PA', num: true, get: p => p.pa, render: p => qHtml(p.pa), w: 56 },
+  { key: 'interest', label: 'c_interest', help: 'interestHint', get: p => { const i = interestEstimate(p); return i ? i.score : -1; }, render: p => intHtml(p), w: 110 },
   { key: 'wage', label: 'c_wage', num: true, get: p => p.wage, fmt: fmtWage, w: 100 },
   { key: 'expires', label: 'c_expires', get: p => p.expires, fmt: fmtDate, tdCls: p => expiresHtml(p).cls, w: 110 },
   { key: 'clubRep', label: 'c_clubrep', num: true, get: p => p.clubRep || 0, defHidden: true, w: 85 },
@@ -2811,6 +2812,7 @@ function applyFilters() {
   const staffRole = $('f-staffrole').value;
   const staffContractF = state.mode === 'staff' ? $('f-staff-contract').value : '';
   const staffRelocate = state.mode === 'staff' && $('f-staff-relocate').checked;
+  const staffEngage = state.mode === 'staff' && $('f-staff-engage').checked;
   const gsel = $('f-gender').value;   // '' = beide, 'm' = mannen, 'v' = vrouwen
   const divVal = $('f-div').value.trim().toLowerCase();   // zoekbalk: substring, hoofdletterongevoelig
   const myClub = (state.meta.myClub || '').toLowerCase();
@@ -2890,6 +2892,7 @@ function applyFilters() {
       const m = monthsUntil(p.expires);
       if (m == null || m > (staffContractF === 'exp6' ? 6 : 12)) return false;
     }
+    if (staffEngage) { const i = interestEstimate(p); if (i && (i.note === 'not_competitive' || i.score < 25)) return false; }
     if (staffRelocate && (!p.staffAttrs || (p.staffAttrs.Aanpassingsvermogen || 0) < 13)) return false;
     if (gsel === 'm' && p.gender === 1) return false;
     if (gsel === 'v' && p.gender !== 1) return false;
@@ -2930,7 +2933,7 @@ function updateSecDots() {
     financial: n(val('f-price'), val('f-fee'), val('f-wage')),
     origin: n(val('f-nat'), $('f-eu').checked, val('f-div')),
     availability: n(+$('f-interest').value > 0, $('f-tstatus').value, $('f-contract').value, $('f-myclub').checked, $('f-shortlist').checked, $('f-deals')?.checked),
-    staffavail: n($('f-staff-contract')?.value, $('f-staff-relocate')?.checked),
+    staffavail: n($('f-staff-contract')?.value, $('f-staff-engage')?.checked, $('f-staff-relocate')?.checked),
   };
   document.querySelectorAll('.fsection[data-sec]').forEach(sec => {
     const k = sec.dataset.sec, head = sec.querySelector('.fsec-head');
@@ -2956,6 +2959,8 @@ const QUICK_FILTERS = [
     on: () => $('f-myclub').checked, set: v => { $('f-myclub').checked = v; renderMyTeamChips(); } },
   { id: 'stafffree', label: 'qfStaffFree', show: () => state.mode === 'staff',
     on: () => $('f-staff-contract').value === 'free', set: v => { $('f-staff-contract').value = v ? 'free' : ''; } },
+  { id: 'staffengage', label: 'staffEngage', show: () => state.mode === 'staff',
+    on: () => $('f-staff-engage').checked, set: v => { $('f-staff-engage').checked = v; } },
   { id: 'staffrelocate', label: 'qfStaffRelocate', show: () => state.mode === 'staff',
     on: () => $('f-staff-relocate').checked, set: v => { $('f-staff-relocate').checked = v; } },
   { id: 'amscout', label: 'qfAMScout', show: () => state.mode === 'staff',
@@ -3015,6 +3020,7 @@ function buildChips() {
     () => { activePos.clear(); document.querySelectorAll('.pos-node').forEach(n => n.classList.remove('on')); });
   if (state.mode === 'staff' && $('f-staffrole').value) add($('f-staffrole').value, () => { $('f-staffrole').value = ''; });
   if (state.mode === 'staff' && $('f-staff-contract').value) add(`${t('contractF')}: ${$('f-staff-contract').selectedOptions[0].textContent}`, () => { $('f-staff-contract').value = ''; });
+  if (state.mode === 'staff' && $('f-staff-engage').checked) add(t('staffEngage'), () => { $('f-staff-engage').checked = false; });
   if (state.mode === 'staff' && $('f-staff-relocate').checked) add(t('staffRelocate'), () => { $('f-staff-relocate').checked = false; });
   if ($('f-gender').value) add(t($('f-gender').value === 'm' ? 'dbMen' : 'dbWomen'), () => { $('f-gender').value = ''; });
   if ($('f-div').value.trim()) add(`${t('divLabel')}: ${$('f-div').value.trim()}`, () => { $('f-div').value = ''; });
@@ -3728,7 +3734,7 @@ function showDetail(p) {
 
   if (isPlayer) {
     const i = interestEstimate(p);
-    if (i) html += `<div class="interest-box" data-help="interestHint"><b>${t('interestTitle')}:</b> <span class="int ${i.cls}">${i.label}</span> <span class="dim">(${i.score}/100)</span> <span class="col-help">?</span>${i.note ? `<div class="int-note">${t(i.note === 'minor' ? 'minorNote' : 'minorIntlNote')}</div>` : ''}</div>`;
+    if (i) html += `<div class="interest-box" data-help="interestHint"><b>${t('interestTitle')}:</b> <span class="int ${i.cls}">${i.label}</span> <span class="dim">(${i.score}/100)</span> <span class="col-help">?</span>${i.note ? `<div class="int-note">${t(i.note === 'minor' ? 'minorNote' : i.note === 'not_competitive' ? 'int_not_competitive' : 'minorIntlNote')}</div>` : ''}</div>`;
     html += '<div id="dev-box"></div>';   // ontwikkel-grafiek (trends) laadt async
   }
 
@@ -5106,6 +5112,7 @@ $('f-staffrole').addEventListener('change', () => {
   applyFilters();
 });
 $('f-staff-contract').addEventListener('change', applyFilters);
+$('f-staff-engage').addEventListener('change', applyFilters);
 $('f-staff-relocate').addEventListener('change', applyFilters);
 $('f-gender').addEventListener('change', applyFilters);
 // Divisie-zoekbalk: filter terwijl je typt + eigen suggestie-dropdown (app-stijl, i.p.v.
@@ -5145,7 +5152,7 @@ $('btn-clear').onclick = () => {
   document.querySelectorAll('#filters input[type=text], #filters input[type=number]').forEach(i => i.value = '');
   document.querySelectorAll('#filters input[type=checkbox]').forEach(i => i.checked = false);
   $('f-staffrole').value = ''; $('f-gender').value = ''; $('f-interest').value = '0'; $('f-contract').value = ''; $('f-tstatus').value = '';
-  $('f-staff-contract').value = ''; $('f-staff-relocate').checked = false;
+  $('f-staff-contract').value = ''; $('f-staff-relocate').checked = false; $('f-staff-engage').checked = false;
   $('f-foot').value = '';
   state.advF = []; saveAdv();
   activePos.clear();
