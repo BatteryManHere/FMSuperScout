@@ -57,6 +57,7 @@ function loadApp() {
     'NATIONS', 'JOB_LABEL', 'natsLabel', 'jobLabel', 'fmtWage', 'wageFactor',
     'histKey', 'STAFF_ATTR_LABEL', 'STAFF_ATTR_GROUPS', 'natPos', 'myTeamType', 'inMyTeam', 'dealInvolvesMe',
     'bargainIndex', 'staffRoleScore', 'squadPlayersForPos', 'bestStaffFit', 'staffFit',
+    'STAFF_GROUPS', 'staffIntrinsicGroup', 'clubStaffForGroup',
   ];
   const body = src + '\n;return {' + exposed.map(n => `${n}: typeof ${n} !== 'undefined' ? ${n} : undefined`).join(',') + '};';
   const factory = new Function(

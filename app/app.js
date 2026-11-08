@@ -187,6 +187,15 @@ const I18N = {
     cmpSquadTitle: 'Positie-vergelijking met eigen team',
     cmpNoSquadPeers: 'Geen spelers in je team spelen momenteel op deze positie ({pos})',
     cmpWinsBadge: '{n}× beste attribuut', avgLabel: 'Gemiddeld',
+    cmpStaffTitle: 'Stafvergelijking',
+    cmpStaffClubBtn: 'Vergelijk met clubstaf',
+    cmpStaffClubTip: 'Vergelijk dit staflid met collega\'s binnen dezelfde functiegroep bij jouw club',
+    cmpStaffNavBtn: 'Staf vergelijken',
+    cmpStaffNavTip: 'Vergelijk clubstaf per functiegroep (assistent, analist, trainer, scout...)',
+    cmpStaffGroupLabel: 'Functiegroep',
+    cmpClubStaff: 'Huidige staf bij club',
+    cmpNoClubStaffInGroup: 'Geen stafleden bij jouw club in deze functiegroep ({group})',
+    cmpStaffScoreLabel: 'Geschiktheid voor deze rol',
     mt_all: 'Alles', mt_first: '1e elftal', mt_res: '2e elftal', mt_youth: 'Jeugd',
     cmpDeltaHint: 'Verschil: speler 1 min speler 2 (groen = speler 1 beter af)',
     analysis: 'Analyse', anTitle: 'Squad-behoefteanalyse', anNoClub: 'Geen eigen club in de data gevonden.',
@@ -362,6 +371,15 @@ const I18N = {
     cmpSquadTitle: 'Squad Positional Comparison',
     cmpNoSquadPeers: 'No players in your squad currently play this position ({pos})',
     cmpWinsBadge: '{n}× best attribute', avgLabel: 'Average',
+    cmpStaffTitle: 'Staff Comparison',
+    cmpStaffClubBtn: 'Compare with Club Staff',
+    cmpStaffClubTip: 'Compare this staff member with colleagues in the same role group at your club',
+    cmpStaffNavBtn: 'Compare Staff',
+    cmpStaffNavTip: 'Compare club staff by role group (assistant, analyst, coach, scout...)',
+    cmpStaffGroupLabel: 'Role Group',
+    cmpClubStaff: 'Current club staff',
+    cmpNoClubStaffInGroup: 'No staff members at your club in this role group ({group})',
+    cmpStaffScoreLabel: 'Role Suitability',
     mt_all: 'All', mt_first: 'First Team', mt_res: 'Reserves', mt_youth: 'Youth',
     cmpDeltaHint: 'Difference: player 1 minus player 2 (green = player 1 better off)',
     analysis: 'Analysis', anTitle: 'Squad Analysis', anNoClub: 'No own club found in the data.',
@@ -537,6 +555,15 @@ const I18N = {
     cmpSquadTitle: 'Comparaison au poste avec l\'équipe',
     cmpNoSquadPeers: 'Aucun joueur de votre effectif ne joue actuellement à ce poste ({pos})',
     cmpWinsBadge: '{n}× meilleur attribut', avgLabel: 'Moyenne',
+    cmpStaffTitle: 'Comparaison du staff',
+    cmpStaffClubBtn: 'Comparer avec le staff du club',
+    cmpStaffClubTip: 'Comparer ce membre du staff avec ses collègues du même groupe de fonctions au club',
+    cmpStaffNavBtn: 'Comparer le staff',
+    cmpStaffNavTip: 'Comparer le staff du club par groupe de fonctions (adjoint, analyste, entraîneur...)',
+    cmpStaffGroupLabel: 'Groupe de rôle',
+    cmpClubStaff: 'Staff actuel du club',
+    cmpNoClubStaffInGroup: 'Aucun membre du staff dans ce groupe de fonctions au club ({group})',
+    cmpStaffScoreLabel: 'Adéquation pour ce rôle',
     mt_all: 'Tout', mt_first: 'Équipe première', mt_res: 'Réserve', mt_youth: 'Jeunes',
     cmpDeltaHint: 'Écart : joueur 1 moins joueur 2 (vert = avantage joueur 1)',
     analysis: 'Analyse', anTitle: 'Analyse des besoins de l\'effectif', anNoClub: 'Aucun club à vous trouvé dans les données.',
@@ -712,6 +739,15 @@ const I18N = {
     cmpSquadTitle: 'Positionsvergleich mit dem Team',
     cmpNoSquadPeers: 'Kein Spieler in deinem Team spielt derzeit auf dieser Position ({pos})',
     cmpWinsBadge: '{n}× bestes Attribut', avgLabel: 'Durchschnitt',
+    cmpStaffTitle: 'Mitarbeiter-Vergleich',
+    cmpStaffClubBtn: 'Mit Vereinsmitarbeitern vergleichen',
+    cmpStaffClubTip: 'Diesen Mitarbeiter mit Kollegen derselben Rollengruppe im Verein vergleichen',
+    cmpStaffNavBtn: 'Mitarbeiter vergleichen',
+    cmpStaffNavTip: 'Vereinsmitarbeiter nach Rollengruppe vergleichen (Co-Trainer, Analyst, Trainer...)',
+    cmpStaffGroupLabel: 'Rollengruppe',
+    cmpClubStaff: 'Aktuelle Mitarbeiter im Verein',
+    cmpNoClubStaffInGroup: 'Keine Mitarbeiter in deinem Verein in dieser Rollengruppe ({group})',
+    cmpStaffScoreLabel: 'Rollen-Eignung',
     mt_all: 'Alle', mt_first: '1. Mannschaft', mt_res: 'Reserve', mt_youth: 'Jugend',
     cmpDeltaHint: 'Differenz: Spieler 1 minus Spieler 2 (grün = Vorteil Spieler 1)',
     analysis: 'Analyse', anTitle: 'Kaderbedarfsanalyse', anNoClub: 'Kein eigener Verein in den Daten gefunden.',
@@ -1826,7 +1862,7 @@ const ROLES = [
   // Aanvallende / brede middenvelders
   { id: 'wing', short: 'Buitenspeler', pos: ['ML', 'MR', 'AML', 'AMR'], key: ['Crossing', 'Dribbling', 'Technique', 'Pace', 'Acceleration', 'Agility', 'OffTheBall'], pref: ['FirstTouch', 'Passing', 'Flair', 'Balance', 'Stamina', 'Anticipation'] },
   { id: 'iw', short: 'Inside Wing', pos: ['ML', 'MR', 'AML', 'AMR'], key: ['Crossing', 'Dribbling', 'Passing', 'Technique', 'FirstTouch', 'OffTheBall', 'Pace', 'Acceleration', 'Agility', 'Decisions'], pref: ['Vision', 'Composure', 'Flair', 'Stamina', 'WorkRate', 'Anticipation'] },
-  { id: 'if', short: 'Schaduwspits', pos: ['AML', 'AMR'], key: ['Dribbling', 'Finishing', 'FirstTouch', 'Technique', 'OffTheBall', 'Pace', 'Acceleration', 'Agility', 'Composure'], pref: ['LongShots', 'Passing', 'Flair', 'Anticipation', 'Balance', 'Vision'] },
+  { id: 'if', short: 'Inside Fwd', pos: ['AML', 'AMR'], key: ['Dribbling', 'Finishing', 'FirstTouch', 'Technique', 'OffTheBall', 'Pace', 'Acceleration', 'Agility', 'Composure'], pref: ['LongShots', 'Passing', 'Flair', 'Anticipation', 'Balance', 'Vision'] },
   { id: 'wp', short: 'Playm. Wing', pos: ['ML', 'MR', 'AML', 'AMR'], key: ['Passing', 'Vision', 'FirstTouch', 'Technique', 'Composure', 'Decisions', 'Teamwork', 'OffTheBall'], pref: ['Crossing', 'Anticipation', 'Agility', 'Flair', 'Balance'] },
   { id: 'wtf', short: 'Wide Fwd', pos: ['ML', 'MR', 'AML', 'AMR'], key: ['OffTheBall', 'Acceleration', 'Pace', 'Finishing', 'Heading', 'JumpingReach', 'Strength', 'FirstTouch'], pref: ['Dribbling', 'Technique', 'Anticipation', 'WorkRate', 'Composure', 'Decisions', 'Crossing'] },
   { id: 'rd', short: 'Raumdeuter', pos: ['AML', 'AMR'], key: ['OffTheBall', 'Anticipation', 'Decisions', 'Finishing', 'Composure', 'Concentration'], pref: ['FirstTouch', 'WorkRate', 'Acceleration', 'Balance'] },
@@ -1941,7 +1977,7 @@ const PREF_GROUP_LABEL = {
   fr: { 8: 'Direction', 12: 'Analyste' }, de: { 8: 'Vorstand', 12: 'Analyst' },
 };
 // Functie-id → voorkeursgroep, voor de rolfilter (transfervrije staf matcht op voorkeur).
-const JOB_PREF_GROUP = { 16: 0, 52: 0, 144: 0, 20: 1, 2: 2, 54: 2, 12: 3, 50: 3, 14: 4, 44: 4, 34: 5, 26: 6, 22: 7,
+const JOB_PREF_GROUP = { 16: 0, 52: 0, 144: 0, 20: 1, 2: 2, 54: 2, 12: 3, 38: 3, 46: 3, 50: 3, 14: 4, 44: 4, 34: 5, 26: 6, 22: 7,
   4: 8, 6: 8, 8: 8, 24: 8, 66: 8, 70: 8, 10: 9, 64: 10, 86: 11, 58: 12, 60: 12, 62: 12, 40: 13, 48: 13, 88: 14 };
 const prefGroupLabel = g => {
   const id = PREF_JOB[g];
@@ -2020,6 +2056,43 @@ function fitGroup(p) {
   return p.prefJob && p.prefJob.length ? p.prefJob[0] : null;
 }
 const fitOf = p => { const g = fitGroup(p); return g == null ? null : staffFit(p, g); };
+
+const STAFF_GROUPS = [
+  { g: 1, id: 20 },   // Assistent-manager / Assistant Manager
+  { g: 2, id: 2 },    // Trainer / Coach
+  { g: 12, id: 60 },  // Analist / Analyst
+  { g: 4, id: 14 },   // Scout
+  { g: 3, id: 12 },   // Fysiotherapeut / Physio
+  { g: 6, id: 26 },   // Conditietrainer / Fitness Coach
+  { g: 5, id: 34 },   // Keeperstrainer / Goalkeeping Coach
+  { g: 13, id: 48 },  // Sportwetenschapper / Sports Scientist
+  { g: 10, id: 64 },  // Hoofd jeugdopleiding / Head of Youth Development
+  { g: 9, id: 10 },   // Directeur voetbalzaken / Director of Football
+  { g: 14, id: 88 },  // Technisch directeur / Technical Director
+  { g: 11, id: 86 },  // Verhuurmanager / Loan Manager
+  { g: 0, id: 16 },   // Manager
+];
+
+function staffIntrinsicGroup(p) {
+  if (!p) return null;
+  if (p.jobId != null && JOB_PREF_GROUP[p.jobId] != null) return JOB_PREF_GROUP[p.jobId];
+  if (p.job && state.jobIdByJob?.get(p.job) != null) {
+    const jid = state.jobIdByJob.get(p.job);
+    if (JOB_PREF_GROUP[jid] != null) return JOB_PREF_GROUP[jid];
+  }
+  if (p.job === 'Arts' || p.job === 'Clubarts') return 3;
+  if (p.prefJob && p.prefJob.length) return p.prefJob[0];
+  const best = bestStaffFit(p);
+  return best ? best.g : null;
+}
+
+function clubStaffForGroup(g, excludeId = null) {
+  const myClub = (state.meta.myClub || '').toLowerCase();
+  if (!myClub) return [];
+  return (state.staff || [])
+    .filter(x => (x.club || '').toLowerCase() === myClub && staffIntrinsicGroup(x) === g && (!excludeId || x.id !== excludeId))
+    .sort((a, b) => (b.ca || 0) - (a.ca || 0));
+}
 
 // Staf-rolscore (1-20) op basis van de specifieke vereisten van de functie
 function staffRoleScore(p) {
@@ -3585,11 +3658,14 @@ function showDetail(p) {
   $('detail-backdrop').classList.toggle('hidden', !pop);
   $('detail').classList.remove('hidden');
   const isPlayer = !!p.attrs;
+  const isStaff = !isPlayer && !!(p.staffAttrs || p.job);
   const on = state.shortlist.has(p.id);
   const ev = estValue(p);
   const valTxt = ev.v == null || ev.v === 0 ? '–' : ev.est ? `${fmtMoney(ev.lo)} – ${fmtMoney(ev.hi)}` : fmtMoney(ev.v);
   const peers = isPlayer ? squadPlayersForPos(p) : [];
   const hasMyClub = !!(state.meta.myClub);
+  const staffG = isStaff ? staffIntrinsicGroup(p) : null;
+  const staffPeers = (isStaff && hasMyClub && staffG != null) ? clubStaffForGroup(staffG, p.id) : [];
 
   const gauge = (!state.hideCapa && (p.ca != null || p.pa != null)) ? `<div class="capa">
     <div class="capa-nums"><span><b>CA</b> <span class="ca-bar">${p.ca ?? '–'}</span></span><span><b>PA</b> <span class="pa-bar">${p.pa ?? '–'}</span></span></div>
@@ -3604,6 +3680,12 @@ function showDetail(p) {
     <button id="btn-cmp-squad" class="btn-cmp-squad" title="${escHtml(t('cmpSquadTip'))}">
       ${icon('compare', 13)} <span>${t('cmpSquadBtn')}</span>
       ${peers.length ? `<span class="badge-count">${peers.length}</span>` : ''}
+    </button>
+  </div>` : ''}
+  ${isStaff && hasMyClub ? `<div class="detail-actions">
+    <button id="btn-cmp-staff-club" class="btn-cmp-squad" title="${escHtml(t('cmpStaffClubTip'))}">
+      ${icon('compare', 13)} <span>${t('cmpStaffClubBtn')}</span>
+      ${staffPeers.length ? `<span class="badge-count">${staffPeers.length}</span>` : ''}
     </button>
   </div>` : ''}
   ${gauge}
@@ -3717,6 +3799,8 @@ function showDetail(p) {
   $('detail-body').innerHTML = html;
   const bcs = $('btn-cmp-squad');
   if (bcs) bcs.onclick = () => openSquadCompare(p);
+  const bsc = $('btn-cmp-staff-club');
+  if (bsc) bsc.onclick = () => openStaffClubCompare(p);
   document.querySelector('.detail-star').onclick = () => toggleShortlist(p.id);
   document.querySelector('.copybtn').onclick = () => copyName(p.name);
   const cmp = document.querySelector('.cmpbtn');
@@ -4441,10 +4525,270 @@ function openSquadCompare(p, peerIndex = 0) {
     b.onclick = () => openSquadCompare(p, +b.dataset.idx);
   });
 }
+function renderStaffCompare(staffList, currentGroup = null, customTitle = null, headerExtraHtml = null) {
+  if (!Array.isArray(staffList)) staffList = [];
+  const staff = staffList.filter(Boolean);
+  if (!staff.length) return;
+  const n = staff.length;
+  const two = n === 2;
+  const one = n === 1;
+  if (currentGroup == null) currentGroup = staffIntrinsicGroup(staff[0]) ?? 1;
+
+  const marksOf = (vals, hi) => {
+    const nums = vals.filter(v => v != null);
+    if (hi == null || nums.length < 2) return vals.map(() => '');
+    const best = hi ? Math.max(...nums) : Math.min(...nums);
+    const worst = hi ? Math.min(...nums) : Math.max(...nums);
+    if (best === worst) return vals.map(() => '');
+    return vals.map(v => v == null ? '' : v === best ? 'cmp-best' : v === worst ? 'cmp-worst' : '');
+  };
+
+  const deltaCell = (vals, hi, fmtAbs) => {
+    if (!two) return '';
+    const [a, b] = vals;
+    if (a == null || b == null) return '<div class="cmp-cell cmp-delta"><span class="dim">·</span></div>';
+    const d = a - b;
+    const cls = d === 0 || hi == null ? 'cmp-dzero' : (d > 0) === (hi !== false) ? 'cmp-dpos' : 'cmp-dneg';
+    const txt = d === 0 ? '=' : (d > 0 ? '+' : '−') + fmtAbs(Math.abs(d));
+    return `<div class="cmp-cell cmp-delta"><span class="${cls}">${txt}</span></div>`;
+  };
+
+  const row = (label, vals, opts = {}) => {
+    const hi = 'hi' in opts ? opts.hi : true;
+    const fmtV = opts.fmt || (v => opts.dec ? v.toFixed(opts.dec) : String(v));
+    const marks = marksOf(vals, hi);
+    const cells = vals.map((v, i) => {
+      if (v == null) return '<div class="cmp-cell"><span class="dim">·</span></div>';
+      const color = opts.attr ? ' ' + (opts.invert ? attrClass(21 - v) : attrClass(v)) : '';
+      return `<div class="cmp-cell"><span class="v${color} ${marks[i]}">${fmtV(v)}</span></div>`;
+    }).join('');
+    return `<div class="cmp-row"><div class="cmp-lbl">${label}</div>${cells}${deltaCell(vals, hi, fmtV)}</div>`;
+  };
+
+  const textRow = (label, vals) => `<div class="cmp-row"><div class="cmp-lbl">${label}</div>` +
+    vals.map(v => `<div class="cmp-cell">${v ? escHtml(v) : '<span class="dim">·</span>'}</div>`).join('') +
+    (two ? '<div class="cmp-cell cmp-delta"></div>' : '') + '</div>';
+
+  const cmpBar = (a, b, hi, dec) => {
+    if (a == null || b == null || hi == null)
+      return '<span class="cbar"><i class="cb-tick"></i></span>';
+    const d = a - b;
+    const p1beter = (d > 0) === (hi !== false);
+    const pct = Math.min(100, Math.round(Math.abs(d) / 8 * 100));
+    const dTxt = d === 0 ? '=' : (d > 0 ? '+' : '−') + (dec ? Math.abs(d).toFixed(dec) : Math.abs(d));
+    return `<span class="cbar" data-tip="Δ ${escHtml(dTxt)}"><i class="cb-tick"></i>` +
+      (d === 0 ? '' : `<i class="${p1beter ? 'cb-l' : 'cb-r'}" style="width:${Math.max(6, pct / 2)}%"></i>`) + '</span>';
+  };
+
+  const attrPanelRow = (label, vals, opts = {}) => {
+    const hi = 'hi' in opts ? opts.hi : true;
+    const marks = marksOf(vals, hi);
+    const fmtV = v => opts.dec ? v.toFixed(opts.dec) : String(v);
+    const cellV = (v, i) => v == null ? '<span class="cpv dim">·</span>' :
+      `<span class="cpv v ${opts.invert ? attrClass(21 - v) : attrClass(v)} ${marks[i]}">${fmtV(v)}</span>`;
+    const rowCls = 'cpr' + (opts.isKey ? ' cpr-key' : '') + (opts.foot ? ' cpr-foot' : '');
+    if (two)
+      return `<div class="${rowCls}"><span class="cpl">${label}</span>${cellV(vals[0], 0)}${cmpBar(vals[0], vals[1], hi, opts.dec)}${cellV(vals[1], 1)}</div>`;
+    if (one)
+      return `<div class="${rowCls}"><span class="cpl">${label}</span>${cellV(vals[0], 0)}</div>`;
+    return `<div class="${rowCls} cpr3"><span class="cpl">${label}</span>${vals.map((v, i) => cellV(v, i)).join('')}</div>`;
+  };
+
+  // Attribuut-winsttelling over alle 19 stafattributen
+  const allStaffKeys = STAFF_ATTR_GROUPS.flatMap(([, ks]) => ks.filter(staffAttrUsable));
+  const wins = staff.map(() => 0);
+  for (const k of allStaffKeys) {
+    const vals = staff.map(s => s.staffAttrs ? s.staffAttrs[k] : null);
+    const nums = vals.filter(v => v != null && v > 0);
+    if (nums.length < 2) continue;
+    const best = Math.max(...nums);
+    const idx = vals.map((v, i) => v === best ? i : -1).filter(i => i >= 0);
+    if (idx.length === 1 && best !== Math.min(...nums)) wins[idx[0]]++;
+  }
+
+  // Kop: sticky grid
+  const headRow = `<div class="cmp-row cmp-head"><div class="cmp-lbl"></div>` +
+    staff.map((s, i) => {
+      const bits = [s.wage > 0 ? fmtWage(s.wage) + ' ' + wageSuf() : null,
+        s.expires ? String(s.expires).slice(0, 4) : null].filter(Boolean).join(' · ');
+      const fit = staffFit(s, currentGroup);
+      const fitHtml = fit != null ? `<span class="${roleClass(fit)}">${fit.toFixed(1)}</span>` : '–';
+      return `<div class="cmp-cell"><div class="cmp-name">${escHtml(s.name)}</div>` +
+        `<div class="cmp-meta">${getAge(s)} · ${escHtml(jobLabel(s))} · ${s.club ? escHtml(s.club) : '–'}` +
+        `${bits ? `<br>${bits}` : ''}` +
+        `<br><b>${t('cmpStaffScoreLabel')}:</b> ${fitHtml}` +
+        `${s.staffAttrs && n > 1 ? `<br><span class="cmp-winsb">${tf('cmpWinsBadge', { n: wins[i] })}</span>` : ''}</div></div>`;
+    }).join('') +
+    (two ? `<div class="cmp-cell cmp-delta" data-help="cmpDeltaHint">Δ</div>` : '') + '</div>';
+
+  let body = '';
+  if (!state.hideCapa) {
+    body += row('CA', staff.map(s => s.ca));
+    body += row('PA', staff.map(s => s.pa));
+  }
+  body += row(t('wageLabel') + ' ' + wageSuf(), staff.map(s => s.wage), { fmt: fmtWage, hi: false });
+  body += row(t('c_age'), staff.map(s => getAge(s)), { hi: false });
+  body += textRow(t('contractLabel'), staff.map(s => fmtDate(s.expires)));
+  if (currentGroup != null) {
+    body += row(t('cmpStaffScoreLabel') + ` (${prefGroupLabel(currentGroup)})`, staff.map(s => staffFit(s, currentGroup)), { dec: 1 });
+  }
+
+  const panel = (title, rowsHtml) => rowsHtml ? `<div class="cmpg"><h3>${title}</h3>${rowsHtml}</div>` : '';
+  const keyWeights = (currentGroup != null && STAFF_FIT_W[currentGroup]) ? STAFF_FIT_W[currentGroup] : {};
+  const buildGroup = (gkey, keys) => {
+    const present = (keys || []).filter(k => staffAttrUsable(k) && staff.some(s => s.staffAttrs && s.staffAttrs[k] > 0));
+    if (!present.length) return '';
+    let rows = present.map(k => {
+      const isKey = !!keyWeights[k];
+      const lbl = (isKey ? '<span class="cpr-key-star">★</span>' : '') + escHtml(staffAttrName(k));
+      return attrPanelRow(lbl, staff.map(s => s.staffAttrs ? s.staffAttrs[k] : null), { isKey });
+    }).join('');
+    if (present.length >= 3) {
+      const avgs = staff.map(s => {
+        const vs = present.map(k => s.staffAttrs ? s.staffAttrs[k] : null).filter(v => v != null);
+        return vs.length ? Math.round(10 * vs.reduce((sum, v) => sum + v, 0) / vs.length) / 10 : null;
+      });
+      rows += attrPanelRow(t('avgLabel'), avgs, { dec: 1, foot: true });
+    }
+    return panel(t(gkey), rows);
+  };
+
+  const gmap = Object.fromEntries(STAFF_ATTR_GROUPS);
+  let persPanel = '';
+  if (!state.hideCapa) {
+    const pers = [['ambition', true], ['professionalism', true], ['loyalty', null], ['pressure', true],
+      ['temperament', true], ['sportsmanship', null], ['controversy', false]]
+      .filter(([k]) => staff.some(s => s[k] > 0));
+    if (pers.length) {
+      persPanel = panel(t('personaTitle'), pers.map(([k, dir]) =>
+        attrPanelRow(t(k), staff.map(s => s[k] > 0 ? s[k] : null), { hi: dir, invert: dir === false })).join(''));
+    }
+  }
+
+  const leftStack = buildGroup('sg_coaching', gmap.sg_coaching) + buildGroup('sg_medical', gmap.sg_medical);
+  const rightStack = buildGroup('sg_mental', gmap.sg_mental) + buildGroup('sg_knowledge', gmap.sg_knowledge) + persPanel;
+  const panels = `<div class="cmp-panels"><div>${leftStack}</div><div>${rightStack}</div></div>`;
+
+  const cols = two ? '140px 1fr 1fr 72px' : one ? '140px 1fr' : `140px repeat(${n}, 1fr)`;
+  const title = customTitle || t('cmpStaffTitle');
+  const extra = headerExtraHtml ? headerExtraHtml : '';
+  $('compare-inner').innerHTML =
+    `<div class="cmp-top"><h2>${escHtml(title)}</h2>${extra}<button id="cmp-close">${icon('x', 15)}</button></div>` +
+    `<div class="cmp-scroll">` +
+    `<div class="cmp-grid cmp-headgrid" style="grid-template-columns:${cols}">${headRow}</div>` +
+    `<div class="cmp-grid" style="grid-template-columns:${cols}">${body}</div>${panels}</div>`;
+  $('compare-modal').classList.remove('hidden');
+  $('cmp-close').onclick = closeCompare;
+}
+
+function openStaffClubCompare(candidate, peerIndex = 0, currentGroup = null) {
+  if (!candidate) return;
+  if (currentGroup == null) currentGroup = staffIntrinsicGroup(candidate) ?? 1;
+  const peers = clubStaffForGroup(currentGroup, candidate.id);
+  const idx = Math.max(0, Math.min(Math.max(0, peers.length - 1), peerIndex));
+  const peer = peers.length ? peers[idx] : null;
+
+  const groupOpts = STAFF_GROUPS.map(({ g }) =>
+    `<option value="${g}" ${g === currentGroup ? 'selected' : ''}>${escHtml(prefGroupLabel(g))}</option>`
+  ).join('');
+
+  let peersHtml = '';
+  if (peers.length > 0) {
+    peersHtml = `<span class="cmp-peers-lbl">${t('cmpClubStaff')}:</span>` +
+      peers.map((m, i) =>
+        `<button type="button" class="cmp-tab${i === idx ? ' active' : ''}" data-idx="${i}">
+          ${escHtml(m.name)} <span class="dim">(CA ${m.ca ?? '-'})</span>
+        </button>`
+      ).join('');
+  } else {
+    peersHtml = `<span class="cmp-no-peers">${tf('cmpNoClubStaffInGroup', { group: prefGroupLabel(currentGroup) })}</span>`;
+  }
+
+  const headerExtraHtml = `<div class="cmp-staff-header-extra">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <label class="cmp-staff-group-sel"><span>${t('cmpStaffGroupLabel')}:</span> <select id="cmp-staff-group-select" class="cmp-staff-select">${groupOpts}</select></label>
+      <div class="cmp-staff-peers">${peersHtml}</div>
+    </div>
+  </div>`;
+
+  const staffToCompare = peer ? [candidate, peer] : [candidate];
+  const title = peer
+    ? `${t('cmpStaffTitle')} · ${candidate.name} vs ${peer.name}`
+    : `${t('cmpStaffTitle')} · ${candidate.name}`;
+
+  renderStaffCompare(staffToCompare, currentGroup, title, headerExtraHtml);
+
+  const sel = $('cmp-staff-group-select');
+  if (sel) sel.onchange = e => openStaffClubCompare(candidate, 0, +e.target.value);
+  document.querySelectorAll('.cmp-staff-peers .cmp-tab').forEach(b => {
+    b.onclick = () => openStaffClubCompare(candidate, +b.dataset.idx, currentGroup);
+  });
+}
+
+function openStaffGroupCompare(group = 1, peer1Idx = 0, peer2Idx = 1) {
+  const peers = clubStaffForGroup(group);
+  const groupOpts = STAFF_GROUPS.map(({ g }) =>
+    `<option value="${g}" ${g === group ? 'selected' : ''}>${escHtml(prefGroupLabel(g))}</option>`
+  ).join('');
+
+  let peersHtml = '';
+  let staffToCompare = [];
+  if (peers.length >= 2) {
+    const p1 = peers[Math.min(peers.length - 1, peer1Idx)];
+    const p2 = peers[Math.min(peers.length - 1, peer2Idx === peer1Idx ? (peer2Idx + 1) % peers.length : peer2Idx)];
+    staffToCompare = [p1, p2];
+    peersHtml = `<span class="cmp-peers-lbl">${t('cmpClubStaff')} (${peers.length}):</span>` +
+      peers.map((m, i) =>
+        `<button type="button" class="cmp-tab${m.id === p1.id || m.id === p2.id ? ' active' : ''}" data-id="${m.id}">
+          ${escHtml(m.name)} <span class="dim">(CA ${m.ca ?? '-'})</span>
+        </button>`
+      ).join('');
+  } else if (peers.length === 1) {
+    staffToCompare = [peers[0]];
+    peersHtml = `<span class="cmp-peers-lbl">${t('cmpClubStaff')}:</span> <button type="button" class="cmp-tab active">${escHtml(peers[0].name)} <span class="dim">(CA ${peers[0].ca ?? '-'})</span></button>`;
+  } else {
+    peersHtml = `<span class="cmp-no-peers">${tf('cmpNoClubStaffInGroup', { group: prefGroupLabel(group) })}</span>`;
+  }
+
+  const headerExtraHtml = `<div class="cmp-staff-header-extra">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <label class="cmp-staff-group-sel"><span>${t('cmpStaffGroupLabel')}:</span> <select id="cmp-staff-group-select" class="cmp-staff-select">${groupOpts}</select></label>
+      <div class="cmp-staff-peers">${peersHtml}</div>
+    </div>
+  </div>`;
+
+  const title = staffToCompare.length === 2
+    ? `${t('cmpStaffTitle')} · ${staffToCompare[0].name} vs ${staffToCompare[1].name}`
+    : staffToCompare.length === 1
+    ? `${t('cmpStaffTitle')} · ${staffToCompare[0].name}`
+    : `${t('cmpStaffTitle')} · ${prefGroupLabel(group)}`;
+
+  renderStaffCompare(staffToCompare, group, title, headerExtraHtml);
+
+  const sel = $('cmp-staff-group-select');
+  if (sel) sel.onchange = e => openStaffGroupCompare(+e.target.value);
+  document.querySelectorAll('.cmp-staff-peers .cmp-tab').forEach(b => {
+    b.onclick = () => {
+      const clickedId = +b.dataset.id;
+      if (staffToCompare.some(s => s.id === clickedId)) return;
+      const p1 = staffToCompare[0];
+      const p2 = peers.find(p => p.id === clickedId);
+      if (p1 && p2) {
+        const i1 = peers.findIndex(p => p.id === p1.id);
+        const i2 = peers.findIndex(p => p.id === p2.id);
+        openStaffGroupCompare(group, i1, i2);
+      }
+    };
+  });
+}
+
 function openCompare(customPlayers, customTitle, headerExtraHtml) {
   if (!Array.isArray(customPlayers)) { customPlayers = null; customTitle = null; headerExtraHtml = null; }
   const players = (customPlayers || state.compare.map(findPlayer)).filter(Boolean);
   if (players.length < 2) return;
+  if (players.every(p => !p.attrs && (p.staffAttrs || p.job))) {
+    return renderStaffCompare(players, staffIntrinsicGroup(players[0]) ?? 1, customTitle, headerExtraHtml);
+  }
   const n = players.length;
   const two = n === 2;   // bij precies 2 spelers is er een Δ-kolom; bij 3 markeert de rij de winnaar
 
@@ -4749,6 +5093,12 @@ $('f-hist-period').addEventListener('change', async () => {
   applyFilters();
 });
 $('btn-adv').onclick = advDialog;
+const bscTool = $('btn-staff-compare');
+if (bscTool) bscTool.onclick = () => {
+  const currentRole = $('f-staffrole').value;
+  const currentG = currentRole ? roleGroup(currentRole) : 1;
+  openStaffGroupCompare(currentG ?? 1);
+};
 $('f-staffrole').addEventListener('change', () => {
   // Rol gekozen: meteen op geschiktheid sorteren (zoals de spelersrolfilter op rolscore).
   if ($('f-staffrole').value) { state.sortKey = 'fit'; state.sortDir = -1; }

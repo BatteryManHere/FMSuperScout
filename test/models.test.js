@@ -314,3 +314,37 @@ test('interestEstimate: staff exceeding club reputation considers club not compe
   const intReal = M.interestEstimate(realisticStaff);
   assert.ok(intReal.score >= 50);
 });
+
+test('staff comparison: groups, intrinsic mapping and club peer filtering', () => {
+  assert.ok(M.STAFF_GROUPS.length >= 10, 'All main staff groups defined');
+  const asst = { id: 1, jobId: 20, job: 'Assistent-manager' };
+  assert.equal(M.staffIntrinsicGroup(asst), 1, 'Group 1 for Assistant Manager');
+
+  const doctor = { id: 2, job: 'Arts' };
+  assert.equal(M.staffIntrinsicGroup(doctor), 3, 'Group 3 (Physio/Medical) for Doctor');
+
+  const joblessScout = {
+    id: 3,
+    prefJob: [4],
+    staffAttrs: { Oordeel_vermogen: 18, Oordeel_potentie: 18, Aanpassingsvermogen: 16 },
+  };
+  assert.equal(M.staffIntrinsicGroup(joblessScout), 4, 'Group 4 (Scout) for jobless scout by preferred job');
+
+  // Club peer filtering
+  M.state.meta.myClub = 'Fenerbahce';
+  M.state.staff = [
+    { id: 101, name: 'Dirk', club: 'Fenerbahce', jobId: 20, ca: 145 },
+    { id: 102, name: 'Zeki', club: 'Fenerbahce', jobId: 20, ca: 130 },
+    { id: 103, name: 'Foreign Asst', club: 'Galatasaray', jobId: 20, ca: 150 },
+    { id: 104, name: 'Trainer Ali', club: 'Fenerbahce', jobId: 2, ca: 140 },
+  ];
+
+  const peers = M.clubStaffForGroup(1);
+  assert.equal(peers.length, 2, 'Two assistant managers at Fenerbahce');
+  assert.equal(peers[0].id, 101, 'Highest CA first');
+  assert.equal(peers[1].id, 102);
+
+  const peersExcl = M.clubStaffForGroup(1, 101);
+  assert.equal(peersExcl.length, 1);
+  assert.equal(peersExcl[0].id, 102, 'Excluded Dirk correctly');
+});
