@@ -139,6 +139,7 @@ const I18N = {
     sg_coaching: 'Training', sg_mental: 'Mentaal', sg_knowledge: 'Kennis', sg_medical: 'Medisch & data',
     g_technical: 'Technisch', g_setpieces: 'Standaardsituaties', g_mental: 'Mentaal', g_physical: 'Fysiek', g_goalkeeping: 'Keepen',
     staffAttrs: 'Staf-attributen',
+    why_club: 'Jouw club', why_status: 'Hun status', why_above: 'Jouw club ligt boven hun status', why_below: 'Jouw club ligt onder hun status', why_free: 'Clubloos', why_expiring: 'Contract loopt af', why_listed: 'Beschikbaar voor transfer', why_wage: 'Salaris boven jouw plafond', why_adapt_lo: 'Verhuist niet graag', why_adapt_hi: 'Went snel aan een verhuizing', why_amb: 'Ambitieus: wil een stap omhoog', why_loyal: 'Loyaal aan huidige club', why_refuse: 'Weigert boven',
     staffEngage: 'Wil bij mijn club', staffEngageHint: 'Verbergt staf die zou weigeren: filtert staf weg die jouw club “niet competitief genoeg” vindt (clubreputatie onder zijn status) en staf met Interesse “Nee”. Schatting, geen FM-getal.', staffRelocate: 'Bereid te verhuizen', staffRelocateHint: 'Hoge aanpassingsvermogen (≥ 13/20) duidt op bereidheid om te verhuizen. Schatting gebaseerd op het staf-attribuut, geen FM-waarde.',
     staffAvailSection: 'Beschikbaarheid staf', qfStaffFree: 'Transfervrij', qfStaffRelocate: 'Verhuisbereid',
     staffCoachRole: 'Coachfunctie',
@@ -323,6 +324,7 @@ const I18N = {
     sg_coaching: 'Coaching', sg_mental: 'Mental', sg_knowledge: 'Knowledge', sg_medical: 'Medical & Data',
     g_technical: 'Technical', g_setpieces: 'Set Pieces', g_mental: 'Mental', g_physical: 'Physical', g_goalkeeping: 'Goalkeeping',
     staffAttrs: 'Staff Attributes',
+    why_club: 'Your club', why_status: 'Their status', why_above: 'Your club is above their status', why_below: 'Your club is below their status', why_free: 'Free agent', why_expiring: 'Contract running out', why_listed: 'Available for transfer', why_wage: 'Wage above your ceiling', why_adapt_lo: 'Reluctant to relocate', why_adapt_hi: 'Adapts to a move easily', why_amb: 'Ambitious: wants a step up', why_loyal: 'Loyal to current club', why_refuse: 'Refuses above',
     staffEngage: 'Would join my club', staffEngageHint: 'Hides staff who would refuse: those who find your club “not competitive enough” (club reputation below their status) and anyone rated Interest “None”. An estimate, not an FM number.', staffRelocate: 'Willing to relocate', staffRelocateHint: 'High adaptability (≥ 13/20) indicates willingness to relocate. An estimate based on the staff attribute, not a direct FM value.',
     staffAvailSection: 'Availability', qfStaffFree: 'Free agents', qfStaffRelocate: 'Relocatable',
     staffCoachRole: 'Coaching role',
@@ -507,6 +509,7 @@ const I18N = {
     sg_coaching: 'Entraînement', sg_mental: 'Mental', sg_knowledge: 'Connaissances', sg_medical: 'Médical & données',
     g_technical: 'Technique', g_setpieces: 'Coups de pied arrêtés', g_mental: 'Mental', g_physical: 'Physique', g_goalkeeping: 'Gardien',
     staffAttrs: 'Attributs du staff',
+    why_club: 'Votre club', why_status: 'Leur statut', why_above: 'Votre club est au-dessus de leur statut', why_below: 'Votre club est sous leur statut', why_free: 'Libre', why_expiring: 'Contrat bientôt terminé', why_listed: 'Disponible au transfert', why_wage: 'Salaire au-dessus de votre plafond', why_adapt_lo: 'Réticent à déménager', why_adapt_hi: 'S’adapte facilement', why_amb: 'Ambitieux : veut monter d’un cran', why_loyal: 'Loyal à son club actuel', why_refuse: 'Refuse au-dessus de',
     staffEngage: 'Accepterait mon club', staffEngageHint: 'Masque le staff qui refuserait : ceux qui jugent votre club « pas assez compétitif » (réputation du club sous leur statut) et ceux dont l’intérêt est « Non ». Estimation, pas un chiffre FM.', staffRelocate: 'Prêt à déménager', staffRelocateHint: 'Une grande adaptabilité (≥ 13/20) indique la volonté de déménager. Estimation basée sur l\'attribut du staff, pas une valeur FM directe.',
     staffAvailSection: 'Disponibilité', qfStaffFree: 'Agents libres', qfStaffRelocate: 'Mobiles',
     staffCoachRole: 'Rôle de coaching',
@@ -691,6 +694,7 @@ const I18N = {
     sg_coaching: 'Training', sg_mental: 'Mental', sg_knowledge: 'Wissen', sg_medical: 'Medizin & Daten',
     g_technical: 'Technik', g_setpieces: 'Standards', g_mental: 'Mental', g_physical: 'Physis', g_goalkeeping: 'Torwart',
     staffAttrs: 'Mitarbeiter-Attribute',
+    why_club: 'Dein Verein', why_status: 'Ihr Status', why_above: 'Dein Verein liegt über ihrem Status', why_below: 'Dein Verein liegt unter ihrem Status', why_free: 'Vereinslos', why_expiring: 'Vertrag läuft aus', why_listed: 'Transfer möglich', why_wage: 'Gehalt über deiner Grenze', why_adapt_lo: 'Ungern umzugsbereit', why_adapt_hi: 'Gewöhnt sich schnell ein', why_amb: 'Ehrgeizig: will aufsteigen', why_loyal: 'Loyal zum aktuellen Verein', why_refuse: 'Lehnt ab über',
     staffEngage: 'Würde zu meinem Verein kommen', staffEngageHint: 'Blendet Mitarbeiter aus, die ablehnen würden: wer deinen Verein „nicht konkurrenzfähig genug“ findet (Vereinsreputation unter seinem Status) und alle mit Interesse „Nein“. Schätzung, keine FM-Zahl.', staffRelocate: 'Umzugsbereit', staffRelocateHint: 'Hohe Anpassungsfähigkeit (≥ 13/20) deutet auf Umzugsbereitschaft hin. Schätzung auf Basis des Mitarbeiter-Attributs, kein direkter FM-Wert.',
     staffAvailSection: 'Verfügbarkeit', qfStaffFree: 'Vereinslose', qfStaffRelocate: 'Mobil',
     staffCoachRole: 'Coaching-Rolle',
@@ -1530,6 +1534,10 @@ function interestEstimateCalc(p) {
     : (p.worldRep != null ? p.worldRep : (p.ca ? Math.min(10000, p.ca * 50) : 3500));
   const clubGap = myRep - (p.clubRep || 0);
   const statGap = myRep - personalRep;
+  // Redenen voor het detailpaneel: s = +1 helpt, -1 remt, 0 neutraal.
+  const why = [{ s: statGap >= 0 ? 1 : -1, k: statGap >= 0 ? 'why_above' : 'why_below' }];
+  let reach = null;   // hoogste status waarbij mijn club nog acceptabel is (alleen staf)
+  const info = () => ({ why, myRep, personalRep, reach });
 
   // Staf-specifieke competitiviteit / status-eis:
   // In FM weigert een buitenlands staflid direct als de clubreputatie onder zijn persoonlijke status ligt
@@ -1538,14 +1546,15 @@ function interestEstimateCalc(p) {
     const myNat = myClubNation();
     const isDomestic = myNat && (p.nat || []).includes(myNat);
     const maxDeficit = isDomestic ? -400 : -150;
+    reach = myRep - maxDeficit;
     if (statGap < maxDeficit) {
-      return { score: 10, label: t('int_no'), cls: 'int-n', note: 'not_competitive' };
+      return { score: 10, label: t('int_no'), cls: 'int-n', note: 'not_competitive', ...info() };
     }
   }
 
   // Idem voor topspelers: als een club 1400+ punten onder hun status ligt, weigeren ze.
   if (!isStaff && statGap < -1400) {
-    return { score: 12, label: t('int_no'), cls: 'int-n', note: 'not_competitive' };
+    return { score: 12, label: t('int_no'), cls: 'int-n', note: 'not_competitive', ...info() };
   }
 
   const blend = isStaff
@@ -1564,35 +1573,41 @@ function interestEstimateCalc(p) {
     } else {
       score = Math.min(100, score + 20);
     }
+    why.push({ s: !isStaff || statGap >= 0 ? 1 : 0, k: 'why_free' });
   }
-  if (p.listed || p.setForRelease) score += 15;
+  if (p.listed || p.setForRelease) { score += 15; why.push({ s: 1, k: 'why_listed' }); }
   if (p.notForSale) score *= 0.4;
   const m = monthsUntil(p.expires);
   if (m != null && m <= 6) score += 14;
   else if (m != null && m <= 12) score += 7;
+  if (m != null && m <= 12 && !isFree(p)) why.push({ s: 1, k: 'why_expiring' });
 
   // Loon-haalbaarheid
   const ceil = myWageCeiling();
   if (ceil && p.wage > 0 && !isFree(p)) {
     const ratio = p.wage / ceil;
-    if (ratio > 1) score -= Math.min(38, (ratio - 1) * 46);
+    if (ratio > 1) { score -= Math.min(38, (ratio - 1) * 46); why.push({ s: -1, k: 'why_wage' }); }
     else score += Math.min(6, (1 - ratio) * 8);
   }
 
   // Persoonlijkheid & Verhuizen / Adaptability
   const adapt = isStaff ? (p.staffAttrs?.Aanpassingsvermogen || 10) : (p.adaptability || 10);
   if (isStaff) {
-    if (adapt < 10) score -= 25;
-    else if (adapt >= 14 && statGap >= 0) score += 8;
+    if (adapt < 10) { score -= 25; why.push({ s: -1, k: 'why_adapt_lo' }); }
+    else if (adapt >= 14 && statGap >= 0) { score += 8; why.push({ s: 1, k: 'why_adapt_hi' }); }
   }
   if (p.ambition) {
     if (isStaff && statGap < 0) {
       score -= (p.ambition - 10) * 2.5; // Hoge ambitie weigert stap omlaag
+      if (p.ambition >= 14) why.push({ s: -1, k: 'why_amb' });
     } else {
       score += (blend >= 0 ? 1.2 : -2.2) * (p.ambition - 10);
     }
   }
-  if (p.loyalty && !isFree(p)) score *= (1 - 0.45 * (p.loyalty / 20));
+  if (p.loyalty && !isFree(p)) {
+    score *= (1 - 0.45 * (p.loyalty / 20));
+    if (p.loyalty >= 14) why.push({ s: -1, k: 'why_loyal' });
+  }
 
   // Leeftijd (spelers)
   if (!isStaff) {
@@ -1610,7 +1625,35 @@ function interestEstimateCalc(p) {
   score = Math.max(0, Math.min(100, Math.round(score)));
   const label = score >= 70 ? t('int_big') : score >= 45 ? t('int_ok') : score >= 25 ? t('int_small') : t('int_no');
   const cls = score >= 70 ? 'int-g' : score >= 45 ? 'int-r' : score >= 25 ? 'int-k' : 'int-n';
-  return { score, label, cls, note };
+  return { score, label, cls, note, ...info() };
+}
+// Statuslineaal voor het detailpaneel: mijn clubreputatie en de status van de kandidaat op één
+// schaal van 0-10000, zodat je ziet waarom iemand wel of niet meewil. De rode zone is waar de
+// kandidaat mijn club "niet competitief genoeg" vindt.
+function interestPanelHtml(p) {
+  const i = interestEstimate(p);
+  if (!i || i.reach == null) return '';
+  const pct = v => Math.max(0, Math.min(100, v / 100));
+  const me = pct(i.myRep), him = pct(i.personalRep), reach = pct(i.reach);
+  const refuses = i.note === 'not_competitive';
+  const gap = Math.round(i.myRep - i.personalRep);
+  const chips = i.why.filter(w => w.k !== 'why_above' && w.k !== 'why_below').map(w => `<span class="why ${w.s > 0 ? 'up' : w.s < 0 ? 'down' : ''}">${t(w.k)}</span>`).join('');
+  return `<div class="int-panel" data-help="interestHint">
+    <div class="int-head"><span>${t('interestTitle')}</span><span class="int-verdict ${i.cls}">${i.label}<b>${i.score}</b></span></div>
+    <div class="ruler" role="img" aria-label="${t('why_club')} ${i.myRep}, ${t('why_status')} ${i.personalRep}">
+      <i class="zone" style="left:${reach}%"></i>
+      <i class="tick" style="left:${reach}%"></i>
+      <i class="mark him ${refuses ? 'bad' : ''}" style="left:${him}%"></i>
+      <i class="mark me" style="left:${me}%"></i>
+    </div>
+    <div class="ruler-key">
+      <span><i class="dot me"></i>${t('why_club')} <b>${i.myRep}</b></span>
+      <span><i class="dot him ${refuses ? 'bad' : ''}"></i>${t('why_status')} <b>${i.personalRep}</b></span>
+      <span class="dim">${t('why_refuse')} <b>${Math.round(i.reach)}</b></span>
+    </div>
+    <div class="int-gap ${refuses ? 'bad' : gap >= 0 ? 'good' : 'warn'}">${t(refuses ? 'int_not_competitive' : gap >= 0 ? 'why_above' : 'why_below')} (${gap > 0 ? '+' : ''}${gap})</div>
+    <div class="why-list">${chips}</div>
+  </div>`;
 }
 function intHtml(p) {
   const i = interestEstimate(p);
@@ -3732,6 +3775,7 @@ function showDetail(p) {
   }
   if (flags.length) html += '<div>' + flags.join('') + '</div>';
 
+  if (!isPlayer) html += interestPanelHtml(p);
   if (isPlayer) {
     const i = interestEstimate(p);
     if (i) html += `<div class="interest-box" data-help="interestHint"><b>${t('interestTitle')}:</b> <span class="int ${i.cls}">${i.label}</span> <span class="dim">(${i.score}/100)</span> <span class="col-help">?</span>${i.note ? `<div class="int-note">${t(i.note === 'minor' ? 'minorNote' : i.note === 'not_competitive' ? 'int_not_competitive' : 'minorIntlNote')}</div>` : ''}</div>`;
