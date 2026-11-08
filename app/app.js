@@ -140,6 +140,7 @@ const I18N = {
     g_technical: 'Technisch', g_setpieces: 'Standaardsituaties', g_mental: 'Mentaal', g_physical: 'Fysiek', g_goalkeeping: 'Keepen',
     staffAttrs: 'Staf-attributen',
     why_club: 'Jouw club', why_status: 'Hun status', why_above: 'Jouw club ligt boven hun status', why_below: 'Jouw club ligt onder hun status', why_free: 'Clubloos', why_expiring: 'Contract loopt af', why_listed: 'Beschikbaar voor transfer', why_wage: 'Salaris boven jouw plafond', why_adapt_lo: 'Verhuist niet graag', why_adapt_hi: 'Went snel aan een verhuizing', why_amb: 'Ambitieus: wil een stap omhoog', why_loyal: 'Loyaal aan huidige club', why_refuse: 'Weigert boven',
+    srm_any: 'Rol, wens of geschiktheid', srm_cur: 'Heeft deze rol nu', srm_pref: 'Wil deze rol', srmTip: 'Op welke manier een staflid bij de gekozen rol hoort',
     staffEngage: 'Wil bij mijn club', staffEngageHint: 'Verbergt staf die zou weigeren: filtert staf weg die jouw club “niet competitief genoeg” vindt (clubreputatie onder zijn status) en staf met Interesse “Nee”. Schatting, geen FM-getal.', staffRelocate: 'Bereid te verhuizen', staffRelocateHint: 'Hoge aanpassingsvermogen (≥ 13/20) duidt op bereidheid om te verhuizen. Schatting gebaseerd op het staf-attribuut, geen FM-waarde.',
     staffAvailSection: 'Beschikbaarheid staf', qfStaffFree: 'Transfervrij', qfStaffRelocate: 'Verhuisbereid',
     staffCoachRole: 'Coachfunctie',
@@ -325,6 +326,7 @@ const I18N = {
     g_technical: 'Technical', g_setpieces: 'Set Pieces', g_mental: 'Mental', g_physical: 'Physical', g_goalkeeping: 'Goalkeeping',
     staffAttrs: 'Staff Attributes',
     why_club: 'Your club', why_status: 'Their status', why_above: 'Your club is above their status', why_below: 'Your club is below their status', why_free: 'Free agent', why_expiring: 'Contract running out', why_listed: 'Available for transfer', why_wage: 'Wage above your ceiling', why_adapt_lo: 'Reluctant to relocate', why_adapt_hi: 'Adapts to a move easily', why_amb: 'Ambitious: wants a step up', why_loyal: 'Loyal to current club', why_refuse: 'Refuses above',
+    srm_any: 'Role, wish or fit', srm_cur: 'Holds this role now', srm_pref: 'Wants this role', srmTip: 'How a staff member counts as matching the chosen role',
     staffEngage: 'Would join my club', staffEngageHint: 'Hides staff who would refuse: those who find your club “not competitive enough” (club reputation below their status) and anyone rated Interest “None”. An estimate, not an FM number.', staffRelocate: 'Willing to relocate', staffRelocateHint: 'High adaptability (≥ 13/20) indicates willingness to relocate. An estimate based on the staff attribute, not a direct FM value.',
     staffAvailSection: 'Availability', qfStaffFree: 'Free agents', qfStaffRelocate: 'Relocatable',
     staffCoachRole: 'Coaching role',
@@ -510,6 +512,7 @@ const I18N = {
     g_technical: 'Technique', g_setpieces: 'Coups de pied arrêtés', g_mental: 'Mental', g_physical: 'Physique', g_goalkeeping: 'Gardien',
     staffAttrs: 'Attributs du staff',
     why_club: 'Votre club', why_status: 'Leur statut', why_above: 'Votre club est au-dessus de leur statut', why_below: 'Votre club est sous leur statut', why_free: 'Libre', why_expiring: 'Contrat bientôt terminé', why_listed: 'Disponible au transfert', why_wage: 'Salaire au-dessus de votre plafond', why_adapt_lo: 'Réticent à déménager', why_adapt_hi: 'S’adapte facilement', why_amb: 'Ambitieux : veut monter d’un cran', why_loyal: 'Loyal à son club actuel', why_refuse: 'Refuse au-dessus de',
+    srm_any: 'Rôle, souhait ou aptitude', srm_cur: 'Occupe ce rôle', srm_pref: 'Veut ce rôle', srmTip: 'Comment un membre du staff correspond au rôle choisi',
     staffEngage: 'Accepterait mon club', staffEngageHint: 'Masque le staff qui refuserait : ceux qui jugent votre club « pas assez compétitif » (réputation du club sous leur statut) et ceux dont l’intérêt est « Non ». Estimation, pas un chiffre FM.', staffRelocate: 'Prêt à déménager', staffRelocateHint: 'Une grande adaptabilité (≥ 13/20) indique la volonté de déménager. Estimation basée sur l\'attribut du staff, pas une valeur FM directe.',
     staffAvailSection: 'Disponibilité', qfStaffFree: 'Agents libres', qfStaffRelocate: 'Mobiles',
     staffCoachRole: 'Rôle de coaching',
@@ -695,6 +698,7 @@ const I18N = {
     g_technical: 'Technik', g_setpieces: 'Standards', g_mental: 'Mental', g_physical: 'Physis', g_goalkeeping: 'Torwart',
     staffAttrs: 'Mitarbeiter-Attribute',
     why_club: 'Dein Verein', why_status: 'Ihr Status', why_above: 'Dein Verein liegt über ihrem Status', why_below: 'Dein Verein liegt unter ihrem Status', why_free: 'Vereinslos', why_expiring: 'Vertrag läuft aus', why_listed: 'Transfer möglich', why_wage: 'Gehalt über deiner Grenze', why_adapt_lo: 'Ungern umzugsbereit', why_adapt_hi: 'Gewöhnt sich schnell ein', why_amb: 'Ehrgeizig: will aufsteigen', why_loyal: 'Loyal zum aktuellen Verein', why_refuse: 'Lehnt ab über',
+    srm_any: 'Rolle, Wunsch oder Eignung', srm_cur: 'Hat diese Rolle jetzt', srm_pref: 'Will diese Rolle', srmTip: 'Wie ein Mitarbeiter zur gewählten Rolle passt',
     staffEngage: 'Würde zu meinem Verein kommen', staffEngageHint: 'Blendet Mitarbeiter aus, die ablehnen würden: wer deinen Verein „nicht konkurrenzfähig genug“ findet (Vereinsreputation unter seinem Status) und alle mit Interesse „Nein“. Schätzung, keine FM-Zahl.', staffRelocate: 'Umzugsbereit', staffRelocateHint: 'Hohe Anpassungsfähigkeit (≥ 13/20) deutet auf Umzugsbereitschaft hin. Schätzung auf Basis des Mitarbeiter-Attributs, kein direkter FM-Wert.',
     staffAvailSection: 'Verfügbarkeit', qfStaffFree: 'Vereinslose', qfStaffRelocate: 'Mobil',
     staffCoachRole: 'Coaching-Rolle',
@@ -2853,6 +2857,9 @@ function applyFilters() {
   const onlySl = $('f-shortlist').checked || state.mode === 'shortlist';
   const advRules = activeAdvRules();   // spelers: veld-/verborgen attributen; staf: stafattributen
   const staffRole = $('f-staffrole').value;
+  const roleModeEl = $('f-staff-rolemode');
+  roleModeEl.disabled = !staffRole || staffRole === '__unassigned__';
+  const roleMode = roleModeEl.disabled ? '' : roleModeEl.value;   // '' = functie, wens of geschiktheid
   const staffContractF = state.mode === 'staff' ? $('f-staff-contract').value : '';
   const staffRelocate = state.mode === 'staff' && $('f-staff-relocate').checked;
   const staffEngage = state.mode === 'staff' && $('f-staff-engage').checked;
@@ -2927,7 +2934,10 @@ function applyFilters() {
         const matchesJoblessFit = staffJobless(p) && g != null && (
           (staffFit(p, g) >= 12.0) || (bestStaffFit(p)?.g === g && staffFit(p, g) >= 10.0)
         );
-        if (!matchesJob && !matchesPref && !matchesJoblessFit) return false;
+        const roleOk = roleMode === 'cur' ? matchesJob
+          : roleMode === 'pref' ? matchesPref
+          : matchesJob || matchesPref || matchesJoblessFit;
+        if (!roleOk) return false;
       }
     }
     if (staffContractF === 'free' && !isFree(p)) return false;
@@ -3061,7 +3071,8 @@ function buildChips() {
   if (v('f-name')) add(`${t('chipSearch')}: "${v('f-name')}"`, clearInput('f-name'));
   if (activePos.size) add(`${t('position')}: ${[...activePos].join(', ')}`,
     () => { activePos.clear(); document.querySelectorAll('.pos-node').forEach(n => n.classList.remove('on')); });
-  if (state.mode === 'staff' && $('f-staffrole').value) add($('f-staffrole').value, () => { $('f-staffrole').value = ''; });
+  if (state.mode === 'staff' && $('f-staffrole').value) add($('f-staffrole').value, () => { $('f-staffrole').value = ''; $('f-staff-rolemode').value = ''; });
+  if (state.mode === 'staff' && $('f-staffrole').value && $('f-staff-rolemode').value && !$('f-staff-rolemode').disabled) add($('f-staff-rolemode').selectedOptions[0].textContent, () => { $('f-staff-rolemode').value = ''; });
   if (state.mode === 'staff' && $('f-staff-contract').value) add(`${t('contractF')}: ${$('f-staff-contract').selectedOptions[0].textContent}`, () => { $('f-staff-contract').value = ''; });
   if (state.mode === 'staff' && $('f-staff-engage').checked) add(t('staffEngage'), () => { $('f-staff-engage').checked = false; });
   if (state.mode === 'staff' && $('f-staff-relocate').checked) add(t('staffRelocate'), () => { $('f-staff-relocate').checked = false; });
@@ -3123,7 +3134,7 @@ const PRESET_TEXT_IDS = ['f-name', 'f-age-min', 'f-age-max', 'f-ca-min', 'f-ca-m
 const PRESET_CHECK_IDS = ['f-eu', 'f-myclub', 'f-shortlist', 'f-wonderkid', 'f-new', 'f-deals'];
 // De peilperiode hoort bewust bij de preset: "doorbraken dit seizoen" betekent niets als
 // het venster erbij wegvalt. Zie applyPreset voor het opnieuw ophalen van de groeidata.
-const PRESET_SELECT_IDS = ['f-interest', 'f-staffrole', 'f-role', 'f-contract', 'f-tstatus', 'f-foot', 'f-hist-period', 'f-gender', 'f-staff-contract'];
+const PRESET_SELECT_IDS = ['f-interest', 'f-staffrole', 'f-staff-rolemode', 'f-role', 'f-contract', 'f-tstatus', 'f-foot', 'f-hist-period', 'f-gender', 'f-staff-contract'];
 function loadPresets() { try { return JSON.parse(localStorage.getItem('fmss_presets') || '[]'); } catch { return []; } }
 function storePresets(list) { localStorage.setItem('fmss_presets', JSON.stringify(list)); }
 function snapshotFilters() {
@@ -5155,6 +5166,7 @@ $('f-staffrole').addEventListener('change', () => {
   else if (state.sortKey === 'fit') { state.sortKey = 'wage'; state.sortDir = -1; }
   applyFilters();
 });
+$('f-staff-rolemode').addEventListener('change', applyFilters);
 $('f-staff-contract').addEventListener('change', applyFilters);
 $('f-staff-engage').addEventListener('change', applyFilters);
 $('f-staff-relocate').addEventListener('change', applyFilters);
@@ -5195,7 +5207,7 @@ $('btn-clear').onclick = () => {
   state._qfIronMan = false;
   document.querySelectorAll('#filters input[type=text], #filters input[type=number]').forEach(i => i.value = '');
   document.querySelectorAll('#filters input[type=checkbox]').forEach(i => i.checked = false);
-  $('f-staffrole').value = ''; $('f-gender').value = ''; $('f-interest').value = '0'; $('f-contract').value = ''; $('f-tstatus').value = '';
+  $('f-staffrole').value = ''; $('f-staff-rolemode').value = ''; $('f-gender').value = ''; $('f-interest').value = '0'; $('f-contract').value = ''; $('f-tstatus').value = '';
   $('f-staff-contract').value = ''; $('f-staff-relocate').checked = false; $('f-staff-engage').checked = false;
   $('f-foot').value = '';
   state.advF = []; saveAdv();

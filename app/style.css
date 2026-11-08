@@ -961,3 +961,6 @@ path.dvl-v { stroke: var(--accent2); }
 .why { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--bg-deep); color: var(--text2); border: 1px solid var(--border); }
 .why.up { border-color: rgba(63,197,111,.45); color: var(--good-hi); }
 .why.down { border-color: rgba(224,96,96,.45); color: #f0a0a0; }
+
+#f-staff-rolemode { margin-top: 6px; }
+#f-staff-rolemode:disabled { opacity: .5; }
